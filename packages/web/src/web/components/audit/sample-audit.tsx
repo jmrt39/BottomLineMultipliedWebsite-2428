@@ -1,0 +1,492 @@
+import { type KeyboardEvent, type ReactNode, useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import {
+  ADDED_SALES,
+  BENCH,
+  CHECK_LIFT,
+  COGS,
+  COVERS,
+  COVERS_PER_SERVICE,
+  FLOW_THROUGH,
+  NET_MARGIN,
+  POUR,
+  PROFIT,
+  PROFIT_NOW,
+  REST_AVG,
+  ROOM_NOW,
+  ROOM_TARGET,
+  SALES_NOW,
+  SPREAD,
+  TIP_RATE,
+  TIPS,
+  TIPS_WEEK_EACH,
+  TOTAL,
+  composition,
+  cents,
+  findings,
+  pctOf,
+  servers,
+  usd,
+} from "./model";
+
+const PAGES = [
+  { id: "summary", title: "Summary" },
+  { id: "servers", title: "Your servers" },
+  { id: "priorities", title: "What to fix first" },
+  { id: "evidence", title: "What we saw" },
+  { id: "bottom-line", title: "The bottom line" },
+] as const;
+const NUMERALS = ["I", "II", "III", "IV", "V"];
+
+function PageHead({
+  index,
+  kicker,
+  title,
+  lede,
+}: {
+  index: number;
+  kicker: string;
+  title: ReactNode;
+  lede?: ReactNode;
+}) {
+  return (
+    <header className="ap-head">
+      <span className="ap-kicker">
+        <span>{NUMERALS[index]}</span>
+        {kicker}
+      </span>
+      <h3>{title}</h3>
+      {lede && <p className="ap-lede">{lede}</p>}
+    </header>
+  );
+}
+
+function Summary() {
+  return (
+    <>
+      <PageHead
+        index={0}
+        kicker="Executive summary"
+        title="What this dining room is leaving on the table."
+      />
+      <div className="ap-summary">
+        <div className="ap-hero-figure">
+          <span className="ap-figure">{usd(TOTAL)}</span>
+          <span className="ap-figure-note">every year</span>
+        </div>
+        <blockquote className="ap-pull">
+          Two of your eight servers already average {cents(BENCH)} a guest. The other six average{" "}
+          {cents(REST_AVG)}. The gap isn’t the menu, the room or the prices. It’s what happens at
+          the table.
+        </blockquote>
+      </div>
+      <dl className="ap-stats">
+        <div>
+          <dt>Every week</dt>
+          <dd>{usd(TOTAL / 52)}</dd>
+        </div>
+        <div>
+          <dt>Per guest</dt>
+          <dd>+{cents(CHECK_LIFT / COVERS)}</dd>
+        </div>
+        <div>
+          <dt>Kept as profit</dt>
+          <dd>{usd(PROFIT)}</dd>
+        </div>
+      </dl>
+      <figure className="ap-composition" aria-label="Where the annual figure comes from">
+        <figcaption className="ap-chart-title">Where it comes from</figcaption>
+        <div className="ap-stack" aria-hidden="true">
+          {composition.map((c) => (
+            <span key={c.label} className={`ap-seg tone-${c.tone}`} style={{ flexGrow: c.value }} />
+          ))}
+        </div>
+        <ul className="ap-legend">
+          {composition.map((c) => (
+            <li key={c.label}>
+              <span className={`ap-swatch tone-${c.tone}`} />
+              <span className="ap-legend-label">{c.label}</span>
+              <strong>{usd(c.value)}</strong>
+              <span className="ap-legend-pct">{pctOf(c.value, TOTAL)}</span>
+            </li>
+          ))}
+        </ul>
+      </figure>
+    </>
+  );
+}
+
+const LO = 60;
+const HI = 95;
+const x = (v: number) => `${((v - LO) / (HI - LO)) * 100}%`;
+
+function Servers() {
+  return (
+    <>
+      <PageHead
+        index={1}
+        kicker="Your servers"
+        title={
+          <>
+            Same menu. Same room. <br />A {cents(SPREAD)} spread per guest.
+          </>
+        }
+        lede="Average spend per guest by server, across three weekends. Each target closes half the distance to your own top two."
+      />
+      <figure className="ap-servers" aria-label="Average spend per guest by server, now and target">
+        <div className="ap-sv-legend" aria-hidden="true">
+          <span>
+            <i className="k-now" /> Now
+          </span>
+          <span>
+            <i className="k-target" /> Target
+          </span>
+          <span>
+            <i className="k-bench" /> Top two · {cents(BENCH)}
+          </span>
+          <span>
+            <i className="k-avg" /> Room today · {cents(ROOM_NOW)}
+          </span>
+        </div>
+        <div className="ap-sv-chart">
+          <div className="ap-sv-plot" aria-hidden="true">
+            {[60, 70, 80, 90].map((t) => (
+              <span key={t} className="ap-grid" style={{ left: x(t) }}>
+                <em>${t}</em>
+              </span>
+            ))}
+            <span className="ap-line-bench" style={{ left: x(BENCH) }} />
+            <span className="ap-line-avg" style={{ left: x(ROOM_NOW) }} />
+          </div>
+          <ul className="ap-sv-rows">
+            {servers.map((s) => (
+              <li key={s.name}>
+                <span className="ap-sv-name">{s.name}</span>
+                <span className="ap-sv-track" aria-hidden="true">
+                  <span className="ap-sv-target" style={{ width: x(s.target) }} />
+                  <span className="ap-sv-now" style={{ width: x(s.now) }} />
+                </span>
+                <span className="ap-sv-vals">
+                  {cents(s.now)}
+                  {s.gap > 0 && <em> → {cents(s.target)}</em>}
+                </span>
+                <span className="ap-sv-year">{s.gap > 0 ? `+${usd(s.annual)}` : "Benchmark"}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="ap-sv-total">
+          <span>The room</span>
+          <span>
+            {cents(ROOM_NOW)} <em>→</em> {cents(ROOM_TARGET)} per guest
+          </span>
+          <strong>+{usd(CHECK_LIFT)} a year</strong>
+        </div>
+      </figure>
+    </>
+  );
+}
+
+function Priorities() {
+  const ranked = [...findings].sort((a, b) => b.value - a.value);
+  const max = ranked[0].value;
+  const topTwo = ranked[0].value + ranked[1].value;
+  return (
+    <>
+      <PageHead
+        index={2}
+        kicker="What to fix first"
+        title="Eight leaks, ranked by what they’re worth."
+        lede={`The wine list and the starter at seating are ${pctOf(topTwo, TOTAL)} of the total. That is where the program starts.`}
+      />
+      <figure className="ap-rank" aria-label="Findings ranked by annual value">
+        <ol>
+          {ranked.map((f, i) => (
+            <li key={f.title} className={i < 2 ? "is-top" : undefined}>
+              <span className="ap-rank-n">{String(i + 1).padStart(2, "0")}</span>
+              <span className="ap-rank-label">
+                {f.title}
+                <em>{f.moment}</em>
+              </span>
+              <span className="ap-rank-track" aria-hidden="true">
+                <span style={{ width: `${(f.value / max) * 100}%` }} />
+              </span>
+              <span className="ap-rank-value">{usd(f.value)}</span>
+            </li>
+          ))}
+        </ol>
+      </figure>
+    </>
+  );
+}
+
+function Evidence() {
+  return (
+    <>
+      <PageHead
+        index={3}
+        kicker="What we saw"
+        title="Follow one table through the night."
+        lede="Observed from inside your team, across six services. Every finding has a number, and every number a page in your manual."
+      />
+      <ol className="ap-evidence">
+        {findings.map((f) => (
+          <li key={f.title}>
+            <div className="ap-ev-top">
+              <span className="ap-ev-moment">{f.moment}</span>
+              <span className="ap-ev-value">{usd(f.value)}</span>
+            </div>
+            <h4>{f.title}</h4>
+            <p>{f.saw}</p>
+            <span className="ap-ev-measure">
+              {f.from} <em>→</em> {f.to}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </>
+  );
+}
+
+function BottomLine() {
+  const wMax = ADDED_SALES;
+  const h = (v: number) => `${(v / wMax) * 100}%`;
+  const afterCogs = ADDED_SALES - COGS;
+  const steps = [
+    {
+      label: "Sales recovered",
+      value: ADDED_SALES,
+      base: 0,
+      size: ADDED_SALES,
+      tone: "ink",
+      sign: "",
+    },
+    {
+      label: "Cost of goods & fees",
+      value: -COGS,
+      base: afterCogs,
+      size: COGS,
+      tone: "neg",
+      sign: "−",
+    },
+    { label: "Pour savings", value: POUR, base: afterCogs, size: POUR, tone: "gold", sign: "+" },
+    { label: "Kept as profit", value: PROFIT, base: 0, size: PROFIT, tone: "result", sign: "" },
+  ];
+  const nMax = PROFIT_NOW + PROFIT;
+  return (
+    <>
+      <PageHead
+        index={4}
+        kicker="The bottom line"
+        title="From the floor to the bottom line."
+        lede="Rent and salaries are already paid. Added sales carry only their cost of goods, so most of every recovered dollar is kept."
+      />
+      <div className="ap-bottom">
+        <figure className="ap-waterfall" aria-label="Annual sales recovered to profit kept">
+          <figcaption className="ap-chart-title">Recovered sales to profit, per year</figcaption>
+          <div className="ap-wf-plot">
+            {steps.map((s) => (
+              <div key={s.label} className="ap-wf-col">
+                <span className="ap-wf-area">
+                  <span
+                    className={`ap-wf-bar tone-${s.tone}`}
+                    style={{ bottom: h(s.base), height: h(s.size) }}
+                  />
+                  <em className="ap-bar-value" style={{ bottom: h(s.base + s.size) }}>
+                    {s.sign && <span className="ap-sign">{s.sign}</span>}
+                    {usd(Math.abs(s.value))}
+                  </em>
+                </span>
+                <span className="ap-wf-label">{s.label}</span>
+              </div>
+            ))}
+          </div>
+        </figure>
+        <figure className="ap-net" aria-label="Net profit today and with the gap closed">
+          <figcaption className="ap-chart-title">Net profit, per year</figcaption>
+          <div className="ap-net-plot">
+            <div className="ap-net-col">
+              <span className="ap-net-area">
+                <span
+                  className="ap-net-bar is-now"
+                  style={{ height: `${(PROFIT_NOW / nMax) * 100}%` }}
+                />
+                <em className="ap-bar-value" style={{ bottom: `${(PROFIT_NOW / nMax) * 100}%` }}>
+                  {usd(PROFIT_NOW)}
+                </em>
+              </span>
+              <span className="ap-wf-label">Today, at {Math.round(NET_MARGIN * 100)}%</span>
+            </div>
+            <div className="ap-net-col">
+              <span className="ap-net-area">
+                <span className="ap-net-bar is-after" style={{ height: "100%" }} />
+                <em className="ap-bar-value" style={{ bottom: "100%" }}>
+                  {usd(PROFIT_NOW + PROFIT)}
+                </em>
+              </span>
+              <span className="ap-wf-label">Gap closed</span>
+            </div>
+          </div>
+          <p className="ap-net-note">Nearly double. Same room, same rent.</p>
+        </figure>
+      </div>
+      <dl className="ap-stats ap-stats-foot">
+        <div>
+          <dt>Your servers</dt>
+          <dd>+{usd(TIPS_WEEK_EACH)} a week</dd>
+          <span>Each, in tips. {usd(TIPS)} a year across the team.</span>
+        </div>
+        <div>
+          <dt>Each week you wait</dt>
+          <dd>{usd(TOTAL / 52)}</dd>
+          <span>In sales and savings. {usd(PROFIT / 52)} of it profit.</span>
+        </div>
+        <div>
+          <dt>Sales today</dt>
+          <dd>{usd(SALES_NOW)}</dd>
+          <span>
+            {COVERS_PER_SERVICE} covers, six nights, {cents(ROOM_NOW)} a guest.
+          </span>
+        </div>
+      </dl>
+      <p className="ap-assumptions">
+        Assumptions: {Math.round(FLOW_THROUGH * 100)}% of added sales kept after cost of goods and
+        card fees; comps and pour savings kept in full; tips at {Math.round(TIP_RATE * 100)}%;
+        liquor at 18% of sales with a 20% pour cost; {Math.round(NET_MARGIN * 100)}% net margin
+        today (fine dining typically runs 5–10%).
+      </p>
+    </>
+  );
+}
+
+const RENDER = [Summary, Servers, Priorities, Evidence, BottomLine];
+
+export function SampleAudit() {
+  const [page, setPage] = useState(0);
+  const [inView, setInView] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const paperRef = useRef<HTMLDivElement>(null);
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e?.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // In the horizontal (phone) tab row, slide the active tab fully into view.
+  useEffect(() => {
+    const tab = tabs.current[page];
+    const list = tab?.parentElement;
+    if (!tab || !list || list.scrollWidth <= list.clientWidth) return;
+    const left = tab.offsetLeft - list.offsetLeft;
+    const target = Math.max(0, left - (list.clientWidth - tab.offsetWidth) / 2);
+    list.scrollTo({ left: target, behavior: "smooth" });
+  }, [page]);
+
+  const go = (next: number, focusTab = false) => {
+    const n = (next + PAGES.length) % PAGES.length;
+    setPage(n);
+    if (focusTab) tabs.current[n]?.focus();
+    // On phones the pages differ in height: keep the top of the new page in view.
+    const top = paperRef.current?.getBoundingClientRect().top ?? 0;
+    if (top < 0) paperRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+  };
+
+  const onKey = (e: KeyboardEvent) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+      e.preventDefault();
+      go(page + 1, true);
+    } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+      e.preventDefault();
+      go(page - 1, true);
+    }
+  };
+
+  const Page = RENDER[page];
+
+  return (
+    <div className="audit-viewer" ref={rootRef} data-inview={inView ? "true" : "false"}>
+      <nav className="audit-rail" aria-label="Sample report pages">
+        <span className="audit-rail-title">
+          The Undercover Audit
+          <em>Sample report</em>
+        </span>
+        <div role="tablist" aria-orientation="vertical" tabIndex={-1} onKeyDown={onKey}>
+          {PAGES.map((p, i) => (
+            <button
+              key={p.id}
+              ref={(b) => {
+                tabs.current[i] = b;
+              }}
+              role="tab"
+              id={`audit-tab-${p.id}`}
+              aria-selected={page === i}
+              aria-controls={`audit-page-${p.id}`}
+              tabIndex={page === i ? 0 : -1}
+              onClick={() => go(i)}
+            >
+              <span>{NUMERALS[i]}</span>
+              {p.title}
+            </button>
+          ))}
+        </div>
+        <p className="audit-rail-note">
+          A modeled 110-cover dining room. Every figure is illustrative. Yours is built from your
+          POS data and your floor.
+        </p>
+      </nav>
+
+      <div className="audit-paper" ref={paperRef}>
+        <div className="audit-running">
+          <span>The Undercover Audit · Sample</span>
+          <span>Modeled restaurant · Illustrative figures</span>
+        </div>
+        <section
+          key={PAGES[page].id}
+          className={`audit-page page-${PAGES[page].id}`}
+          role="tabpanel"
+          id={`audit-page-${PAGES[page].id}`}
+          aria-labelledby={`audit-tab-${PAGES[page].id}`}
+        >
+          <Page />
+        </section>
+        <footer className="audit-foot">
+          <button
+            type="button"
+            onClick={() => go(page - 1)}
+            aria-label="Previous page"
+            disabled={page === 0}
+          >
+            <ArrowLeft size={14} />
+          </button>
+          <span className="audit-folio">
+            {page + 1} <em>/</em> {PAGES.length}
+          </span>
+          {page < PAGES.length - 1 ? (
+            <button type="button" className="audit-next" onClick={() => go(page + 1)}>
+              Next · {PAGES[page + 1].title} <ArrowRight size={14} />
+            </button>
+          ) : (
+            <button type="button" className="audit-next" onClick={() => go(0)}>
+              Back to the summary <ArrowRight size={14} />
+            </button>
+          )}
+        </footer>
+      </div>
+    </div>
+  );
+}

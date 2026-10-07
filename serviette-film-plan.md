@@ -1,0 +1,40 @@
+ # Wine service — pour, stop, wipe
+
+## What the service standard actually says
+The Court of Master Sommeliers, Americas, Hospitality & Service Standards requires a serviette held in hand or on the forearm during service, and wiping the bottle with a clean serviette after each pour to prevent drips. It is not a cloth held in the stream or wrapped over the bottle mouth while pouring.
+
+Source: https://www.mastersommeliers.org/wp-content/uploads/2023/12/CMS-Hospitality-Service-Standards.pdf
+
+White gloves are retained as the owner's formal house-style choice. The cited standard does not require gloves. Michelin stars recognize cuisine; there is no single Michelin-mandated glove/napkin uniform. No Michelin affiliation or client relationship is implied.
+
+## Reference and scope
+Proposed first frame: /home/user/blm-service-refinement/serviette-keyframe.png. A precise Sunburst edit of the previous occupied-room frame adds the same sommelier's second white-gloved hand holding a folded white linen service cloth. This is generated illustrative imagery, not a real client photograph.
+
+One locked six-second wine shot only. No principal face is shown and no recurring character is introduced, so no separate multi-view character chart is needed. The actual frame is the reference plate.
+
+## Shot list
+- 0–3.2 seconds: restrained pour; right hand controls the bottle, left hand holds the folded cloth ready, away from the wine stream.
+- 3.2–4.0 seconds: right wrist rotates the bottle upright; the stream stops completely, then the mouth clears the glass.
+- 4.0–5.4 seconds: left hand brings the clean folded cloth to the outer bottle lip and makes one brief wipe to catch residual wine. No cloth enters the bottle opening.
+- 5.4–6.0 seconds: left hand lowers the cloth; bottle and hands withdraw slightly. No dripping on linen.
+
+After generation, inspect the actual stop-before-wipe sequence, two-hand anatomy, grip, cloth contact, wine accumulation and seated-diner continuity. Strip all audio, retime the whole complete action to exactly six seconds if the provider adds frames, and install only after QA succeeds.
+
+The 15-second website loop will retain the installed real truffle beef, evening-grade prawn risotto and sculptural tiramisu photographs, with 0.6-second dissolves and a first-frame return. No food-video generation and no reversed pour.
+
+## Complete animation prompt
+SCENE: A formal sommelier completes a red-wine pour, stops the stream, and uses a clean white linen service cloth to wipe the bottle lip before withdrawing. Elegantly dressed guests dine at occupied tables behind the service.
+REFERENCE AND FIRST FRAME: Match the supplied serviette-keyframe.png exactly. Preserve the cropped black-jacketed sommelier at frame-right, ivory shirt, two visible white cotton service gloves, dark bottle, single foreground Bordeaux glass, white linen, dark walnut architecture, crystal, warm practical lights and every seated background guest. The sommelier's head stays out of frame. The right hand already holds the tilted bottle body; the left hand holds one neatly folded small white linen serviette at lower frame-right, near but not touching the bottle mouth, stream or glass.
+FORMAT: One continuous six-second landscape shot, 720p-tier output, real-time motion. No cuts, slow motion, captions, logos or generated text.
+OPTICS AND CAMERA: Natural 47-degree field-of-view look, medium-close service detail at the reference angle, locked tripod. No zoom, pan, tilt, drift, push or reframing. Foreground gloves, cloth, bottle and wine are crisp; background occupied tables, faces and shoulders remain softly recognizable.
+ACTION: During seconds zero through 3.2 the right gloved fingers maintain a stable grip around the bottle body. A slender ruby-red stream falls into the stationary glass. Wine rises only slightly, remaining below the bowl's widest point. The left hand holds the folded serviette ready, separated from the stream. During seconds 3.2 through 4.0 the right wrist smoothly rotates the bottle upward; the stream narrows and STOPS COMPLETELY, then the bottle mouth moves a few centimeters upward and away from the glass. Only after the stream has stopped, during seconds 4.0 through 5.4, the left hand moves the folded cloth to the outside rim of the bottle mouth and makes one small deliberate wipe across the outer lip to catch residual wine. The bottle stays securely held in the right hand. No cloth is pushed into the opening and no cloth touches the stream or glass. During seconds 5.4 through 6.0 the left hand lowers the cloth and both hands with the bottle withdraw five centimeters toward frame-right. Complete the stop, wipe and withdrawal before the shot ends.
+BACKGROUND PERFORMANCE: All the same guests stay seated in the same chairs and clothing. Restrained small head nods, gaze shifts toward companions and breathing only. No raised glasses, broad gestures, new diners, disappearing diners or foreground walkers. The room remains visibly occupied throughout.
+PHYSICS: Exactly one foreground sommelier, exactly two service hands, exactly one bottle, one cloth and one foreground wine glass. Both hands remain anatomically connected to the same person's sleeves. Right fingers maintain hand-to-bottle contact throughout. Left fingers maintain hand-to-cloth contact throughout. Cloth folds deform only under the wiping hand's pressure. Correct cotton weave, realistic finger anatomy, linen weight, crystal refraction and stem contact shadow. No spills, intersections, floating objects or drips on the tablecloth. The glass is stationary. Wine accumulates only while pouring; its level never falls, resets or overflows.
+LIGHTING: Match the reference's subdued evening lighting. Soft neutral upper-camera-left light illuminates white cotton, linen and crystal around 4300K; restrained warm shaded wall/candle practicals illuminate the guests. Diners remain recognizable, not black silhouettes. No bright daylight, moving lights or extra spotlights.
+GRADE: Neutral white-linen nocturne. Base: charcoal tailoring, neutral ivory cotton and linen, dark walnut. Contrast: deep true blacks with retained shadow detail, no crushed midtones or blown whites. Accent: ruby-red wine. Fine natural photographic grain. Not teal-and-orange, not HDR, not CGI gloss, not oversaturated gold.
+AUDIO: Only wordless low dining-room ambience and subtle pouring; no dialogue, speech or music. Website assembly removes the audio track entirely.
+POSITIVE LOCKS: Preserve the reference room, diners, torso, sleeves, bottle and glass. Two white cotton gloves and the folded linen cloth remain visible. Exactly two hands: right pours, left wipes. The stream must stop before cloth contact. Wine level carries forward and does not reset. The cloth contacts only the outer bottle lip after pouring. Guests remain seated and stable in identity, outfit and position.
+NEGATIVE: Third hand, extra fingers, bare service hands, latex gloves, changing sleeve ownership, floating cloth, cloth in the wine stream, wiping during pouring, cloth inside bottle, bottle or glass deformation, changing bottle label, morphing guests, spills, falling wine level, emptying dining room, furniture moving, foreground face entering, camera motion, logos, text or watermarks.
+
+## Status
+Owner explicitly approved the delivered reference and complete prompt. Generated one MiniMax H3 Max image-to-video clip, six-second request, 720p tier (actual 1344 × 768, raw video 6.583333 seconds). Retimed the complete action to exactly six seconds and removed audio. Installed public/videos/serviette-pour.mp4 and the 15-second public/videos/serviette-evening-film.mp4 hero loop, with public/images/serviette-service.webp poster/fallback. Visually inspected sequential full-shot frames, close bottle-wipe frames and desktop/mobile website frames: the stream stops before the folded white cloth contacts the outer bottle lip, then cloth lowers and bottle withdraws. Build/lint and 1440/390/320px interaction tests passed. Genuine food photographs, charcoal methodology, full portrait and $75,000/$130,000 pricing retained.
