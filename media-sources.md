@@ -117,3 +117,10 @@ These are illustrative dining-room photographs, not claims that the pictured est
 - v2 (163 s) remains at `/home/user/platform-demo/1906-platform-demo-v2.mp4` and `videos/platform-demo-v2.mp4`; it is no longer served.
 - v1 (90 s) remains at `/home/user/platform-demo/1906-platform-demo.mp4`; it is no longer served.
 
+
+## 2026-10-07 — film v9, smoother pour and walk-away
+- **Hero film** `public/videos/evening-film-v9.mp4` (18.9 s, 1344×768, 24 fps, silent). Same shots and order as v8; only the opening pour and walk-away were re-cut. Build: `/home/user/blm-food-v6/film-e.mp4`.
+  - Pour re-cut from the original Kling takes (`seg1-gloves-raw.mp4` from frame 24, `seg2-gloves-raw.mp4` frames 1 to 95) at 1.2× with motion-compensated interpolation (`minterpolate` mci). v8 had been sped up 1.5× by dropping frames, which gave an uneven 2-1-2-1 frame cadence.
+  - The 1.3 s hold after the serviette lands on the forearm was cut. The walk-away (`walk-away-v1.mp4`, from frame 3) now joins through a 0.25 s dissolve, so he turns and leaves as the drape settles. Work files: `/home/user/blm-sfs-pour/v9/`.
+  - Dissolves at 9.275 / 12.275 / 15.275 / 18.275. No new generation.
+- `videos/evening-film-v8.mp4` is no longer referenced.

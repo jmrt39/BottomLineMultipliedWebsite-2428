@@ -5,10 +5,10 @@ import { Pause, Play } from "lucide-react";
 // (bottle and glass, server walking off, clinking glasses, risotto, lifted fork)
 // stays in frame.
 const FILM_FOCAL: [until: number, focal: string][] = [
-  [9.1, "68%"],
-  [12.1, "60%"],
-  [15.1, "84%"],
-  [18.1, "72%"],
+  [9.6, "68%"],
+  [12.6, "60%"],
+  [15.6, "84%"],
+  [18.6, "72%"],
 ];
 
 function filmFocal(time: number) {
@@ -106,7 +106,7 @@ export function CinematicRoom() {
         <video
           ref={attach}
           className="room-film"
-          src="/videos/evening-film-v8.mp4"
+          src="/videos/evening-film-v9.mp4"
           poster="/images/pour-gloves-label-v6.webp"
           muted
           loop
