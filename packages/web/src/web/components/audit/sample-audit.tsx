@@ -249,30 +249,14 @@ function Evidence() {
 }
 
 function BottomLine() {
-  const wMax = ADDED_SALES;
-  const h = (v: number) => `${(v / wMax) * 100}%`;
-  const afterCogs = ADDED_SALES - COGS;
-  const steps = [
-    {
-      label: "Sales recovered",
-      value: ADDED_SALES,
-      base: 0,
-      size: ADDED_SALES,
-      tone: "ink",
-      sign: "",
-    },
-    {
-      label: "Cost of goods & fees",
-      value: -COGS,
-      base: afterCogs,
-      size: COGS,
-      tone: "neg",
-      sign: "−",
-    },
-    { label: "Pour savings", value: POUR, base: afterCogs, size: POUR, tone: "gold", sign: "+" },
-    { label: "Kept as profit", value: PROFIT, base: 0, size: PROFIT, tone: "result", sign: "" },
+  // One scale for every bar on the page, so the same dollars are always the same length.
+  const max = PROFIT_NOW + PROFIT;
+  const w = (v: number) => `${(v / max) * 100}%`;
+  const rows = [
+    { label: "Sales recovered", value: ADDED_SALES, sign: "", tone: "ink" },
+    { label: "Less cost of goods & fees", value: COGS, sign: "", tone: "neg" },
+    { label: "Plus pour savings", value: POUR, sign: "+", tone: "gold" },
   ];
-  const nMax = PROFIT_NOW + PROFIT;
   return (
     <>
       <PageHead
@@ -281,53 +265,56 @@ function BottomLine() {
         title="From the floor to the bottom line."
         lede="Rent and salaries are already paid. Added sales carry only their cost of goods, so most of every recovered dollar is kept."
       />
-      <div className="ap-bottom">
-        <figure className="ap-waterfall" aria-label="Annual sales recovered to profit kept">
+      <div className="ap-ledger">
+        <figure className="ap-ledger-block" aria-label="Annual sales recovered to profit kept">
           <figcaption className="ap-chart-title">Recovered sales to profit, per year</figcaption>
-          <div className="ap-wf-plot">
-            {steps.map((s) => (
-              <div key={s.label} className="ap-wf-col">
-                <span className="ap-wf-area">
-                  <span
-                    className={`ap-wf-bar tone-${s.tone}`}
-                    style={{ bottom: h(s.base), height: h(s.size) }}
-                  />
-                  <em className="ap-bar-value" style={{ bottom: h(s.base + s.size) }}>
-                    {s.sign && <span className="ap-sign">{s.sign}</span>}
-                    {usd(Math.abs(s.value))}
-                  </em>
+          <ul className="ap-lg-rows">
+            {rows.map((r) => (
+              <li key={r.label} className="ap-lg-row">
+                <span className="ap-lg-label">{r.label}</span>
+                <span className="ap-lg-track">
+                  <span className={`ap-lg-bar tone-${r.tone}`} style={{ width: w(r.value) }} />
                 </span>
-                <span className="ap-wf-label">{s.label}</span>
-              </div>
+                <strong className="ap-lg-value">
+                  {r.sign && <span className="ap-sign">{r.sign}</span>}
+                  {r.tone === "neg" ? `(${usd(r.value)})` : usd(r.value)}
+                </strong>
+              </li>
             ))}
-          </div>
+            <li className="ap-lg-row is-total">
+              <span className="ap-lg-label">Kept as profit</span>
+              <span className="ap-lg-track">
+                <span className="ap-lg-bar tone-result" style={{ width: w(PROFIT) }} />
+              </span>
+              <strong className="ap-lg-value">{usd(PROFIT)}</strong>
+            </li>
+          </ul>
         </figure>
-        <figure className="ap-net" aria-label="Net profit today and with the gap closed">
+        <figure className="ap-ledger-block" aria-label="Net profit today and with the gap closed">
           <figcaption className="ap-chart-title">Net profit, per year</figcaption>
-          <div className="ap-net-plot">
-            <div className="ap-net-col">
-              <span className="ap-net-area">
+          <ul className="ap-lg-rows">
+            <li className="ap-lg-row">
+              <span className="ap-lg-label">Today, at {Math.round(NET_MARGIN * 100)}%</span>
+              <span className="ap-lg-track">
+                <span className="ap-lg-bar tone-ink" style={{ width: w(PROFIT_NOW) }} />
+              </span>
+              <strong className="ap-lg-value">{usd(PROFIT_NOW)}</strong>
+            </li>
+            <li className="ap-lg-row is-total">
+              <span className="ap-lg-label">With the gap closed</span>
+              <span className="ap-lg-track">
+                <span className="ap-lg-bar tone-ink" style={{ width: w(PROFIT_NOW) }} />
                 <span
-                  className="ap-net-bar is-now"
-                  style={{ height: `${(PROFIT_NOW / nMax) * 100}%` }}
-                />
-                <em className="ap-bar-value" style={{ bottom: `${(PROFIT_NOW / nMax) * 100}%` }}>
-                  {usd(PROFIT_NOW)}
-                </em>
+                  className="ap-lg-bar tone-result is-added"
+                  style={{ left: w(PROFIT_NOW), width: w(PROFIT) }}
+                >
+                  <small>+{usd(PROFIT)}</small>
+                </span>
               </span>
-              <span className="ap-wf-label">Today, at {Math.round(NET_MARGIN * 100)}%</span>
-            </div>
-            <div className="ap-net-col">
-              <span className="ap-net-area">
-                <span className="ap-net-bar is-after" style={{ height: "100%" }} />
-                <em className="ap-bar-value" style={{ bottom: "100%" }}>
-                  {usd(PROFIT_NOW + PROFIT)}
-                </em>
-              </span>
-              <span className="ap-wf-label">Gap closed</span>
-            </div>
-          </div>
-          <p className="ap-net-note">Nearly double. Same room, same rent.</p>
+              <strong className="ap-lg-value">{usd(PROFIT_NOW + PROFIT)}</strong>
+            </li>
+          </ul>
+          <p className="ap-lg-note">Nearly double. Same room, same rent.</p>
         </figure>
       </div>
       <dl className="ap-stats ap-stats-foot">
@@ -353,7 +340,7 @@ function BottomLine() {
         Assumptions: {Math.round(FLOW_THROUGH * 100)}% of added sales kept after cost of goods and
         card fees; comps and pour savings kept in full; tips at {Math.round(TIP_RATE * 100)}%;
         liquor at 18% of sales with a 20% pour cost; {Math.round(NET_MARGIN * 100)}% net margin
-        today (fine dining typically runs 5–10%).
+        today (fine dining typically runs 5 to 10%).
       </p>
     </>
   );
@@ -445,8 +432,8 @@ export function SampleAudit() {
           ))}
         </div>
         <p className="audit-rail-note">
-          A modeled 110-cover dining room. Every figure is illustrative. Yours is built from your
-          POS data and your floor.
+          A modeled dining room of 110 covers. Every figure is illustrative. Yours is built from
+          your POS data and your floor.
         </p>
       </nav>
 

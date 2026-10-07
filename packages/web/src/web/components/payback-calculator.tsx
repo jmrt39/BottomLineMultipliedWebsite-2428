@@ -3,12 +3,13 @@ import { useState } from "react";
 /** Share of each added sales dollar kept after cost of goods and card fees (same as the sample audit). */
 const KEPT = 0.66;
 const HORIZON = 24; // months shown on the timeline
-const PROGRAM = { 1: 75_000, 2: 130_000 } as const;
+const PROGRAM = { 1: 85_000, 2: 140_000 } as const;
 
-const usd = (n: number) => `${n < 0 ? "−" : ""}$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+const money = (n: number) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
+const usd = (n: number) => (n < 0 ? `(${money(n)})` : money(n));
 
 function paybackLabel(months: number) {
-  if (!Number.isFinite(months)) return { value: "—", unit: "" };
+  if (!Number.isFinite(months)) return { value: "Not yet", unit: "" };
   if (months > 36) return { value: "3+", unit: "years" };
   if (months < 2) {
     const weeks = Math.max(1, Math.ceil((months * 52) / 12));
@@ -145,9 +146,9 @@ export function PaybackCalculator() {
       <p className="calculator-disclaimer">
         {covers} covers × ${lift} × {services} nights
         {locations === 2 ? " × 2 locations" : ""}, with {Math.round(KEPT * 100)}% of added sales
-        kept after cost of goods and card fees. The $10,000 audit is credited toward the program
-        within 90 days. Illustrative only; results depend on your operation, costs, guest demand and
-        implementation.
+        kept after cost of goods and card fees. The $10,000 audit per location is credited toward
+        the program within 90 days. Illustrative only; results depend on your operation, costs,
+        guest demand and implementation.
       </p>
     </div>
   );

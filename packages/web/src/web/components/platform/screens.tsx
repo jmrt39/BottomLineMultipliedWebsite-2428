@@ -353,7 +353,9 @@ export function PosScreen({ c }: { c: number }) {
 
 // ---------- glassware & silverware ----------
 // Rows 1–2 are rated during T2 (tablet off camera), rows 3–4 under Kerr's taps in T3, row 5 in
-// the UI; the trainee signs at the start of LF-sign and the trainer near its end, then confirms.
+// the UI. In LF-sign everything on the sign-off page happens under a tracked fingertip:
+// Camille initials (clip 0.70–1.20), Kerr taps "Approve grade" (clip 4.97–5.50) and initials
+// (clip 6.03–6.60); the confirm press and the stamp follow in the UI scene.
 // c = clip time − 2.0 (T3) and clip time + 11 (LF).
 const ROWS = [-3.0, -1.6, 1.4, 2.8, 4.4];
 export const SILVER = {
@@ -361,13 +363,68 @@ export const SILVER = {
   score: 6.6,
   button: 8.6,
   view: 9.4,
-  trainee: 11.2,
-  traineeDur: 1.6,
-  trainer: 15.4,
-  trainerDur: 1.3,
-  confirm: 17.2,
-  stamp: 17.6,
+  approve: 15.97,
+  approveEnd: 16.5,
+  confirm: 18.4,
+  stamp: 18.8,
 };
+/** Ink strokes as [c, u, v] in screen pixels: Kerr's and Camille's fingertips tracked in LF-sign. */
+type InkPoint = [number, number, number];
+const INK_TRAINEE: InkPoint[] = [
+  [11.7, 376, 393],
+  [11.77, 347, 431],
+  [11.8, 334, 454],
+  [11.83, 332, 458],
+  [11.87, 338, 468],
+  [11.93, 344, 478],
+  [11.97, 350, 490],
+  [12.0, 359, 507],
+  [12.03, 361, 511],
+  [12.1, 373, 518],
+  [12.13, 381, 507],
+  [12.2, 384, 518],
+];
+const INK_TRAINER: InkPoint[] = [
+  [17.03, 498, 653],
+  [17.1, 510, 665],
+  [17.13, 521, 675],
+  [17.17, 531, 694],
+  [17.2, 530, 723],
+  [17.27, 507, 739],
+  [17.3, 472, 732],
+  [17.33, 439, 708],
+  [17.37, 410, 656],
+  [17.43, 398, 631],
+  [17.47, 397, 639],
+  [17.5, 408, 682],
+  [17.53, 420, 711],
+  [17.6, 419, 721],
+];
+const inkDone = (pts: InkPoint[]) => pts[pts.length - 1][0];
+/** The part of a stroke drawn by clock c, smoothed through segment midpoints. */
+function inkPath(pts: InkPoint[], c: number) {
+  if (c <= pts[0][0]) return "";
+  const vis: [number, number][] = [];
+  for (let i = 0; i < pts.length; i++) {
+    const [t, u, v] = pts[i];
+    if (t <= c) {
+      vis.push([u, v]);
+      continue;
+    }
+    const [t0, u0, v0] = pts[i - 1];
+    const k = (c - t0) / (t - t0);
+    vis.push([lerp(u0, u, k), lerp(v0, v, k)]);
+    break;
+  }
+  let d = `M${vis[0][0]} ${vis[0][1]}`;
+  for (let i = 1; i < vis.length - 1; i++) {
+    const [x, y] = vis[i];
+    const [nx, ny] = vis[i + 1];
+    d += ` Q${x} ${y} ${(x + nx) / 2} ${(y + ny) / 2}`;
+  }
+  const [lx, ly] = vis[vis.length - 1];
+  return `${d} L${lx} ${ly}`;
+}
 const WORD = ["", "Little to none", "Developing", "Moderate", "Strong", "Excellent"];
 
 export function SilverScreen({ c }: { c: number }) {
@@ -375,6 +432,8 @@ export function SilverScreen({ c }: { c: number }) {
   const avg = SILVER_SCORES.reduce((a, b) => a + b, 0) / SILVER_SCORES.length;
   const score = pop(c, SILVER.score);
   const stamp = ease(c, SILVER.stamp, SILVER.stamp + 0.5, easeOut);
+  const approving = c >= SILVER.approve && c < SILVER.approveEnd;
+  const approved = c >= SILVER.approveEnd;
   return (
     <div className="pv-screen pv-silver">
       <header className="pv-head">
@@ -421,34 +480,45 @@ export function SilverScreen({ c }: { c: number }) {
           className="pv-silver-page pv-signpad"
         >
           <p>Both signatures are required before this exercise counts toward the program.</p>
-          <div className="pv-signpad-boxes">
-            {[
-              {
-                label: "Trainee",
-                name: NEW_HIRE.name,
-                at: SILVER.trainee,
-                dur: SILVER.traineeDur,
-                which: 1 as const,
-              },
-              {
-                label: "Trainer",
-                name: MANAGER.name,
-                at: SILVER.trainer,
-                dur: SILVER.trainerDur,
-                which: 0 as const,
-              },
-            ].map((s) => (
-              <div key={s.label} className="pv-sign big">
-                <span>{s.label}</span>
-                <Signature which={s.which} p={progress(c, s.at, s.at + 1.6)} />
-                <em>
-                  {s.name} · Oct 6{c >= s.at + 1.6 && <Check size={20} strokeWidth={2.4} />}
-                </em>
-              </div>
-            ))}
+          {[
+            { label: "Trainee", name: NEW_HIRE.name, pts: INK_TRAINEE, cls: "is-trainee" },
+            { label: "Trainer", name: MANAGER.name, pts: INK_TRAINER, cls: "is-trainer" },
+          ].map((s) => (
+            <div key={s.label} className={`pv-sp-box ${s.cls}`}>
+              <span>{s.label}</span>
+              <em>
+                {s.name} · Oct 6{c >= inkDone(s.pts) && <Check size={20} strokeWidth={2.4} />}
+              </em>
+            </div>
+          ))}
+          <div className="pv-sp-grade">
+            <span>Grade</span>
+            <strong>
+              {avg.toFixed(1)}
+              <small> of 5</small>
+            </strong>
+            <ul>
+              {SILVER_CRITERIA.map((k, i) => (
+                <li key={k}>
+                  <Stars shown={SILVER_SCORES[i]} size={17} />
+                  <small>{k}</small>
+                </li>
+              ))}
+            </ul>
           </div>
           <span
-            className={`pv-submit pv-confirm${c >= SILVER.confirm && c < SILVER.confirm + 0.35 ? " is-pressed" : ""}${stamp > 0 ? " is-done" : ""}`}
+            className={`pv-submit pv-sp-approve${approving ? " is-pressed" : ""}${approved ? " is-done" : ""}`}
+          >
+            {approved ? (
+              <>
+                <Check size={24} strokeWidth={2.4} /> Grade approved
+              </>
+            ) : (
+              "Approve grade"
+            )}
+          </span>
+          <span
+            className={`pv-submit pv-sp-confirm${c >= SILVER.confirm && c < SILVER.confirm + 0.35 ? " is-pressed" : ""}${stamp > 0 ? " is-done" : ""}`}
           >
             {stamp > 0 ? (
               <>
@@ -459,7 +529,7 @@ export function SilverScreen({ c }: { c: number }) {
             )}
           </span>
           <div
-            className="pv-stamp"
+            className="pv-stamp pv-sp-stamp"
             style={{
               opacity: stamp,
               transform: `rotate(-5deg) scale(${lerp(1.35, 1, stamp)})`,
@@ -470,6 +540,12 @@ export function SilverScreen({ c }: { c: number }) {
           </div>
         </div>
       </div>
+      {view >= 1 && (
+        <svg className="pv-ink" viewBox="0 0 1280 880" aria-hidden="true">
+          <path d={inkPath(INK_TRAINEE, c)} />
+          <path d={inkPath(INK_TRAINER, c)} />
+        </svg>
+      )}
     </div>
   );
 }

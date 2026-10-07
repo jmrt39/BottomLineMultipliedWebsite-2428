@@ -59,11 +59,11 @@ const methods = [
     phase: "BUILD",
     time: "APPROXIMATELY 30 DAYS",
     description:
-      "Your menu. Your people. Your gaps. We turn the diagnosis into a custom training system—not a borrowed playbook. Every detail is built for the way your restaurant should feel.",
+      "Your menu. Your people. Your gaps. We turn the diagnosis into a custom training system, not a borrowed playbook. Every detail is built for the way your restaurant should feel.",
     details: [
-      "Greeting and guest-recognition scripts",
+      "Greeting and guest recognition scripts",
       "Upsell frameworks & wine presentation",
-      "Check delivery & end-of-shift discipline",
+      "Check delivery & end of shift discipline",
     ],
   },
   {
@@ -71,10 +71,10 @@ const methods = [
     phase: "INSTALL & ACCOUNTABILITY",
     time: "BUILT TO LAST",
     description:
-      "We install your program on our proprietary platform. Your team learns, practices, and is signed off on the floor. Managers finally have a system for coaching—not just scheduling.",
+      "We install your program on our proprietary platform. Your team learns, practices, and is signed off on the floor. Managers finally have a system for coaching, not just scheduling.",
     details: [
-      "Knowledge checks & manager-signed floor exercises",
-      "Six competencies graded from 1–5 for every team member",
+      "Knowledge checks & floor exercises signed off by managers",
+      "Six competencies graded from 1 to 5 for every team member",
       "Live performance reporting tied to sales data",
     ],
   },
@@ -95,11 +95,11 @@ const reportChapters = [
   },
   {
     title: "Where money slips out.",
-    body: "Comps, voids, discounts and items never rung in; pour consistency and bar leakage; check delivery, closing out tables and end-of-shift side work; sections, staffing and covers per server.",
+    body: "Comps, voids, discounts and items never rung in; pour consistency and bar leakage; check delivery, closing out tables and end of shift side work; sections, staffing and covers per server.",
   },
   {
     title: "What your numbers say.",
-    body: "Analysis of your point-of-sale (POS) data, including average check and attach rates by server.",
+    body: "Analysis of your point of sale (POS) data, including average check and attach rates by server.",
   },
   {
     title: "What to fix first.",
@@ -166,7 +166,7 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <p className="inquiry-intro">
-              A focused, 20-minute discovery conversation. No generic pitch. Just your restaurant,
+              A focused, 20 minute discovery conversation. No generic pitch. Just your restaurant,
               your standards, and what might be getting in the way.
             </p>
             <form
@@ -317,7 +317,7 @@ export default function Home() {
             <p>
               I join your floor as a new hire. Only you know who I am. Across{" "}
               <strong>three weekends</strong>, I experience your current training exactly as your
-              staff does—where expectations are left unclear, shortcuts become habits, and
+              staff does, where expectations are left unclear, shortcuts become habits, and
               accountability slips. Then I hand you the number your dining room leaks every single
               year.
             </p>
@@ -352,7 +352,7 @@ export default function Home() {
               <div className="course-image">
                 <img
                   src="/images/beef-tenderloin-medium-rare.webp"
-                  alt="Photograph of medium-rare sliced beef tenderloin with dark jus, roasted potatoes under a light cream, microgreens and herb-oil dots on an unobstructed white plate in low evening light"
+                  alt="Photograph of medium rare sliced beef tenderloin with dark jus, roasted potatoes under a light cream, microgreens and herb oil dots on an unobstructed white plate in low evening light"
                   loading="lazy"
                 />
               </div>
@@ -365,7 +365,7 @@ export default function Home() {
               <div className="course-image">
                 <img
                   src="/images/guests-laughing-real-v1.webp"
-                  alt="Guests framed below the eyes: a woman in a black dress smiles over a raised glass of champagne in a wood-panelled dining room"
+                  alt="Guests framed below the eyes: a woman in a black dress smiles over a raised glass of champagne in a wood panelled dining room"
                   loading="lazy"
                 />
                 <AmbientClip
@@ -428,7 +428,7 @@ export default function Home() {
               <p className="statement">
                 You don’t need another workshop.
                 <br />
-                You need the truth—and a system that holds.
+                You need the truth, and a system that holds.
               </p>
             </div>
           </div>
@@ -463,7 +463,7 @@ export default function Home() {
             <div className="method-photo">
               <img
                 src="/images/pristine-occupied-dining.webp"
-                alt="Illustrative scene of an occupied, pristine fine-dining room with elegantly dressed guests, attentive black-suited service, full ivory linen, polished crystal and cream upholstery"
+                alt="Illustrative scene of an occupied, pristine fine dining room with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
                 loading="lazy"
               />
               <div className="method-photo-label">
@@ -521,7 +521,7 @@ export default function Home() {
               </h2>
               <p>
                 One considered recommendation. A more confident wine presentation. A team that knows
-                what to say—and when.
+                what to say, and when.
               </p>
               <p>
                 Slide to your room and see how quickly a higher average check pays for the program.
@@ -550,7 +550,7 @@ export default function Home() {
               <span className="small-index">I</span>
               <h3>Learn it.</h3>
               <p>
-                Custom modules and knowledge checks built around your actual service—not someone
+                Custom modules and knowledge checks built around your actual service, not someone
                 else’s restaurant.
               </p>
             </div>
@@ -558,7 +558,7 @@ export default function Home() {
               <span className="small-index">II</span>
               <h3>Live it.</h3>
               <p>
-                Floor exercises signed off by managers. Six competencies. A 1–5 grading system.
+                Floor exercises signed off by managers. Six competencies. A 1 to 5 grading system.
                 Clear, shared expectations.
               </p>
             </div>
@@ -598,8 +598,8 @@ export default function Home() {
                 sit down together, in person or on video, and walk through every page.
               </p>
               <p>
-                Below is a sample for a modeled 110-cover dining room. In yours, every number comes
-                from your own room.
+                Below is a sample for a modeled dining room of 110 covers. In yours, every number
+                comes from your own room.
               </p>
               <dl className="deliverable-notes">
                 <div>
@@ -648,7 +648,7 @@ export default function Home() {
                 See the evidence before you commit to the solution.
               </p>
               <button className="text-link" onClick={openInquiry}>
-                Arrange a 20-minute discovery call <ArrowUpRight size={17} />
+                Arrange a 20 minute discovery call <ArrowUpRight size={17} />
               </button>
             </div>
             <div className="price-list">
@@ -656,27 +656,48 @@ export default function Home() {
                 <div>
                   <span className="eyebrow">THE UNDERCOVER AUDIT</span>
                   <h3>Three weekends. The whole picture.</h3>
-                  <p>Gap report, per-server breakdown and debrief within 10 business days.</p>
+                  <p>Gap report, breakdown by server and debrief within 10 business days.</p>
                 </div>
                 <span className="price">$10,000</span>
               </div>
               <p className="audit-credit">
-                Credited in full toward your program if you proceed within 90 days.
+                Per location. Credited in full toward your program if you proceed within 90 days.
+                The audit is effectively free.
               </p>
               <div className="price-row">
                 <div>
                   <span className="eyebrow">THE COMPLETE PROGRAM</span>
                   <h3>Diagnose. Build. Install.</h3>
-                  <p>Includes the first 12 months of the platform.</p>
+                  <p>
+                    One program, one standard. Each floor audited against it. Includes the first 12
+                    months of the platform.
+                  </p>
                 </div>
                 <div className="program-prices">
                   <span>
-                    <b>$75,000</b> one location
+                    <b>$85,000</b> one location
+                    <em className="program-credit">$75,000 with your audit credit</em>
                   </span>
                   <span>
-                    <b>$130,000</b> two locations
+                    <b>$140,000</b> two locations
+                    <em className="program-credit">$120,000 with your audit credits</em>
                   </span>
                 </div>
+              </div>
+              <div className="commit-offer">
+                <span className="eyebrow">COMMIT FROM THE START</span>
+                <h3>Sign on for the full program before your audit.</h3>
+                <ul>
+                  <li>
+                    <b>Walk away if the numbers aren’t there.</b> If your gap report finds less
+                    yearly profit to recover than the program costs, cancel and pay only for the
+                    audit.
+                  </li>
+                  <li>
+                    <b>Your platform rate, locked for years two and three.</b> $450/month for one
+                    location. $650/month for two locations together, instead of $900.
+                  </li>
+                </ul>
               </div>
               <button
                 className="terms-toggle"
@@ -689,12 +710,18 @@ export default function Home() {
               {pricingOpen && (
                 <div className="payment-details">
                   <p>
-                    <b>40%</b> to begin the audit · <b>40%</b> when you receive the gap report and
-                    custom program · <b>20%</b> at launch on the platform.
+                    <b>Audit:</b> $5,000 to secure your dates, nonrefundable · $5,000 when the gap
+                    report is delivered.
                   </p>
                   <p>
-                    After year one, the platform renews at <b>$450/month per location.</b> The audit
-                    credit is applied to the full program price.
+                    <b>Program:</b> <b>50%</b> when you sign on · <b>50%</b> when your platform is
+                    handed over to your team.
+                  </p>
+                  <p>
+                    After year one, the platform renews at <b>$450/month per location.</b> Sign on
+                    from the start and it’s locked for years two and three: $450/month for one
+                    location, $650/month for two. Audit credits are applied to the full program
+                    price.
                   </p>
                 </div>
               )}

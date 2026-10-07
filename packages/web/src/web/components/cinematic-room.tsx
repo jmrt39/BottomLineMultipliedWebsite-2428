@@ -138,7 +138,7 @@ export function CinematicRoom() {
       )}
       {failed && (
         <div className="film-preview-label">
-          <span>WHITE-GLOVE SERVICE</span>
+          <span>WHITE GLOVE SERVICE</span>
           <span>STILL VIEW</span>
         </div>
       )}

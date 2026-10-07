@@ -51,7 +51,7 @@ export type Finding = {
 // In the order a table meets them.
 export const findings: Finding[] = [
   {
-    moment: "Pre-shift · 4:30 pm",
+    moment: "Lineup · 4:30 pm",
     title: "The meeting before service",
     saw: "A lineup ran before 3 of 6 services. The kitchen attended none, and features were never tasted. Two dishes ran out and were still sold, then comped.",
     from: "Comps 1.9% of sales",
@@ -98,7 +98,7 @@ export const findings: Finding[] = [
   {
     moment: "After the entrée",
     title: "The last course",
-    saw: "Dessert menus were dropped without a recommendation at 68% of tables. Coffee or an after-dinner drink was offered at 1 table in 4.",
+    saw: "Dessert menus were dropped without a recommendation at 68% of tables. Coffee or an after dinner drink was offered at 1 table in 4.",
     from: "0.17 desserts per guest",
     to: "0.24",
     value: 32_600,
@@ -115,8 +115,8 @@ export const findings: Finding[] = [
   },
   {
     moment: "All night · the well",
-    title: "The two-ounce pour that isn’t",
-    saw: "Free-poured cocktails measured 2.25 oz against a 2 oz spec on 18 of the 24 we checked.",
+    title: "The two ounce pour that isn’t",
+    saw: "Cocktails poured freehand measured 2.25 oz against a 2 oz spec on 18 of the 24 we checked.",
     from: "2.25 oz",
     to: "2.00 oz",
     value: SALES_NOW * 0.18 * 0.2 * 0.125,
@@ -140,7 +140,7 @@ export const composition = [
   { label: "Higher checks", value: CHECK_LIFT, tone: "ink" },
   { label: "Covers that walked", value: COVER_SALES, tone: "gold" },
   { label: "Comps & remakes", value: COMPS, tone: "taupe" },
-  { label: "Over-pour", value: POUR, tone: "pale" },
+  { label: "Overpour", value: POUR, tone: "pale" },
 ] as const;
 
 export const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;

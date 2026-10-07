@@ -191,8 +191,8 @@ export function SilverScene({ t }: { t: number }) {
 export function SilverSignedScene({ t }: { t: number }) {
   const keys = tabKeys(SILVER_C0, [
     [17.0, 640, 500, 1.18],
-    [18.2, 760, 560, 1.36],
-    [21.6, 760, 560, 1.44],
+    [18.3, 820, 540, 1.36],
+    [21.6, 860, 540, 1.46],
   ]);
   return (
     <Cam t={t} keys={keys}>
