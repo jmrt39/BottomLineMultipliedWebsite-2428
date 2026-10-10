@@ -377,6 +377,6 @@ export const INCENTIVES = [
   { title: "First pick of sections and shifts", detail: "On the next schedule" },
   { title: "Chef’s Table for two", detail: "With the sommelier’s pairing" },
   { title: "Certification paid in full", detail: "WSET Level 2 or CMS Introductory" },
-  { title: "Ten guests, by name", detail: "Every 10 reviews that name you: pick your Friday or Saturday section" },
+  { title: "Ten guests, by name", detail: "Every 10 reviews that name you: pick a Friday or Saturday section, a shift with no side work, or $50 to spend here" },
   { title: "Winery or distillery visit", detail: "Top performer of the year" },
 ];
