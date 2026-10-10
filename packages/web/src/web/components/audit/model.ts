@@ -9,7 +9,7 @@ export const FLOW_THROUGH = 0.66; // added items after ~30% cost of goods and ~4
 export const TIP_RATE = 0.2;
 export const WEEKEND_NIGHTS = 104;
 
-// Average spend per guest during the audit, by server.
+// Average spend per ticket during the audit, by server (net sales ÷ tickets).
 const OBSERVED = [
   { name: "Server A", now: 91.1 },
   { name: "Server B", now: 86.3 },
@@ -56,21 +56,21 @@ export type Finding = {
   kind: Kind;
 };
 
-// The arithmetic behind a per guest gap, written the way the owner would check it.
-const BASE = `${COVERS_PER_SERVICE} covers × ${NIGHTS_PER_WEEK} nights × 52 weeks`;
+// The arithmetic behind a per ticket gap, written the way the owner would check it.
+const BASE = `${COVERS_PER_SERVICE} tickets × ${NIGHTS_PER_WEEK} nights × 52 weeks`;
 const money2 = (n: number) => `$${n.toFixed(2)}`;
 const whole = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 function perGuest(how: string, gap: number) {
-  return { math: `${how} = ${money2(gap)} per guest × ${BASE}`, value: Math.round(gap * COVERS) };
+  return { math: `${how} = ${money2(gap)} per ticket × ${BASE}`, value: Math.round(gap * COVERS) };
 }
 
-// Per guest gaps for the five check findings. Together they are exactly the room's
-// check lift on the Servers page ($5.75 a guest), so every page reconciles.
-const STARTER = perGuest("0.09 more starters per guest × $15 average starter", 0.09 * 15);
+// Per ticket gaps for the five check findings. Together they are exactly the room's
+// check lift on the Servers page ($5.75 a ticket), so every page reconciles.
+const STARTER = perGuest("0.09 more starters per ticket × $15 average starter", 0.09 * 15);
 const WINE = perGuest("$19.90 target less $17.80 today", 19.9 - 17.8);
 const FEATURES = perGuest("6 more entrées in 100 as features × $14 above the average entrée", 0.06 * 14);
-const CALL = perGuest("0.22 house pours per guest moved to a call brand × $2.50 upcharge", 0.22 * 2.5);
-const DESSERT = perGuest("0.07 more desserts per guest × $13 average dessert", 0.07 * 13);
+const CALL = perGuest("0.22 house pours per ticket moved to a call brand × $2.50 upcharge", 0.22 * 2.5);
+const DESSERT = perGuest("0.07 more desserts per ticket × $13 average dessert", 0.07 * 13);
 
 const LIQUOR_SHARE = 0.18;
 const POUR_COST = 0.2;
@@ -99,9 +99,9 @@ export const findings: Finding[] = [
     moment: "Seating · first two minutes",
     title: "A starter, named at the table",
     saw: "A specific starter was recommended at 11 of 46 tables. Naming one dish sold a starter to 52% of tables; “any appetizers?” sold 19%.",
-    from: "0.24 starters per guest",
+    from: "0.24 starters per ticket",
     to: "0.33",
-    now: "0.24 starters per guest.",
+    now: "0.24 starters per ticket.",
     target: "0.33, achieved when every server names one specific starter at seating.",
     ...STARTER,
     kind: "check",
@@ -110,9 +110,9 @@ export const findings: Finding[] = [
     moment: "Ordering · the wine list",
     title: "The wine list, explained",
     saw: "Asked for a pairing, 3 of 8 servers named a wine and said why. A second glass was offered 1 time in 3. Tables of four were offered a bottle at 9 of 22.",
-    from: "$17.80 wine per guest",
+    from: "$17.80 wine per ticket",
     to: "$19.90",
-    now: "$17.80 current wine per guest.",
+    now: "$17.80 current wine per ticket.",
     target:
       "$19.90, achieved when a second glass is offered and bottle upgrades are suggested to tables of four.",
     ...WINE,
@@ -144,9 +144,9 @@ export const findings: Finding[] = [
     moment: "After the entrée",
     title: "The last course",
     saw: "Dessert menus were dropped without a recommendation at 68% of tables. Coffee or an after dinner drink was offered at 1 table in 4.",
-    from: "0.17 desserts per guest",
+    from: "0.17 desserts per ticket",
     to: "0.24",
-    now: "0.17 desserts per guest.",
+    now: "0.17 desserts per ticket.",
     target:
       "0.24, achieved when the server recommends one dessert by name as the menu goes down.",
     ...DESSERT,
@@ -155,12 +155,12 @@ export const findings: Finding[] = [
   {
     moment: "The check",
     title: "The check that arrives late",
-    saw: "On Saturdays: 8 min 40 s from “whenever you’re ready” to the check on the table. Meanwhile about three covers a night walked from the wait list.",
+    saw: "On Saturdays: 8 min 40 s from “whenever you’re ready” to the check on the table. Meanwhile about three tables a night walked from the wait list.",
     from: "8 min 40 s",
     to: "under 3 min",
-    now: "About 3 covers a night walk from the wait list on Fridays and Saturdays.",
+    now: "About 3 tables a night walk from the wait list on Fridays and Saturdays.",
     target: "Seat them, by getting the check down within 3 minutes of being asked.",
-    math: `${WALKED_PER_NIGHT} covers × ${WEEKEND_NIGHTS} Friday and Saturday nights × ${money2(ROOM_NOW)} average spend`,
+    math: `${WALKED_PER_NIGHT} tables × ${WEEKEND_NIGHTS} Friday and Saturday nights × ${money2(ROOM_NOW)} average ticket`,
     value: Math.round(WALKED_PER_NIGHT * WEEKEND_NIGHTS * ROOM_NOW),
     kind: "covers",
   },
@@ -196,7 +196,7 @@ export const TIPS_WEEK_EACH = TIPS / servers.length / 52;
 
 export const composition = [
   { label: "Higher checks", value: CHECK_LIFT, tone: "ink" },
-  { label: "Covers that walked", value: COVER_SALES, tone: "gold" },
+  { label: "Tables that walked", value: COVER_SALES, tone: "gold" },
   { label: "Comps & remakes", value: COMPS, tone: "taupe" },
   { label: "Overpour", value: POUR, tone: "pale" },
 ] as const;

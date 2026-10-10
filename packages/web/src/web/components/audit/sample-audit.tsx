@@ -78,7 +78,7 @@ function Summary() {
           <span className="ap-figure-note">every year</span>
         </div>
         <blockquote className="ap-pull">
-          Two of your eight servers already average {cents(BENCH)} a guest. The other six average{" "}
+          Two of your eight servers already average {cents(BENCH)} a ticket. The other six average{" "}
           {cents(REST_AVG)}. The gap isn’t the menu, the room or the prices. It’s what happens at
           the table.
         </blockquote>
@@ -89,7 +89,7 @@ function Summary() {
           <dd>{usd(TOTAL / 52)}</dd>
         </div>
         <div>
-          <dt>Per guest</dt>
+          <dt>Per ticket</dt>
           <dd>+{cents(CHECK_LIFT / COVERS)}</dd>
         </div>
         <div>
@@ -115,8 +115,8 @@ function Summary() {
           ))}
         </ul>
         <p className="ap-math-note">
-          {cents(CHECK_LIFT / COVERS)} per guest × {COVERS.toLocaleString("en-US")} covers a year ={" "}
-          {usd(CHECK_LIFT)} in higher checks, plus {usd(COVER_SALES)} in covers that walked,{" "}
+          {cents(CHECK_LIFT / COVERS)} per ticket × {COVERS.toLocaleString("en-US")} tickets a year ={" "}
+          {usd(CHECK_LIFT)} in higher checks, plus {usd(COVER_SALES)} in tables that walked,{" "}
           {usd(COMPS)} in comps and {usd(POUR)} in pour. Every line is worked out under What we
           saw.
         </p>
@@ -137,12 +137,12 @@ function Servers() {
         kicker="Your servers"
         title={
           <>
-            Same menu. Same room. <br />A {cents(SPREAD)} spread per guest.
+            Same menu. Same room. <br />A {cents(SPREAD)} spread per ticket.
           </>
         }
-        lede="Average spend per guest by server, across six shifts over two weeks. Each target closes half the distance to your own top two."
+        lede="Average spend per ticket by server, across six shifts over two weeks. Each target closes half the distance to your own top two."
       />
-      <figure className="ap-servers" aria-label="Average spend per guest by server, now and target">
+      <figure className="ap-servers" aria-label="Average spend per ticket by server, now and target">
         <div className="ap-sv-legend" aria-hidden="true">
           <span>
             <i className="k-now" /> Now
@@ -187,7 +187,7 @@ function Servers() {
         <div className="ap-sv-total">
           <span>The room</span>
           <span>
-            {cents(ROOM_NOW)} <em>→</em> {cents(ROOM_TARGET)} per guest
+            {cents(ROOM_NOW)} <em>→</em> {cents(ROOM_TARGET)} per ticket
           </span>
           <strong>+{usd(CHECK_LIFT)} a year</strong>
         </div>
@@ -203,10 +203,10 @@ function ServerMath() {
   return (
     <p className="ap-math-note">
       How each line is worked out, using {ex.name}: half of the {cents(BENCH - ex.now)} between{" "}
-      {cents(ex.now)} and the top two at {cents(BENCH)} = {cents(ex.gap)} per guest × {perServer}{" "}
-      covers a year ({COVERS.toLocaleString("en-US")} covers shared by {servers.length} servers) ={" "}
-      {usd(ex.annual)}. The room: {cents(CHECK_LIFT / COVERS)} per guest ×{" "}
-      {COVERS.toLocaleString("en-US")} covers = {usd(CHECK_LIFT)}.
+      {cents(ex.now)} and the top two at {cents(BENCH)} = {cents(ex.gap)} per ticket × {perServer}{" "}
+      tickets a year ({COVERS.toLocaleString("en-US")} tickets shared by {servers.length} servers) ={" "}
+      {usd(ex.annual)}. The room: {cents(CHECK_LIFT / COVERS)} per ticket ×{" "}
+      {COVERS.toLocaleString("en-US")} tickets = {usd(CHECK_LIFT)}.
     </p>
   );
 }
@@ -369,7 +369,7 @@ function BottomLine() {
           <dt>Sales today</dt>
           <dd>{usd(SALES_NOW)}</dd>
           <span>
-            {COVERS_PER_SERVICE} covers, six nights, {cents(ROOM_NOW)} a guest.
+            {COVERS_PER_SERVICE} tickets a night, six nights, {cents(ROOM_NOW)} a ticket.
           </span>
         </div>
       </dl>
@@ -469,7 +469,7 @@ export function SampleAudit() {
           ))}
         </div>
         <p className="audit-rail-note">
-          A modeled dining room of 110 covers. Every figure is illustrative. Yours is built from
+          A modeled dining room of 110 tickets a night. Every figure is illustrative. Yours is built from
           your POS data and your floor.
         </p>
       </nav>

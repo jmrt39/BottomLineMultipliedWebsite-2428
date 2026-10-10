@@ -54,11 +54,11 @@ export function PaybackCalculator() {
       <div className="calculator-controls">
         <label>
           <span>
-            Covers per night{locations === 2 ? ", each location" : ""} <strong>{covers}</strong>
+            Tickets per night{locations === 2 ? ", each location" : ""} <strong>{covers}</strong>
           </span>
           <input
             type="range"
-            aria-label="Covers per night"
+            aria-label="Tickets per night"
             min="40"
             max="300"
             step="5"
@@ -68,11 +68,11 @@ export function PaybackCalculator() {
         </label>
         <label>
           <span>
-            Additional spend per guest <strong>${lift}</strong>
+            Additional spend per ticket <strong>${lift}</strong>
           </span>
           <input
             type="range"
-            aria-label="Additional spend per guest"
+            aria-label="Additional spend per ticket"
             min="2"
             max="25"
             step="1"
@@ -144,7 +144,7 @@ export function PaybackCalculator() {
       </dl>
 
       <p className="calculator-disclaimer">
-        {covers} covers × ${lift} × {services} nights
+        {covers} tickets × ${lift} × {services} nights
         {locations === 2 ? " × 2 locations" : ""}, with {Math.round(KEPT * 100)}% of added sales
         kept after cost of goods and card fees. Program at $85,000 pay as you go for one location
         ($75,000 if paid in full upfront), first year of the platform included. Illustrative only; results depend on your operation, costs,
