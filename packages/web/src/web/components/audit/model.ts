@@ -11,16 +11,17 @@ export const WEEKEND_NIGHTS = 104;
 
 // Average spend per guest during the audit, by server.
 const OBSERVED = [
-  { name: "Server A", now: 91.4 },
-  { name: "Server B", now: 86.2 },
+  { name: "Server A", now: 91.1 },
+  { name: "Server B", now: 86.3 },
   { name: "Server C", now: 81.7 },
   { name: "Server D", now: 78.1 },
   { name: "Server E", now: 75.3 },
   { name: "Server F", now: 72.6 },
   { name: "Server G", now: 69.8 },
-  { name: "Server H", now: 64.9 },
+  { name: "Server H", now: 65.1 },
 ];
-const COVERS_EACH = COVERS / OBSERVED.length;
+export const COVERS_EACH = COVERS / OBSERVED.length; // 4,290 covers a year per server
+export const NIGHTS_PER_WEEK = SERVICES_PER_YEAR / 52;
 export const ROOM_NOW = OBSERVED.reduce((s, x) => s + x.now, 0) / OBSERVED.length;
 export const SALES_NOW = ROOM_NOW * COVERS;
 
@@ -30,7 +31,7 @@ export const BENCH = (OBSERVED[0].now + OBSERVED[1].now) / 2;
 export const servers = OBSERVED.map((s) => {
   const target = Math.max(s.now, s.now + (BENCH - s.now) / 2);
   const gap = target - s.now;
-  return { ...s, target, gap, annual: gap * COVERS_EACH };
+  return { ...s, target, gap, annual: Math.round(gap * COVERS_EACH) };
 });
 export const CHECK_LIFT = servers.reduce((s, x) => s + x.annual, 0);
 export const ROOM_TARGET = ROOM_NOW + CHECK_LIFT / COVERS;
@@ -42,12 +43,43 @@ export type Finding = {
   moment: string;
   title: string;
   saw: string;
+  /** Short before and after, for the ranked list. */
   from: string;
   to: string;
+  /** The measured starting point, in a sentence. */
+  now: string;
+  /** The target, and what on the floor gets the room there. */
+  target: string;
+  /** The arithmetic, written out, ending just before the result. */
+  math: string;
   value: number;
   kind: Kind;
 };
 
+// The arithmetic behind a per guest gap, written the way the owner would check it.
+const BASE = `${COVERS_PER_SERVICE} covers × ${NIGHTS_PER_WEEK} nights × 52 weeks`;
+const money2 = (n: number) => `$${n.toFixed(2)}`;
+const whole = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
+function perGuest(how: string, gap: number) {
+  return { math: `${how} = ${money2(gap)} per guest × ${BASE}`, value: Math.round(gap * COVERS) };
+}
+
+// Per guest gaps for the five check findings. Together they are exactly the room's
+// check lift on the Servers page ($5.75 a guest), so every page reconciles.
+const STARTER = perGuest("0.09 more starters per guest × $15 average starter", 0.09 * 15);
+const WINE = perGuest("$19.90 target less $17.80 today", 19.9 - 17.8);
+const FEATURES = perGuest("6 more entrées in 100 as features × $14 above the average entrée", 0.06 * 14);
+const CALL = perGuest("0.22 house pours per guest moved to a call brand × $2.50 upcharge", 0.22 * 2.5);
+const DESSERT = perGuest("0.07 more desserts per guest × $13 average dessert", 0.07 * 13);
+
+const LIQUOR_SHARE = 0.18;
+const POUR_COST = 0.2;
+const OVERPOUR = 0.25 / 2; // 0.25 oz over a 2 oz spec
+const POURS_OVER = 18 / 24;
+const WALKED_PER_NIGHT = 3;
+
+// Each finding is rounded to the dollar once, here, so the figures on the page add up
+// to the totals exactly.
 // In the order a table meets them.
 export const findings: Finding[] = [
   {
@@ -56,7 +88,11 @@ export const findings: Finding[] = [
     saw: "A lineup ran before 3 of 6 services. The kitchen attended none, and features were never tasted. Two dishes ran out and were still sold, then comped.",
     from: "Comps 1.9% of sales",
     to: "1.2%",
-    value: SALES_NOW * 0.007,
+    now: "Comps and remakes run at 1.9% of sales.",
+    target:
+      "1.2%, the rate on nights a full lineup ran with the kitchen there and sold out dishes called before doors.",
+    math: `0.7% of ${whole(SALES_NOW)} in yearly sales`,
+    value: Math.round(SALES_NOW * 0.007),
     kind: "comps",
   },
   {
@@ -65,7 +101,9 @@ export const findings: Finding[] = [
     saw: "A specific starter was recommended at 11 of 46 tables. Naming one dish sold a starter to 52% of tables; “any appetizers?” sold 19%.",
     from: "0.24 starters per guest",
     to: "0.33",
-    value: 46_330,
+    now: "0.24 starters per guest.",
+    target: "0.33, achieved when every server names one specific starter at seating.",
+    ...STARTER,
     kind: "check",
   },
   {
@@ -74,7 +112,10 @@ export const findings: Finding[] = [
     saw: "Asked for a pairing, 3 of 8 servers named a wine and said why. A second glass was offered 1 time in 3. Tables of four were offered a bottle at 9 of 22.",
     from: "$17.80 wine per guest",
     to: "$19.90",
-    value: 72_070,
+    now: "$17.80 current wine per guest.",
+    target:
+      "$19.90, achieved when a second glass is offered and bottle upgrades are suggested to tables of four.",
+    ...WINE,
     kind: "check",
   },
   {
@@ -83,7 +124,9 @@ export const findings: Finding[] = [
     saw: "6 of 8 servers couldn’t describe the market fish. Allergy questions went back to the kitchen 14 times. Features sold 7% of entrées; 13% when tasted at lineup.",
     from: "Features 7% of entrées",
     to: "13%",
-    value: 29_170,
+    now: "Features are 7% of entrées sold.",
+    target: "13%, the rate on nights the features were tasted at lineup.",
+    ...FEATURES,
     kind: "check",
   },
   {
@@ -92,7 +135,9 @@ export const findings: Finding[] = [
     saw: "A “vodka soda” was rung in with the house vodka 81% of the time. Guests were asked which brand on 1 order in 5.",
     from: "Asked 1 in 5",
     to: "every order",
-    value: 19_315,
+    now: "Guests are asked which brand on 1 spirit order in 5.",
+    target: "Every order, by offering two call brands by name instead of asking “any preference?”",
+    ...CALL,
     kind: "check",
   },
   {
@@ -101,7 +146,10 @@ export const findings: Finding[] = [
     saw: "Dessert menus were dropped without a recommendation at 68% of tables. Coffee or an after dinner drink was offered at 1 table in 4.",
     from: "0.17 desserts per guest",
     to: "0.24",
-    value: 32_600,
+    now: "0.17 desserts per guest.",
+    target:
+      "0.24, achieved when the server recommends one dessert by name as the menu goes down.",
+    ...DESSERT,
     kind: "check",
   },
   {
@@ -110,7 +158,10 @@ export const findings: Finding[] = [
     saw: "On Saturdays: 8 min 40 s from “whenever you’re ready” to the check on the table. Meanwhile about three covers a night walked from the wait list.",
     from: "8 min 40 s",
     to: "under 3 min",
-    value: 3 * WEEKEND_NIGHTS * ROOM_NOW,
+    now: "About 3 covers a night walk from the wait list on Fridays and Saturdays.",
+    target: "Seat them, by getting the check down within 3 minutes of being asked.",
+    math: `${WALKED_PER_NIGHT} covers × ${WEEKEND_NIGHTS} Friday and Saturday nights × ${money2(ROOM_NOW)} average spend`,
+    value: Math.round(WALKED_PER_NIGHT * WEEKEND_NIGHTS * ROOM_NOW),
     kind: "covers",
   },
   {
@@ -119,13 +170,20 @@ export const findings: Finding[] = [
     saw: "Cocktails poured freehand measured 2.25 oz against a 2 oz spec on 18 of the 24 we checked.",
     from: "2.25 oz",
     to: "2.00 oz",
-    value: SALES_NOW * 0.18 * 0.2 * 0.125,
+    now: "18 of 24 freehand pours measured 2.25 oz against a 2 oz spec.",
+    target: "2.00 oz on every pour, with jiggers in the well.",
+    math: `${whole(SALES_NOW)} sales × ${Math.round(LIQUOR_SHARE * 100)}% liquor × ${Math.round(POUR_COST * 100)}% pour cost × ${OVERPOUR * 100}% over spec × 18 of 24 pours`,
+    value: Math.round(SALES_NOW * LIQUOR_SHARE * POUR_COST * OVERPOUR * POURS_OVER),
     kind: "cost",
   },
 ];
 
 const sum = (k: Kind) => findings.filter((f) => f.kind === k).reduce((s, f) => s + f.value, 0);
 export const TOTAL = findings.reduce((s, f) => s + f.value, 0);
+// The check findings and the server by server model are two views of the same lift.
+if (import.meta.env.DEV && Math.abs(sum("check") - CHECK_LIFT) > 1) {
+  console.warn("Sample audit: check findings do not add up to the server lift", sum("check"), CHECK_LIFT);
+}
 export const COMPS = sum("comps");
 export const COVER_SALES = sum("covers");
 export const POUR = sum("cost");

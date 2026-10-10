@@ -1,34 +1,19 @@
 const chapters = [
-  { title: "The audit", from: 0, to: 2 },
-  { title: "The program", from: 2, to: 6 },
-  { title: "The platform", from: 6, to: 9 },
+  { title: "The audit", from: 0, to: 4 },
+  { title: "The program", from: 4, to: 8 },
+  { title: "The platform", from: 8, to: 11 },
 ];
 
 const questions = [
   {
     question: "Can I start with just the audit?",
     answer:
-      "Yes. The paid audit is $10,000 per location and stands on its own. You get the diagnosis and the gap report whether or not you continue. Decide on the full program within 90 days and every audit fee comes off the program price.",
+      "Yes. The audit is $10,000 per location and stands on its own. You get the diagnosis and the written gap report whether or not you continue, and the $10,000 counts toward the program if you go ahead.",
   },
   {
-    question: "How is the audit paid?",
+    question: "What does the audit involve?",
     answer:
-      "Two payments per location. $5,000 to book the audit dates, nonrefundable, which holds your audit window of three weekends, and $5,000 when the written gap report is delivered, due within 7 days. Invoiced by ACH or check; card available with the processing fee passed through.",
-  },
-  {
-    question: "How is the program paid?",
-    answer:
-      "In two payments. 50% when you sign on for the full program, and 50% when your platform is handed over: set up, loaded with your program and in your team's hands. Your audit credits come off the program price.",
-  },
-  {
-    question: "Why sign on for the full program from the start?",
-    answer:
-      "Two reasons. You can walk away: if your gap report finds less yearly profit to recover than the program costs, you cancel and pay only for the audit. And your platform rate is locked for years two and three: $450/month for one location, or $650/month for two locations together instead of $900.",
-  },
-  {
-    question: "How do you prove it worked?",
-    answer:
-      "During the audit I record each server's starting numbers. Every report after launch compares against that starting point.",
+      "Six shifts over two weeks: two weekdays, two Fridays and two Saturdays. I come in as a new employee being trained. You know; your staff don't. I experience exactly what every new hire experiences, then deliver a written report showing every gap found and the exact dollar value of what each one costs you a year.",
   },
   {
     question: "Am I really an employee?",
@@ -36,19 +21,44 @@ const questions = [
       "Yes, hired through your normal process. We sign an agreement first that covers pay, tips, insurance and confidentiality.",
   },
   {
-    question: "What's included in the 12 months of software?",
+    question: "How long does it take?",
+    answer:
+      "5 to 6 weeks from the first audit shift to delivery: two weeks on your floor, the gap report and debrief, then your program built, installed on the platform and your team trained on it.",
+  },
+  {
+    question: "How is the program paid?",
+    answer:
+      "Two ways. Pay as you go: $10,000 upfront for the audit, then $75,000 on delivery, $85,000 in total. Or pay in full upfront: $75,000, which makes the audit free and saves you $10,000.",
+  },
+  {
+    question: "What is the guarantee?",
+    answer:
+      "If your gap report doesn't reveal at least $150,000 in recoverable annual revenue, you walk away and get everything back except the $10,000 audit fee. Every dollar figure in the report shows its arithmetic, so you can check the number yourself.",
+  },
+  {
+    question: "What's included?",
+    answer:
+      "The audit and gap report, your custom training program, the first year of the platform at no charge, and a one day training on the platform for your staff and managers.",
+  },
+  {
+    question: "How do you prove it worked?",
+    answer:
+      "During the audit I record each server's starting numbers. Every report after launch compares against that starting point.",
+  },
+  {
+    question: "What's included in the first year of software?",
     answer:
       "Every current server and bartender gets a login, the full training program, knowledge checks and floor exercises signed off by managers, plus manager grading and monthly sales reports. New hires enter the same program at no extra cost during year one.",
   },
   {
     question: "What happens after the first year?",
     answer:
-      "The platform continues at $450 per location per month, or at your locked rate for years two and three if you signed on from the start. Most owners keep it: it's what keeps new hires selling the same way the audit taught the originals.",
+      "From year two the platform is a subscription of $350 to $450 a month per location. Most owners keep it: it's what keeps new hires selling the same way the audit taught the originals.",
   },
   {
-    question: "What if I have more than two locations?",
+    question: "What if I have more than one location?",
     answer:
-      "Three or more rooms are quoted individually. Every location runs on the same program and the same standard, and each floor gets its own audit against it.",
+      "Two locations are $140,000 together. Three or more rooms are quoted individually. Every location runs on the same program and the same standard, and each floor gets its own audit against it.",
   },
 ];
 

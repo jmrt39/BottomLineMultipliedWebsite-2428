@@ -7,6 +7,10 @@ import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
 import { useReveal } from "../hooks/use-reveal";
 
+// Where clients sign in to The Platform. Set VITE_PLATFORM_URL when the platform is published.
+const PLATFORM_URL: string =
+  import.meta.env.VITE_PLATFORM_URL ?? "https://theplat-hjcx7ui-preview-4200.runable.site/";
+
 // Everything below the hero eases in as it scrolls into view.
 const REVEAL_TARGETS = [
   ".culinary-intro > div > *",
@@ -34,7 +38,6 @@ const REVEAL_TARGETS = [
   ".report-contents > .eyebrow",
   ".report-chapter",
   ".price-row",
-  ".audit-credit",
   ".questions-heading > *",
   ".question-chapter",
   ".closing > *",
@@ -45,9 +48,9 @@ const methods = [
   {
     title: "First, the truth.",
     phase: "DIAGNOSE",
-    time: "THREE WEEKENDS · INSIDE YOUR TEAM",
+    time: "SIX SHIFTS · TWO WEEKS · INSIDE YOUR TEAM",
     description:
-      "We become a regular employee in your dining room. Only you know why we’re there. Across shifts and three weekends, we see the habits that a scheduled inspection never will.",
+      "We join your dining room as a new employee being trained. You know why we’re there; your staff don’t. Across six shifts in two weeks (two weekdays, two Fridays and two Saturdays) we experience exactly what every new hire experiences, and see the habits a scheduled inspection never will.",
     details: [
       "Real service, observed from inside your team",
       "Missed recommendations, wine opportunities & timing gaps",
@@ -272,9 +275,14 @@ export default function Home() {
           <a href="#approach">The approach</a>
           <a href="#investment">The investment</a>
         </nav>
-        <button className="header-cta" onClick={openInquiry}>
-          Begin a conversation <ArrowUpRight size={17} />
-        </button>
+        <div className="header-actions">
+          <a className="header-signin" href={PLATFORM_URL} rel="noopener">
+            Sign in
+          </a>
+          <button className="header-cta" onClick={openInquiry}>
+            Begin a conversation <ArrowUpRight size={17} />
+          </button>
+        </div>
         <button
           className="menu-toggle"
           aria-expanded={mobileMenu}
@@ -295,6 +303,9 @@ export default function Home() {
           <a href="#investment" onClick={() => setMobileMenu(false)}>
             The investment
           </a>
+          <a href={PLATFORM_URL} rel="noopener" onClick={() => setMobileMenu(false)}>
+            Sign in to the platform
+          </a>
           <button onClick={openInquiry}>
             Begin a conversation <ArrowUpRight size={16} />
           </button>
@@ -308,7 +319,7 @@ export default function Home() {
           </div>
           <div className="hero-content">
             <span className="eyebrow">
-              <span className="tiny-line" /> THREE WEEKENDS. THE WHOLE PICTURE.
+              <span className="tiny-line" /> SIX SHIFTS. THE WHOLE PICTURE.
             </span>
             <h1 id="hero-title">
               <span className="headline-primary">Your servers are leaving money on the table.</span>{" "}
@@ -316,8 +327,8 @@ export default function Home() {
             </h1>
             <p>
               I join your floor as a new hire. Only you know who I am. Across{" "}
-              <strong>three weekends</strong>, I experience your current training exactly as your
-              staff does, where expectations are left unclear, shortcuts become habits, and
+              <strong>six shifts in two weeks</strong>, I experience your current training exactly
+              as your staff does, where expectations are left unclear, shortcuts become habits, and
               accountability slips. Then I hand you the number your dining room leaks every single
               year.
             </p>
@@ -594,8 +605,9 @@ export default function Home() {
             </div>
             <div className="deliverable-intro">
               <p>
-                Within 10 business days of the third weekend, you receive the gap report. Then we
-                sit down together, in person or on video, and walk through every page.
+                After the sixth shift you receive a written gap report: every gap we found and the
+                exact dollar value it costs you each year, with the arithmetic shown. Then we sit
+                down together, in person or on video, and walk through every page.
               </p>
               <p>
                 Below is a sample for a modeled dining room of 110 covers. In yours, every number
@@ -609,6 +621,10 @@ export default function Home() {
                 <div>
                   <dt>DEBRIEF</dt>
                   <dd>In person or by video.</dd>
+                </div>
+                <div>
+                  <dt>TIMELINE</dt>
+                  <dd>5 to 6 weeks from the first shift to delivery.</dd>
                 </div>
               </dl>
             </div>
@@ -655,47 +671,46 @@ export default function Home() {
               <div className="price-row">
                 <div>
                   <span className="eyebrow">THE UNDERCOVER AUDIT</span>
-                  <h3>Three weekends. The whole picture.</h3>
-                  <p>Gap report, breakdown by server and debrief within 10 business days.</p>
+                  <h3>Six shifts. The whole picture.</h3>
+                  <p>
+                    Two weekdays, two Fridays and two Saturdays over two weeks. A written gap report
+                    with every dollar figure worked out, a breakdown by server and a debrief.
+                  </p>
                 </div>
                 <span className="price">$10,000</span>
               </div>
-              <p className="audit-credit">
-                Per location. Credited in full toward your program if you proceed within 90 days.
-                The audit is effectively free.
-              </p>
               <div className="price-row">
                 <div>
                   <span className="eyebrow">THE COMPLETE PROGRAM</span>
                   <h3>Diagnose. Build. Install.</h3>
                   <p>
-                    One program, one standard. Each floor audited against it. Includes the first 12
-                    months of the platform.
+                    The audit, your custom training program, the first year of the platform at no
+                    charge, and a one day platform training for your staff and managers.
                   </p>
                 </div>
                 <div className="program-prices">
                   <span>
-                    <b>$85,000</b> one location
-                    <em className="program-credit">$75,000 with your audit credit</em>
+                    <b>$85,000</b> pay as you go
+                    <em className="program-credit">$10,000 upfront · $75,000 on delivery</em>
                   </span>
                   <span>
-                    <b>$140,000</b> two locations
-                    <em className="program-credit">$120,000 with your audit credits</em>
+                    <b>$75,000</b> paid in full upfront
+                    <em className="program-credit">The audit is free. You save $10,000.</em>
                   </span>
                 </div>
               </div>
               <div className="commit-offer">
-                <span className="eyebrow">COMMIT FROM THE START</span>
-                <h3>Sign on for the full program before your audit.</h3>
+                <span className="eyebrow">THE GUARANTEE</span>
+                <h3>At least $150,000, or you walk away.</h3>
                 <ul>
                   <li>
-                    <b>Walk away if the numbers aren’t there.</b> If your gap report finds less
-                    yearly profit to recover than the program costs, cancel and pay only for the
-                    audit.
+                    <b>If the report doesn’t find it, you walk away.</b> If your gap report doesn’t
+                    reveal at least $150,000 in recoverable annual revenue, you get everything back
+                    except the $10,000 audit fee.
                   </li>
                   <li>
-                    <b>Your platform rate, locked for years two and three.</b> $450/month for one
-                    location. $650/month for two locations together, instead of $900.
+                    <b>5 to 6 weeks, start to finish.</b> From the first audit shift to your program
+                    delivered and your team trained on the platform.
                   </li>
                 </ul>
               </div>
@@ -704,24 +719,22 @@ export default function Home() {
                 onClick={() => setPricingOpen(!pricingOpen)}
                 aria-expanded={pricingOpen}
               >
-                Payment milestones & platform renewal{" "}
+                What’s included & the platform after year one{" "}
                 {pricingOpen ? <Minus size={16} /> : <Plus size={16} />}
               </button>
               {pricingOpen && (
                 <div className="payment-details">
                   <p>
-                    <b>Audit:</b> $5,000 to secure your dates, nonrefundable · $5,000 when the gap
-                    report is delivered.
+                    <b>Included:</b> the first year of the platform at no charge, and a one day
+                    training on the platform for your staff and managers.
                   </p>
                   <p>
-                    <b>Program:</b> <b>50%</b> when you sign on · <b>50%</b> when your platform is
-                    handed over to your team.
+                    <b>Year two onward:</b> the platform continues at <b>$350 to $450 a month</b>{" "}
+                    per location.
                   </p>
                   <p>
-                    After year one, the platform renews at <b>$450/month per location.</b> Sign on
-                    from the start and it’s locked for years two and three: $450/month for one
-                    location, $650/month for two. Audit credits are applied to the full program
-                    price.
+                    <b>Two locations:</b> $140,000 for both rooms, each floor audited against one
+                    shared standard. Three or more are quoted individually.
                   </p>
                 </div>
               )}

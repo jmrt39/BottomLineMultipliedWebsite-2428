@@ -6,6 +6,7 @@ import {
   CHECK_LIFT,
   COGS,
   COVERS,
+  COVERS_EACH,
   COVERS_PER_SERVICE,
   FLOW_THROUGH,
   NET_MARGIN,
@@ -23,6 +24,8 @@ import {
   TOTAL,
   composition,
   cents,
+  COVER_SALES,
+  COMPS,
   findings,
   pctOf,
   servers,
@@ -111,6 +114,12 @@ function Summary() {
             </li>
           ))}
         </ul>
+        <p className="ap-math-note">
+          {cents(CHECK_LIFT / COVERS)} per guest × {COVERS.toLocaleString("en-US")} covers a year ={" "}
+          {usd(CHECK_LIFT)} in higher checks, plus {usd(COVER_SALES)} in covers that walked,{" "}
+          {usd(COMPS)} in comps and {usd(POUR)} in pour. Every line is worked out under What we
+          saw.
+        </p>
       </figure>
     </>
   );
@@ -131,7 +140,7 @@ function Servers() {
             Same menu. Same room. <br />A {cents(SPREAD)} spread per guest.
           </>
         }
-        lede="Average spend per guest by server, across three weekends. Each target closes half the distance to your own top two."
+        lede="Average spend per guest by server, across six shifts over two weeks. Each target closes half the distance to your own top two."
       />
       <figure className="ap-servers" aria-label="Average spend per guest by server, now and target">
         <div className="ap-sv-legend" aria-hidden="true">
@@ -182,8 +191,23 @@ function Servers() {
           </span>
           <strong>+{usd(CHECK_LIFT)} a year</strong>
         </div>
+        <ServerMath />
       </figure>
     </>
+  );
+}
+
+function ServerMath() {
+  const ex = servers[2];
+  const perServer = COVERS_EACH.toLocaleString("en-US");
+  return (
+    <p className="ap-math-note">
+      How each line is worked out, using {ex.name}: half of the {cents(BENCH - ex.now)} between{" "}
+      {cents(ex.now)} and the top two at {cents(BENCH)} = {cents(ex.gap)} per guest × {perServer}{" "}
+      covers a year ({COVERS.toLocaleString("en-US")} covers shared by {servers.length} servers) ={" "}
+      {usd(ex.annual)}. The room: {cents(CHECK_LIFT / COVERS)} per guest ×{" "}
+      {COVERS.toLocaleString("en-US")} covers = {usd(CHECK_LIFT)}.
+    </p>
   );
 }
 
@@ -197,7 +221,7 @@ function Priorities() {
         index={2}
         kicker="What to fix first"
         title="Eight leaks, ranked by what they’re worth."
-        lede={`The wine list and the starter at seating are ${pctOf(topTwo, TOTAL)} of the total. That is where the program starts.`}
+        lede={`The wine list and the starter at seating are ${pctOf(topTwo, TOTAL)} of the total. That is where the program starts. The math behind every figure is on the next page.`}
       />
       <figure className="ap-rank" aria-label="Findings ranked by annual value">
         <ol>
@@ -227,7 +251,7 @@ function Evidence() {
         index={3}
         kicker="What we saw"
         title="Follow one table through the night."
-        lede="Observed from inside your team, across six services. Every finding has a number, and every number a page in your manual."
+        lede="Observed from inside your team, across six shifts. Every finding shows what we measured, the target, and the arithmetic behind the dollar figure."
       />
       <ol className="ap-evidence">
         {findings.map((f) => (
@@ -238,9 +262,22 @@ function Evidence() {
             </div>
             <h4>{f.title}</h4>
             <p>{f.saw}</p>
-            <span className="ap-ev-measure">
-              {f.from} <em>→</em> {f.to}
-            </span>
+            <dl className="ap-ev-math">
+              <div>
+                <dt>Now</dt>
+                <dd>{f.now}</dd>
+              </div>
+              <div>
+                <dt>Target</dt>
+                <dd>{f.target}</dd>
+              </div>
+              <div>
+                <dt>Gap</dt>
+                <dd>
+                  {f.math} = <strong>{usd(f.value)} per year</strong>
+                </dd>
+              </div>
+            </dl>
           </li>
         ))}
       </ol>

@@ -146,8 +146,8 @@ export function PaybackCalculator() {
       <p className="calculator-disclaimer">
         {covers} covers × ${lift} × {services} nights
         {locations === 2 ? " × 2 locations" : ""}, with {Math.round(KEPT * 100)}% of added sales
-        kept after cost of goods and card fees. The $10,000 audit per location is credited toward
-        the program within 90 days. Illustrative only; results depend on your operation, costs,
+        kept after cost of goods and card fees. Program at $85,000 pay as you go for one location
+        ($75,000 if paid in full upfront), first year of the platform included. Illustrative only; results depend on your operation, costs,
         guest demand and implementation.
       </p>
     </div>
