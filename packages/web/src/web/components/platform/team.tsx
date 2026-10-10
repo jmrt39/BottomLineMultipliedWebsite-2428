@@ -295,7 +295,7 @@ const LO = 50;
 const HI = 90;
 const EARNED: Record<string, string> = {
   "Monthly ADS bonus": "Earned · M. Hill, J. Price, S. Whitaker",
-  "Guest-quote recognition": "Earned · M. Collins",
+  "Guest quote recognition": "Earned · M. Collins",
 };
 
 export function RewardsScene({ t }: { t: number }) {

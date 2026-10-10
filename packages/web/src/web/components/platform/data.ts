@@ -371,12 +371,12 @@ export const GUEST_QUOTES = [
 ];
 
 export const INCENTIVES = [
-  { title: "Paid day off", detail: "A full quarter at or above target" },
-  { title: "Guest-quote recognition", detail: "Read aloud at pre-shift, kept on the profile" },
-  { title: "Monthly ADS bonus", detail: "$150–$250 for hitting the month’s target" },
+  { title: "Paid day off", detail: "A full quarter at or above your own target, 8 solo shifts a month" },
+  { title: "Guest quote recognition", detail: "Read aloud at line up, kept on the profile" },
+  { title: "Monthly ADS bonus", detail: "$150 cash at 5% over target on the rolling 30 days, 8 solo shifts" },
   { title: "First pick of sections and shifts", detail: "On the next schedule" },
   { title: "Chef’s Table for two", detail: "With the sommelier’s pairing" },
   { title: "Certification paid in full", detail: "WSET Level 2 or CMS Introductory" },
-  { title: "Dinner for two at a peer restaurant", detail: "Manager’s choice" },
+  { title: "Ten guests, by name", detail: "Every 10 reviews that name you: pick your Friday or Saturday section" },
   { title: "Winery or distillery visit", detail: "Top performer of the year" },
 ];
