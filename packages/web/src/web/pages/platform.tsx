@@ -88,7 +88,15 @@ function RenderStage() {
   );
 }
 
+// /platform plays the full film; /platform?cut=90 plays the 90 second cut.
+const FILMS = {
+  full: { file: "platform-demo-v3", length: "3 minutes 4 seconds" },
+  short: { file: "platform-demo-90s", length: "90 seconds" },
+} as const;
+
 function Player() {
+  const film =
+    new URLSearchParams(window.location.search).get("cut") === "90" ? FILMS.short : FILMS.full;
   return (
     <main className="platform-player">
       <header>
@@ -96,14 +104,14 @@ function Player() {
         <em>1906 Bar &amp; Grille · demo film</em>
       </header>
       <video
-        src="/videos/platform-demo-v3.mp4"
+        src={`/videos/${film.file}.mp4`}
         poster="/images/platform-demo-poster.webp"
         controls
         playsInline
         preload="metadata"
-        aria-label="The Platform demo film for 1906 Bar & Grille, 3 minutes 4 seconds, music only"
+        aria-label={`The Platform demo film for 1906 Bar & Grille, ${film.length}, music only`}
       >
-        <track kind="captions" src="/videos/platform-demo-v3.vtt" srcLang="en" label="English" />
+        <track kind="captions" src={`/videos/${film.file}.vtt`} srcLang="en" label="English" />
       </video>
       <p>Demo data · illustrative. Staff names and figures are fictional.</p>
     </main>
