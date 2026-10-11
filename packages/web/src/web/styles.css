@@ -1548,11 +1548,22 @@ select option {
 .inquiry-dialog textarea::placeholder {
   color: #828171;
 }
-.preview-note {
-  font-size: 8px;
-  line-height: 1.8;
-  color: #77715e;
+.inquiry-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.inquiry-error {
+  font-size: 11px;
+  line-height: 1.7;
+  color: #8a2a1e;
   margin-bottom: 18px;
+}
+.inquiry-dialog .solid-button:disabled {
+  opacity: 0.6;
+  cursor: progress;
 }
 .solid-button {
   background: var(--paper-ink);

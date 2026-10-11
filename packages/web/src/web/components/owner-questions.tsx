@@ -43,7 +43,7 @@ const questions = [
   {
     question: "How do you prove it worked?",
     answer:
-      "During the audit I record each server's starting numbers. Every report after launch compares against that starting point.",
+      "During the audit I record every server's starting point from your own POS data: average check, spend per ticket and attach rates. After launch, the monthly sales report sets each server's current numbers against that starting point, so you see who has moved, by how much, and what the change is worth across your covers.",
   },
   {
     question: "What's included in the first year of software?",
@@ -53,7 +53,7 @@ const questions = [
   {
     question: "What happens after the first year?",
     answer:
-      "From year two the platform is a subscription of $350 to $450 a month per location. Most owners keep it: it's what keeps new hires selling the same way the audit taught the originals.",
+      "From year two the platform is a subscription of $350 to $450 a month per location. Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are. New hires keep entering the same program, managers keep grading the same six competencies, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
   },
   {
     question: "What if I have more than one location?",

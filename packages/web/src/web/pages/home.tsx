@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { ArrowUpRight, ArrowRight, ArrowDown, Plus, Minus, X, Menu, Check } from "lucide-react";
 import { CinematicRoom } from "../components/cinematic-room";
 import { AmbientClip } from "../components/ambient-clip";
@@ -6,6 +7,7 @@ import { OwnerQuestions } from "../components/owner-questions";
 import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
 import { useReveal } from "../hooks/use-reveal";
+import { createInquiryOptions } from "../queries/inquiries";
 
 // Where clients sign in to The Platform. Set VITE_PLATFORM_URL when the platform is published.
 const PLATFORM_URL: string =
@@ -125,7 +127,7 @@ function Wordmark() {
 }
 
 function Inquiry({ onClose }: { onClose: () => void }) {
-  const [saved, setSaved] = useState(false);
+  const send = useMutation(createInquiryOptions());
   const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement;
@@ -154,16 +156,16 @@ function Inquiry({ onClose }: { onClose: () => void }) {
           <br />
           <em>your dining room.</em>
         </h2>
-        {saved ? (
-          <div className="inquiry-success">
+        {send.isSuccess ? (
+          <div className="inquiry-success" aria-live="polite">
             <Check size={32} />
-            <h3>Your preview inquiry is saved.</h3>
+            <h3>Thank you. Your note is with me.</h3>
             <p>
-              It is stored only in this browser. Nothing has been sent, and no call has been booked.
-              The live inquiry system will be connected after you choose a direction.
+              I read every inquiry personally and will be in touch to find a time for our
+              conversation.
             </p>
             <button className="solid-button" onClick={onClose}>
-              Return to the preview <ArrowRight size={16} />
+              Return to the site <ArrowRight size={16} />
             </button>
           </div>
         ) : (
@@ -175,15 +177,23 @@ function Inquiry({ onClose }: { onClose: () => void }) {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                const data = Object.fromEntries(new FormData(e.currentTarget));
-                try {
-                  localStorage.setItem("blm-preview-inquiry", JSON.stringify(data));
-                  setSaved(true);
-                } catch {
-                  alert("Browser storage is unavailable. Nothing has been sent.");
-                }
+                if (send.isPending) return;
+                const data = new FormData(e.currentTarget);
+                const field = (key: string) => String(data.get(key) ?? "");
+                send.mutate({
+                  name: field("name"),
+                  email: field("email"),
+                  restaurant: field("restaurant"),
+                  locations: field("locations") as "1" | "2" | "3+",
+                  message: field("message"),
+                  website: field("website"),
+                });
               }}
             >
+              <label className="inquiry-trap" aria-hidden="true">
+                Website
+                <input name="website" aria-label="Leave empty" tabIndex={-1} autoComplete="off" />
+              </label>
               <div className="form-grid">
                 <label htmlFor="inquiry-name">
                   Your name
@@ -239,11 +249,13 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                   placeholder="The gap between the experience you intend and the one your guests receive…"
                 />
               </label>
-              <p className="preview-note">
-                DESIGN PREVIEW · This form saves locally only. No inquiry will be sent.
-              </p>
-              <button className="solid-button" type="submit">
-                Preview an inquiry <ArrowUpRight size={17} />
+              {send.isError && (
+                <p className="inquiry-error" role="alert">
+                  Your inquiry did not go through. Please try again in a moment.
+                </p>
+              )}
+              <button className="solid-button" type="submit" disabled={send.isPending}>
+                {send.isPending ? "Sending" : "Send my inquiry"} <ArrowUpRight size={17} />
               </button>
             </form>
           </>
