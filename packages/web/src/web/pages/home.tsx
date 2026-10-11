@@ -467,16 +467,14 @@ export default function Home() {
               <span className="tiny-line" /> FOR FINE DINING AND UPSCALE HOTEL ROOMS
             </span>
             <h1 id="hero-title">
-              <span className="headline-primary">Your servers are leaving money on the table.</span>{" "}
-              <em className="headline-promise">
-                I work your floor, find exactly how much, and train it back.
-              </em>
+              <span className="headline-primary">Train the habits. Hold the standard.</span>{" "}
+              <em className="headline-promise">Multiply your bottom line.</em>
             </h1>
             <p>
-              I join your team as a new hire. Only you know who I am. After{" "}
-              <strong>six shifts</strong> you get a written report that prices every gap from your
-              own POS data. Then I build the training that closes them, and install it on our
-              platform so it holds.
+              Your servers are leaving money on the table. I join your team as a new hire; only you
+              know who I am. After <strong>six shifts</strong> you get a written report that prices
+              every gap from your own POS data. Then I build the training that closes them, and
+              install it on our platform so it holds.
             </p>
             <ul className="hero-glance" aria-label="At a glance">
               <li>Six shifts</li>
