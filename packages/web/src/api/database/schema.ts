@@ -14,6 +14,11 @@ export const inquiries = sqliteTable("inquiries", {
   email: text("email").notNull(),
   restaurant: text("restaurant").notNull(),
   locations: text("locations").notNull(),
+  /** Qualification answers from the fit call form. Empty on older rows. */
+  role: text("role").notNull().default(""),
+  venue: text("venue").notNull().default(""),
+  volume: text("volume").notNull().default(""),
+  pos: text("pos").notNull().default(""),
   message: text("message").notNull().default(""),
   /** "sent" once the notification email went out, otherwise "pending" or "failed". */
   notified: text("notified").notNull().default("pending"),

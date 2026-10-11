@@ -70,12 +70,12 @@ function Summary() {
       <PageHead
         index={0}
         kicker="Executive summary"
-        title="What this dining room is leaving on the table."
+        title="What this modeled dining room is leaving on the table."
       />
       <div className="ap-summary">
         <div className="ap-hero-figure">
           <span className="ap-figure">{usd(TOTAL)}</span>
-          <span className="ap-figure-note">every year</span>
+          <span className="ap-figure-note">estimated, every year</span>
         </div>
         <blockquote className="ap-pull">
           Two of your eight servers already average {cents(BENCH)} a ticket. The other six average{" "}
@@ -93,7 +93,7 @@ function Summary() {
           <dd>+{cents(CHECK_LIFT / COVERS)}</dd>
         </div>
         <div>
-          <dt>Kept as profit</dt>
+          <dt>Estimated contribution</dt>
           <dd>{usd(PROFIT)}</dd>
         </div>
       </dl>
@@ -115,10 +115,9 @@ function Summary() {
           ))}
         </ul>
         <p className="ap-math-note">
-          {cents(CHECK_LIFT / COVERS)} per ticket × {COVERS.toLocaleString("en-US")} tickets a year ={" "}
-          {usd(CHECK_LIFT)} in higher checks, plus {usd(COVER_SALES)} in tables that walked,{" "}
-          {usd(COMPS)} in comps and {usd(POUR)} in pour. Every line is worked out under What we
-          saw.
+          {cents(CHECK_LIFT / COVERS)} per ticket × {COVERS.toLocaleString("en-US")} tickets a year
+          = {usd(CHECK_LIFT)} in higher checks, plus {usd(COVER_SALES)} in tables that walked,{" "}
+          {usd(COMPS)} in comps and {usd(POUR)} in pour. Every line is worked out under What we saw.
         </p>
       </figure>
     </>
@@ -142,7 +141,10 @@ function Servers() {
         }
         lede="Average spend per ticket by server, across six shifts over two weeks. Each target closes half the distance to your own top two."
       />
-      <figure className="ap-servers" aria-label="Average spend per ticket by server, now and target">
+      <figure
+        className="ap-servers"
+        aria-label="Average spend per ticket by server, now and target"
+      >
         <div className="ap-sv-legend" aria-hidden="true">
           <span>
             <i className="k-now" /> Now
@@ -290,7 +292,7 @@ function BottomLine() {
   const max = PROFIT_NOW + PROFIT;
   const w = (v: number) => `${(v / max) * 100}%`;
   const rows = [
-    { label: "Sales recovered", value: ADDED_SALES, sign: "", tone: "ink" },
+    { label: "Added sales & comps recovered", value: ADDED_SALES, sign: "", tone: "ink" },
     { label: "Less cost of goods & fees", value: COGS, sign: "", tone: "neg" },
     { label: "Plus pour savings", value: POUR, sign: "+", tone: "gold" },
   ];
@@ -300,11 +302,13 @@ function BottomLine() {
         index={4}
         kicker="The bottom line"
         title="From the floor to the bottom line."
-        lede="Rent and salaries are already paid. Added sales carry only their cost of goods, so most of every recovered dollar is kept."
+        lede="Rent and salaries are already paid. Added sales carry only their cost of goods and card fees, so most of every recovered dollar reaches the bottom line. We call that estimated contribution."
       />
       <div className="ap-ledger">
         <figure className="ap-ledger-block" aria-label="Annual sales recovered to profit kept">
-          <figcaption className="ap-chart-title">Recovered sales to profit, per year</figcaption>
+          <figcaption className="ap-chart-title">
+            Recovered sales to estimated contribution, per year
+          </figcaption>
           <ul className="ap-lg-rows">
             {rows.map((r) => (
               <li key={r.label} className="ap-lg-row">
@@ -319,7 +323,7 @@ function BottomLine() {
               </li>
             ))}
             <li className="ap-lg-row is-total">
-              <span className="ap-lg-label">Kept as profit</span>
+              <span className="ap-lg-label">Estimated contribution</span>
               <span className="ap-lg-track">
                 <span className="ap-lg-bar tone-result" style={{ width: w(PROFIT) }} />
               </span>
@@ -328,7 +332,7 @@ function BottomLine() {
           </ul>
         </figure>
         <figure className="ap-ledger-block" aria-label="Net profit today and with the gap closed">
-          <figcaption className="ap-chart-title">Net profit, per year</figcaption>
+          <figcaption className="ap-chart-title">Modeled net profit, per year</figcaption>
           <ul className="ap-lg-rows">
             <li className="ap-lg-row">
               <span className="ap-lg-label">Today, at {Math.round(NET_MARGIN * 100)}%</span>
@@ -351,7 +355,7 @@ function BottomLine() {
               <strong className="ap-lg-value">{usd(PROFIT_NOW + PROFIT)}</strong>
             </li>
           </ul>
-          <p className="ap-lg-note">Nearly double. Same room, same rent.</p>
+          <p className="ap-lg-note">Nearly double, in this model. Same room, same rent.</p>
         </figure>
       </div>
       <dl className="ap-stats ap-stats-foot">
@@ -363,10 +367,10 @@ function BottomLine() {
         <div>
           <dt>Each week you wait</dt>
           <dd>{usd(TOTAL / 52)}</dd>
-          <span>In sales and savings. {usd(PROFIT / 52)} of it profit.</span>
+          <span>In sales and savings. {usd(PROFIT / 52)} of it estimated contribution.</span>
         </div>
         <div>
-          <dt>Sales today</dt>
+          <dt>Modeled sales today</dt>
           <dd>{usd(SALES_NOW)}</dd>
           <span>
             {COVERS_PER_SERVICE} tickets a night, six nights, {cents(ROOM_NOW)} a ticket.
@@ -375,9 +379,9 @@ function BottomLine() {
       </dl>
       <p className="ap-assumptions">
         Assumptions: {Math.round(FLOW_THROUGH * 100)}% of added sales kept after cost of goods and
-        card fees; comps and pour savings kept in full; tips at {Math.round(TIP_RATE * 100)}%;
-        liquor at 18% of sales with a 20% pour cost; {Math.round(NET_MARGIN * 100)}% net margin
-        today (fine dining typically runs 5 to 10%).
+        card fees (estimated contribution); comps and pour savings kept in full; tips at{" "}
+        {Math.round(TIP_RATE * 100)}%; liquor at 18% of sales with a 20% pour cost;{" "}
+        {Math.round(NET_MARGIN * 100)}% net margin today (fine dining typically runs 5 to 10%).
       </p>
     </>
   );
@@ -469,8 +473,9 @@ export function SampleAudit() {
           ))}
         </div>
         <p className="audit-rail-note">
-          A modeled dining room of 110 tickets a night. Every figure is illustrative. Yours is built from
-          your POS data and your floor.
+          A modeled dining room, not a client: {COVERS_PER_SERVICE} tickets a night, six nights a
+          week, eight servers. Every figure is illustrative. Yours is built from your POS data and
+          your floor.
         </p>
       </nav>
 

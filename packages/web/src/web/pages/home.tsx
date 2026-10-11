@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { ArrowUpRight, ArrowRight, ArrowDown, Plus, Minus, X, Menu, Check } from "lucide-react";
+import { ArrowUpRight, ArrowRight, ArrowDown, X, Menu, Check, Minus, Plus } from "lucide-react";
 import { CinematicRoom } from "../components/cinematic-room";
 import { AmbientClip } from "../components/ambient-clip";
 import { OwnerQuestions } from "../components/owner-questions";
 import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
+import { SampleFinding } from "../components/audit/sample-finding";
 import { useReveal } from "../hooks/use-reveal";
 import { createInquiryOptions } from "../queries/inquiries";
 
@@ -15,6 +16,10 @@ const PLATFORM_URL: string =
 
 // Everything below the hero eases in as it scrolls into view.
 const REVEAL_TARGETS = [
+  ".proof-heading > *",
+  ".proof-story > *",
+  ".proof-results > div",
+  ".proof-facts",
   ".culinary-intro > div > *",
   ".culinary-intro > p",
   ".culinary-course",
@@ -29,17 +34,21 @@ const REVEAL_TARGETS = [
   ".method-signoff",
   ".revenue-layout > div:first-child > *",
   ".calculator",
-  ".lasting > .eyebrow",
-  ".lasting-heading > *",
+  ".tour-heading > *",
+  ".tour-film",
   ".lasting-grid > div",
-  ".platform-line",
+  ".tour-terms > div",
   ".investment-grid > div:first-child > *",
+  ".invest-card",
+  ".guarantee",
   ".deliverable-heading > *",
   ".deliverable-intro > *",
+  ".sample-finding",
   ".audit-viewer",
   ".report-contents > .eyebrow",
   ".report-chapter",
-  ".price-row",
+  ".fit-heading > *",
+  ".fit-row",
   ".questions-heading > *",
   ".question-chapter",
   ".closing > *",
@@ -50,37 +59,40 @@ const methods = [
   {
     title: "First, the truth.",
     phase: "DIAGNOSE",
-    time: "SIX SHIFTS · TWO WEEKS · INSIDE YOUR TEAM",
+    time: "WEEKS 1 AND 2 · SIX SHIFTS INSIDE YOUR TEAM",
     description:
-      "We join your dining room as a new employee being trained. You know why we’re there; your staff don’t. Across six shifts in two weeks (two weekdays, two Fridays and two Saturdays) we experience exactly what every new hire experiences, and see the habits a scheduled inspection never will.",
+      "I join your dining room as a new employee being trained. You know why I’m there; your staff don’t. Across six shifts (two weekdays, two Fridays and two Saturdays) I experience exactly what every new hire experiences, and see the habits a scheduled inspection never will.",
     details: [
-      "Real service, observed from inside your team",
-      "Missed recommendations, wine opportunities & timing gaps",
-      "A written gap report with the dollar figure attached",
+      "A written gap report: every gap, what it is worth a year, and the arithmetic",
+      "Spend per ticket by server, from your POS data",
+      "A prioritised list of fixes",
+      "A debrief, in person or by video",
     ],
   },
   {
     title: "Then, your standard.",
     phase: "BUILD",
-    time: "APPROXIMATELY 30 DAYS",
+    time: "WEEKS 3 TO 5",
     description:
-      "Your menu. Your people. Your gaps. We turn the diagnosis into a custom training system, not a borrowed playbook. Every detail is built for the way your restaurant should feel.",
+      "Your menu. Your people. Your gaps. The diagnosis becomes a custom training program, not a borrowed playbook, built for the way your room should feel.",
     details: [
-      "Greeting and guest recognition scripts",
-      "Upsell frameworks & wine presentation",
-      "Check delivery & end of shift discipline",
+      "Your training program, written around your menu and your service",
+      "Greeting, recommendation, wine and check scripts",
+      "Knowledge checks and floor exercises for every role",
+      "Six competencies, each with a 1 to 5 grading guide for managers",
     ],
   },
   {
     title: "Finally, staying power.",
-    phase: "INSTALL & ACCOUNTABILITY",
-    time: "BUILT TO LAST",
+    phase: "INSTALL",
+    time: "WEEK 6, THEN THE FIRST YEAR",
     description:
-      "We install your program on our proprietary platform. Your team learns, practices, and is signed off on the floor. Managers finally have a system for coaching, not just scheduling.",
+      "Your program goes live on our platform. Your team learns, practices and is signed off on the floor. Managers finally have a system for coaching, not just scheduling.",
     details: [
-      "Knowledge checks & floor exercises signed off by managers",
-      "Six competencies graded from 1 to 5 for every team member",
-      "Live performance reporting tied to sales data",
+      "A login for every server and bartender",
+      "A one day platform training for your staff and managers",
+      "Monthly sales reports by server, against the audit starting point",
+      "Technical support for as long as you use the platform",
     ],
   },
 ];
@@ -100,7 +112,7 @@ const reportChapters = [
   },
   {
     title: "Where money slips out.",
-    body: "Comps, voids, discounts and items never rung in; pour consistency and bar leakage; check delivery, closing out tables and end of shift side work; sections, staffing and covers per server.",
+    body: "Comps, voids, discounts and items never rung in; pour consistency and bar leakage; check delivery, closing out tables and end of shift side work; sections, staffing and tickets per server.",
   },
   {
     title: "What your numbers say.",
@@ -109,6 +121,34 @@ const reportChapters = [
   {
     title: "What to fix first.",
     body: "A prioritised list of fixes, each with what it is worth.",
+  },
+];
+
+const fit = [
+  {
+    label: "Your room",
+    yes: "A fine dining restaurant, or an upscale hotel bar or restaurant, where guests expect to be guided.",
+    no: "Counter service, or a menu with little to recommend.",
+  },
+  {
+    label: "Locations",
+    yes: "One or two locations. Groups of three to five are quoted individually.",
+    no: "A large chain that needs a corporate rollout.",
+  },
+  {
+    label: "Dinner volume",
+    yes: "Roughly 60 tickets a night or more. At 60 tickets, five nights a week, $8 more per ticket recovers the fee in about a year.",
+    no: "Fewer tickets, where the numbers in the calculator above don’t work yet.",
+  },
+  {
+    label: "POS data",
+    yes: "You can share sales reports by server from your POS before the first shift.",
+    no: "Sales by server can’t be exported or shared.",
+  },
+  {
+    label: "Manager involvement",
+    yes: "A manager who will sign off floor exercises, grade the team and coach from the monthly reports.",
+    no: "No one on the management team has time to hold the standard.",
   },
 ];
 
@@ -123,6 +163,57 @@ function Wordmark() {
         <span>Multiplied</span>
       </span>
     </a>
+  );
+}
+
+type Choice<T extends string> = { value: T; label: string };
+const ROLES: Choice<"owner" | "gm" | "fnb" | "other">[] = [
+  { value: "owner", label: "Owner" },
+  { value: "gm", label: "General manager" },
+  { value: "fnb", label: "Food & beverage director" },
+  { value: "other", label: "Other" },
+];
+const VENUES: Choice<"restaurant" | "hotel" | "other">[] = [
+  { value: "restaurant", label: "Fine dining restaurant" },
+  { value: "hotel", label: "Hotel bar or restaurant" },
+  { value: "other", label: "Something else" },
+];
+const VOLUMES: Choice<"under60" | "60to120" | "120to200" | "over200">[] = [
+  { value: "under60", label: "Under 60" },
+  { value: "60to120", label: "60 to 120" },
+  { value: "120to200", label: "120 to 200" },
+  { value: "over200", label: "Over 200" },
+];
+const POS: Choice<"yes" | "unsure" | "no">[] = [
+  { value: "yes", label: "Yes" },
+  { value: "unsure", label: "Not sure" },
+  { value: "no", label: "No" },
+];
+
+function Select<T extends string>({
+  id,
+  name,
+  label,
+  options,
+  defaultValue,
+}: {
+  id: string;
+  name: string;
+  label: string;
+  options: Choice<T>[];
+  defaultValue: T;
+}) {
+  return (
+    <label htmlFor={id}>
+      {label}
+      <select id={id} name={name} defaultValue={defaultValue}>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
@@ -150,11 +241,11 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         <button className="close-dialog" aria-label="Close inquiry" onClick={onClose}>
           <X size={22} />
         </button>
-        <span className="eyebrow">A CONVERSATION BETWEEN OWNERS & EXPERTS</span>
+        <span className="eyebrow">A 20 MINUTE FIT CALL</span>
         <h2 id="inquiry-title">
-          Let’s talk about
+          Let’s see if
           <br />
-          <em>your dining room.</em>
+          <em>this fits your room.</em>
         </h2>
         {send.isSuccess ? (
           <div className="inquiry-success" aria-live="polite">
@@ -171,8 +262,8 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <p className="inquiry-intro">
-              A focused, 20 minute discovery conversation. No generic pitch. Just your restaurant,
-              your standards, and what might be getting in the way.
+              Six quick questions so the call is about your room, not a pitch. If it isn’t a fit,
+              I’ll tell you.
             </p>
             <form
               onSubmit={(e) => {
@@ -182,9 +273,13 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                 const field = (key: string) => String(data.get(key) ?? "");
                 send.mutate({
                   name: field("name"),
+                  role: field("role") as (typeof ROLES)[number]["value"],
                   email: field("email"),
                   restaurant: field("restaurant"),
+                  venue: field("venue") as (typeof VENUES)[number]["value"],
                   locations: field("locations") as "1" | "2" | "3+",
+                  volume: field("volume") as (typeof VOLUMES)[number]["value"],
+                  pos: field("pos") as (typeof POS)[number]["value"],
                   message: field("message"),
                   website: field("website"),
                 });
@@ -206,6 +301,15 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                     autoComplete="name"
                   />
                 </label>
+                <Select
+                  id="inquiry-role"
+                  name="role"
+                  label="Your role"
+                  options={ROLES}
+                  defaultValue="owner"
+                />
+              </div>
+              <div className="form-grid">
                 <label htmlFor="inquiry-email">
                   Email address
                   <input
@@ -218,18 +322,25 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                     autoComplete="email"
                   />
                 </label>
-              </div>
-              <div className="form-grid">
                 <label htmlFor="inquiry-restaurant">
-                  Restaurant
+                  Restaurant or group
                   <input
                     id="inquiry-restaurant"
-                    aria-label="Restaurant"
+                    aria-label="Restaurant or group"
                     name="restaurant"
                     required
-                    placeholder="Restaurant name"
+                    placeholder="Name"
                   />
                 </label>
+              </div>
+              <div className="form-grid">
+                <Select
+                  id="inquiry-venue"
+                  name="venue"
+                  label="Type of room"
+                  options={VENUES}
+                  defaultValue="restaurant"
+                />
                 <label htmlFor="inquiry-locations">
                   Locations
                   <select id="inquiry-locations" name="locations" defaultValue="1">
@@ -239,13 +350,29 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                   </select>
                 </label>
               </div>
+              <div className="form-grid">
+                <Select
+                  id="inquiry-volume"
+                  name="volume"
+                  label="Tickets on a typical night"
+                  options={VOLUMES}
+                  defaultValue="60to120"
+                />
+                <Select
+                  id="inquiry-pos"
+                  name="pos"
+                  label="Can you share POS sales by server?"
+                  options={POS}
+                  defaultValue="yes"
+                />
+              </div>
               <label htmlFor="inquiry-message">
-                What is on your mind?
+                What would you most like to fix?
                 <textarea
                   id="inquiry-message"
-                  aria-label="What is on your mind?"
+                  aria-label="What would you most like to fix?"
                   name="message"
-                  rows={3}
+                  rows={2}
                   placeholder="The gap between the experience you intend and the one your guests receive…"
                 />
               </label>
@@ -268,8 +395,7 @@ function Inquiry({ onClose }: { onClose: () => void }) {
 export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [inquiry, setInquiry] = useState(false);
-  const [step, setStep] = useState(0);
-  const [pricingOpen, setPricingOpen] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
   const closeInquiry = useRef(() => setInquiry(false)).current;
   const siteRef = useRef<HTMLDivElement>(null);
   useReveal(siteRef, REVEAL_TARGETS);
@@ -277,22 +403,30 @@ export default function Home() {
     setMobileMenu(false);
     setInquiry(true);
   };
+  const nav = [
+    ["#proof", "The proof"],
+    ["#approach", "The method"],
+    ["#deliverable", "Sample audit"],
+    ["#investment", "The investment"],
+  ] as const;
 
   return (
     <div className="site theme-noir selected-noir" id="top" ref={siteRef}>
       <header className="header">
         <Wordmark />
         <nav aria-label="Main navigation">
-          <a href="#perspective">The perspective</a>
-          <a href="#approach">The approach</a>
-          <a href="#investment">The investment</a>
+          {nav.map(([href, label]) => (
+            <a key={href} href={href}>
+              {label}
+            </a>
+          ))}
         </nav>
         <div className="header-actions">
           <a className="header-signin" href={PLATFORM_URL} rel="noopener">
-            Sign in
+            Client sign in
           </a>
           <button className="header-cta" onClick={openInquiry}>
-            Begin a conversation <ArrowUpRight size={17} />
+            Book a fit call <ArrowUpRight size={17} />
           </button>
         </div>
         <button
@@ -306,20 +440,19 @@ export default function Home() {
       </header>
       {mobileMenu && (
         <nav className="mobile-nav">
-          <a href="#perspective" onClick={() => setMobileMenu(false)}>
-            The perspective
-          </a>
-          <a href="#approach" onClick={() => setMobileMenu(false)}>
-            The approach
-          </a>
-          <a href="#investment" onClick={() => setMobileMenu(false)}>
-            The investment
+          {nav.map(([href, label]) => (
+            <a key={href} href={href} onClick={() => setMobileMenu(false)}>
+              {label}
+            </a>
+          ))}
+          <a href="#tour" onClick={() => setMobileMenu(false)}>
+            Platform tour
           </a>
           <a href={PLATFORM_URL} rel="noopener" onClick={() => setMobileMenu(false)}>
-            Sign in to the platform
+            Client sign in
           </a>
           <button onClick={openInquiry}>
-            Begin a conversation <ArrowUpRight size={16} />
+            Book a fit call <ArrowUpRight size={16} />
           </button>
         </nav>
       )}
@@ -331,29 +464,580 @@ export default function Home() {
           </div>
           <div className="hero-content">
             <span className="eyebrow">
-              <span className="tiny-line" /> SIX SHIFTS. THE WHOLE PICTURE.
+              <span className="tiny-line" /> FOR FINE DINING AND UPSCALE HOTEL ROOMS
             </span>
             <h1 id="hero-title">
               <span className="headline-primary">Your servers are leaving money on the table.</span>{" "}
-              <em className="headline-promise">I can show you exactly how much.</em>
+              <em className="headline-promise">
+                I work your floor, find exactly how much, and train it back.
+              </em>
             </h1>
             <p>
-              I join your floor as a new hire. Only you know who I am. Across{" "}
-              <strong>six shifts in two weeks</strong>, I experience your current training exactly
-              as your staff does, where expectations are left unclear, shortcuts become habits, and
-              accountability slips. Then I hand you the number your dining room leaks every single
-              year.
+              I join your team as a new hire. Only you know who I am. After{" "}
+              <strong>six shifts</strong> you get a written report that prices every gap from your
+              own POS data. Then I build the training that closes them, and install it on our
+              platform so it holds.
             </p>
-            <button className="hero-cta" onClick={openInquiry}>
-              Discover the Disconnect <ArrowUpRight size={18} />
-            </button>
+            <ul className="hero-glance" aria-label="At a glance">
+              <li>Six shifts</li>
+              <li>Two weeks of observation</li>
+              <li>Custom program</li>
+              <li>First year of platform access</li>
+            </ul>
+            <div className="hero-actions">
+              <button className="hero-cta" onClick={openInquiry}>
+                Book a 20 minute fit call <ArrowUpRight size={18} />
+              </button>
+              <a className="hero-secondary" href="#sample-finding">
+                View a sample audit <ArrowDown size={16} />
+              </a>
+            </div>
           </div>
           <div className="hero-foot">
-            <a href="#perspective">
-              <ArrowDown size={15} /> THE DIFFERENCE IS IN THE DETAILS
+            <a href="#proof">
+              <ArrowDown size={15} /> $68 TO $84 A TICKET. SEE HOW.
             </a>
           </div>
         </section>
+
+        <section className="proof section-shell" id="proof" aria-labelledby="proof-title">
+          <div className="section-label">
+            <span className="eyebrow">01 / THE PROOF</span>
+            <span className="eyebrow">ONE ROOM. ONE YEAR. NO PRICE CHANGES.</span>
+          </div>
+          <div className="proof-grid">
+            <div className="proof-heading">
+              <h2 id="proof-title">
+                $68 to $84.
+                <br />
+                <em>Same menu, one year later.</em>
+              </h2>
+              <div className="proof-story">
+                <p>
+                  This method didn’t start in an office. I was a server at an upscale fine dining
+                  bar. On day one my manager told me to memorize the menu and the table numbers.
+                  Three days later I was on the floor alone, taking tables of eight to ten.
+                </p>
+                <p>
+                  I asked for training materials. There weren’t any. I was told to figure it out, so
+                  I did, and built the first version of this system for myself. When management saw
+                  it working, they rolled it out to the whole team. A year later, this is what had
+                  changed.
+                </p>
+              </div>
+            </div>
+            <div className="proof-panel">
+              <div className="proof-results">
+                <div>
+                  <span className="proof-label">Average ticket</span>
+                  <span className="proof-figure">
+                    $68 <em>to</em> $84
+                  </span>
+                  <span className="proof-note">Up $16, about 24%, over one year</span>
+                </div>
+                <div>
+                  <span className="proof-label">Regional rank, total food & beverage revenue</span>
+                  <span className="proof-figure">
+                    #11 <em>to</em> #5
+                  </span>
+                  <span className="proof-note">Among 25 locations in its region</span>
+                </div>
+              </div>
+              <dl className="proof-facts">
+                <div>
+                  <dt>Venue</dt>
+                  <dd>An upscale fine dining bar, kept anonymous</dd>
+                </div>
+                <div>
+                  <dt>Service</dt>
+                  <dd>Dinner</dd>
+                </div>
+                <div>
+                  <dt>Team measured</dt>
+                  <dd>2 full time bartenders, 4 full time servers, 6 part time servers</dd>
+                </div>
+                <div>
+                  <dt>What changed</dt>
+                  <dd>One written service standard, trained to every member of the team</dd>
+                </div>
+                <div>
+                  <dt>How long</dt>
+                  <dd>One year of consistent use</dd>
+                </div>
+                <div>
+                  <dt>Menu prices</dt>
+                  <dd>No meaningful changes during the year</dd>
+                </div>
+              </dl>
+              <p className="proof-caveat">
+                One room’s result, shared as evidence of the method. It is not a forecast for yours;
+                your report prices your own room.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="perspective section-shell" id="perspective">
+          <div className="section-label">
+            <span className="eyebrow">02 / THE OWNER’S BLIND SPOT</span>
+            <span className="small-motif">×</span>
+          </div>
+          <div className="perspective-grid">
+            <h2>
+              You know what
+              <br />
+              your restaurant
+              <br />
+              <em>could be.</em>
+            </h2>
+            <div className="perspective-copy">
+              <h3>
+                But do you know what happens
+                <br />
+                when you’re not in the room?
+              </h3>
+              <p>
+                The greeting that changes with every server. The wine list presented as prices, not
+                possibilities. The check that arrives ten minutes too late.
+              </p>
+              <p>
+                None of it makes its way to your desk. All of it makes its way to your bottom line.
+              </p>
+              <p className="statement">
+                You don’t need another workshop.
+                <br />
+                You need the truth, and a system that holds.
+              </p>
+            </div>
+          </div>
+          <div className="perspective-bottom">
+            <p>
+              For the owner whose reputation
+              <br />
+              is personal. And whose standards are, too.
+            </p>
+            <span>FINE DINING ROOMS AND UPSCALE HOTEL BARS. ONE UNCOMPROMISING STANDARD.</span>
+          </div>
+        </section>
+
+        <section className="approach section-shell" id="approach">
+          <div className="section-label">
+            <span className="eyebrow">03 / THE METHOD</span>
+            <span className="eyebrow">DIAGNOSE. BUILD. INSTALL. ABOUT 6 WEEKS.</span>
+          </div>
+          <div className="section-heading">
+            <h2>
+              Three steps.
+              <br />
+              <em>Each with something in your hands.</em>
+            </h2>
+            <p>
+              I don’t arrive with answers.
+              <br />I earn them on your floor.
+            </p>
+          </div>
+          <div className="method-layout">
+            <div className="method-photo">
+              <img
+                src="/images/pristine-occupied-dining.webp"
+                alt="Illustrative scene of an occupied, pristine fine dining room with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
+                loading="lazy"
+              />
+              <div className="method-photo-label">
+                <span>THE WORK BEGINS HERE.</span>
+                <span>Not in a classroom.</span>
+              </div>
+            </div>
+            <ol className="method-steps">
+              {methods.map((m, i) => (
+                <li className="method-item is-open" key={m.phase}>
+                  <div className="method-head">
+                    <span className="method-number">0{i + 1}</span>
+                    <span className="method-title">
+                      <span className="eyebrow">{m.phase}</span>
+                      <span>{m.title}</span>
+                    </span>
+                  </div>
+                  <div className="method-details" id={`method-${i}`}>
+                    <span className="timing">{m.time}</span>
+                    <p>{m.description}</p>
+                    <span className="method-receive">YOU RECEIVE</span>
+                    <ul>
+                      {m.details.map((d) => (
+                        <li key={d}>{d}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div className="method-support">
+            <span className="eyebrow">SUPPORT AFTER LAUNCH</span>
+            <p>
+              Included for the first 12 months: the platform for your whole team, new hires entering
+              the same program at no extra cost, monthly reports by server, and technical support.
+              From year two the platform is $450 a month for one location, and technical support
+              continues for as long as you use it.
+            </p>
+          </div>
+        </section>
+
+        <section className="deliverable section-shell" id="deliverable">
+          <div className="section-label">
+            <span className="eyebrow">04 / A SAMPLE AUDIT</span>
+            <span className="eyebrow">MODELED FIGURES · NOT A CLIENT</span>
+          </div>
+          <div className="deliverable-grid">
+            <div className="deliverable-heading">
+              <h2>
+                Everything I saw.
+                <br />
+                <em>Every dollar worked out.</em>
+              </h2>
+            </div>
+            <div className="deliverable-intro">
+              <p>
+                After the sixth shift you receive a written gap report: every gap I found and what
+                it is worth a year, with the arithmetic shown. Then we sit down together, in person
+                or on video, and walk through every page.
+              </p>
+              <p>
+                Start with one complete finding below, then open the full sample report. It is built
+                for a modeled dining room of 110 tickets a night. In yours, every number comes from
+                your own room.
+              </p>
+              <dl className="deliverable-notes">
+                <div>
+                  <dt>BEFORE WE BEGIN</dt>
+                  <dd>Access to your POS reports.</dd>
+                </div>
+                <div>
+                  <dt>DEBRIEF</dt>
+                  <dd>In person or by video.</dd>
+                </div>
+                <div>
+                  <dt>TIMELINE</dt>
+                  <dd>5 to 6 weeks from the first shift to delivery.</dd>
+                </div>
+              </dl>
+            </div>
+          </div>
+          <SampleFinding />
+          <SampleAudit />
+          <div className="report-contents">
+            <span className="eyebrow">INSIDE EVERY REPORT</span>
+            <ol className="report-chapters">
+              {reportChapters.map((c, i) => (
+                <li className="report-chapter" key={c.title}>
+                  <span className="report-numeral">{["I", "II", "III", "IV", "V", "VI"][i]}</span>
+                  <div>
+                    <h3>{c.title}</h3>
+                    <p>{c.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <section className="revenue section-shell" id="opportunity">
+          <div className="section-label">
+            <span className="eyebrow">05 / RUN YOUR OWN NUMBERS</span>
+            <span className="eyebrow">A SCENARIO MODEL, NOT A PROMISE</span>
+          </div>
+          <div className="revenue-layout">
+            <div>
+              <h2>
+                A few dollars a ticket.
+                <br />
+                <em>Three honest scenarios.</em>
+              </h2>
+              <p>
+                Set your tickets, your nights and the added spend per ticket you think is realistic.
+                The model shows a conservative case at half your estimate and a higher case at one
+                and a half times.
+              </p>
+              <p>
+                Every result is <b>estimated contribution</b>: added sales less cost of goods and
+                card fees, the part that reaches your bottom line. Not sales, and not a guarantee.
+              </p>
+              <dl className="revenue-key">
+                <div>
+                  <dt>Ticket</dt>
+                  <dd>One check, as your POS counts it.</dd>
+                </div>
+                <div>
+                  <dt>Contribution</dt>
+                  <dd>66% of added sales, after about 30% cost of goods and 4% card fees.</dd>
+                </div>
+                <div>
+                  <dt>Fee recovered</dt>
+                  <dd>When a year of contribution, month by month, adds up to the fee.</dd>
+                </div>
+              </dl>
+            </div>
+            <PaybackCalculator />
+          </div>
+        </section>
+
+        <section className="investment section-shell" id="investment">
+          <div className="section-label">
+            <span className="eyebrow">06 / THE INVESTMENT</span>
+            <span className="eyebrow">ONE PRICE. TWO WAYS TO PAY.</span>
+          </div>
+          <div className="investment-grid">
+            <div>
+              <h2>
+                Know the gap.
+                <br />
+                <em>Then close it.</em>
+              </h2>
+              <p>
+                Start with a 20 minute fit call. Then the audit. You see the evidence before you
+                commit to the build.
+              </p>
+              <button className="text-link" onClick={openInquiry}>
+                Book a 20 minute fit call <ArrowUpRight size={17} />
+              </button>
+            </div>
+            <div className="invest-cards">
+              <div className="invest-card is-main">
+                <span className="eyebrow">THE FULL PROGRAM · ONE LOCATION</span>
+                <div className="invest-price">
+                  <h3>Diagnose. Build. Install.</h3>
+                  <span className="price">$85,000</span>
+                </div>
+                <p>
+                  The audit and gap report, the debrief, your custom training program, the first
+                  year of the platform, a one day platform training for staff and managers, and
+                  technical support.
+                </p>
+                <div className="invest-options">
+                  <div>
+                    <span className="invest-option">Option A · Pay as you go</span>
+                    <b>$10,000 to begin, $75,000 on delivery</b>
+                    <span>$85,000 in total. The $10,000 is the audit.</span>
+                  </div>
+                  <div>
+                    <span className="invest-option">Option B · Paid in full</span>
+                    <b>$75,000 upfront</b>
+                    <span>$10,000 less than paying as you go.</span>
+                  </div>
+                </div>
+              </div>
+              <div className="invest-card">
+                <span className="eyebrow">THE AUDIT ONLY</span>
+                <div className="invest-price">
+                  <h3>Six shifts. The whole picture.</h3>
+                  <span className="price">$10,000</span>
+                </div>
+                <p>
+                  Two weekdays, two Fridays and two Saturdays over two weeks, a written gap report
+                  with every dollar figure worked out, a breakdown by server and a debrief. You keep
+                  the report. If you continue, the full $10,000 is credited toward the program.
+                </p>
+              </div>
+              <div className="guarantee">
+                <span className="eyebrow">THE GUARANTEE</span>
+                <h3>
+                  If the report finds less than $150,000 a year,
+                  <em> you don’t pay for the rest.</em>
+                </h3>
+                <dl>
+                  <div>
+                    <dt>What it covers</dt>
+                    <dd>
+                      What the gap report identifies, not results after training. Results depend on
+                      your team using the program; the platform measures them.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>The measure</dt>
+                    <dd>
+                      Recoverable annual revenue: the yearly total of added sales and cost savings
+                      the report ties to specific, fixable gaps. Each is calculated from your POS
+                      data and the six observed shifts, with the arithmetic shown so you can check
+                      it.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Option A</dt>
+                    <dd>
+                      You have paid $10,000 for the audit. Under $150,000, you owe nothing more and
+                      keep the report.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Option B</dt>
+                    <dd>
+                      You have paid $75,000. Under $150,000, $65,000 is refunded. The $10,000 covers
+                      the audit, and you keep the report.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>When</dt>
+                    <dd>Decided at the debrief, before your program is built.</dd>
+                  </div>
+                </dl>
+                <p className="guarantee-note">
+                  The full terms are written into your agreement before the first shift.
+                </p>
+              </div>
+              <button
+                className="terms-toggle"
+                onClick={() => setTermsOpen(!termsOpen)}
+                aria-expanded={termsOpen}
+              >
+                More than one location, and the platform after year one{" "}
+                {termsOpen ? <Minus size={16} /> : <Plus size={16} />}
+              </button>
+              {termsOpen && (
+                <div className="payment-details">
+                  <p>
+                    <b>Two locations:</b> $140,000 for both rooms, each floor audited against one
+                    shared standard. Three or more are quoted individually.
+                  </p>
+                  <p>
+                    <b>Year two onward:</b> the platform is <b>$450 a month</b> for one location.
+                    Two locations $650 a month, three $900, four $1,250, five $1,500.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className="tour section-shell" id="tour" aria-labelledby="tour-title">
+          <div className="section-label">
+            <span className="eyebrow">07 / THE PLATFORM TOUR</span>
+            <span className="eyebrow">90 SECONDS · NO LOGIN NEEDED</span>
+          </div>
+          <div className="tour-heading">
+            <h2 id="tour-title">
+              The work continues.
+              <br />
+              <em>Even when I don’t.</em>
+            </h2>
+            <p>
+              A great service shouldn’t depend on who is working, or whether the owner is watching.
+              Here is the platform your program lives on, shown with a fictional demo restaurant.
+            </p>
+          </div>
+          <figure className="tour-film">
+            <video
+              src="/videos/platform-demo-90s.mp4"
+              poster="/images/platform-demo-poster.webp"
+              controls
+              playsInline
+              preload="none"
+              aria-label="Platform tour, 90 seconds, music only"
+            >
+              <track
+                kind="captions"
+                src="/videos/platform-demo-90s.vtt"
+                srcLang="en"
+                label="English"
+              />
+            </video>
+            <figcaption>Demo data · staff names and figures are fictional.</figcaption>
+          </figure>
+          <div className="lasting-grid">
+            <div>
+              <span className="small-index">I</span>
+              <h3>Learn it.</h3>
+              <p>
+                Custom modules and knowledge checks built around your actual service, not someone
+                else’s restaurant.
+              </p>
+            </div>
+            <div>
+              <span className="small-index">II</span>
+              <h3>Live it.</h3>
+              <p>
+                Floor exercises signed off by managers. Six competencies. A 1 to 5 grading system.
+                Clear, shared expectations.
+              </p>
+            </div>
+            <div>
+              <span className="small-index">III</span>
+              <h3>Prove it.</h3>
+              <p>
+                Monthly sales reports by server, measured against the audit starting point. Managers
+                coach with evidence. Standards become habits.
+              </p>
+            </div>
+          </div>
+          <div className="tour-terms">
+            <div>
+              <span className="eyebrow">YEAR ONE</span>
+              <p>Included with the program, for every server, bartender and manager.</p>
+            </div>
+            <div>
+              <span className="eyebrow">FROM YEAR TWO</span>
+              <p>
+                <b>$450 a month</b> for one location. Two $650, three $900, four $1,250, five
+                $1,500.
+              </p>
+            </div>
+            <div>
+              <span className="eyebrow">SUPPORT</span>
+              <p>
+                A one day platform training at launch, and technical support for as long as you use
+                the platform.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="fit section-shell" id="fit" aria-labelledby="fit-title">
+          <div className="section-label">
+            <span className="eyebrow">08 / WHO THIS FITS</span>
+            <span className="eyebrow">AN HONEST CHECK BEFORE WE TALK</span>
+          </div>
+          <div className="fit-heading">
+            <h2 id="fit-title">
+              Right for some rooms.
+              <br />
+              <em>Not for every room.</em>
+            </h2>
+            <p>If most of the left column sounds like you, a fit call is worth 20 minutes.</p>
+          </div>
+          <table className="fit-table">
+            <caption className="sr-only">Who this fits</caption>
+            <thead>
+              <tr className="fit-row fit-cols">
+                <th scope="col">
+                  <span className="sr-only">Area</span>
+                </th>
+                <th scope="col">A good fit</th>
+                <th scope="col">Probably not yet</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fit.map((f) => (
+                <tr className="fit-row" key={f.label}>
+                  <th className="fit-label" scope="row">
+                    {f.label}
+                  </th>
+                  <td className="fit-yes">
+                    <Check size={15} aria-hidden="true" />
+                    {f.yes}
+                  </td>
+                  <td className="fit-no">
+                    <X size={15} aria-hidden="true" />
+                    {f.no}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <button className="hero-cta fit-cta" onClick={openInquiry}>
+            Book a 20 minute fit call <ArrowUpRight size={18} />
+          </button>
+        </section>
+
+        <OwnerQuestions />
 
         <section className="culinary section-shell" aria-labelledby="culinary-title">
           <div className="culinary-intro">
@@ -422,342 +1106,8 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="perspective section-shell" id="perspective">
-          <div className="section-label">
-            <span className="eyebrow">01 / THE OWNER’S BLIND SPOT</span>
-            <span className="small-motif">×</span>
-          </div>
-          <div className="perspective-grid">
-            <h2>
-              You know what
-              <br />
-              your restaurant
-              <br />
-              <em>could be.</em>
-            </h2>
-            <div className="perspective-copy">
-              <h3>
-                But do you know what happens
-                <br />
-                when you’re not in the room?
-              </h3>
-              <p>
-                The greeting that changes with every server. The wine list presented as prices, not
-                possibilities. The check that arrives ten minutes too late.
-              </p>
-              <p>
-                None of it makes its way to your desk. All of it makes its way to your bottom line.
-              </p>
-              <p className="statement">
-                You don’t need another workshop.
-                <br />
-                You need the truth, and a system that holds.
-              </p>
-            </div>
-          </div>
-          <div className="perspective-bottom">
-            <p>
-              For the owner whose reputation
-              <br />
-              is personal. And whose standards are, too.
-            </p>
-            <span>ONE OR TWO LOCATIONS. ONE UNCOMPROMISING VISION.</span>
-          </div>
-        </section>
-
-        <section className="approach section-shell" id="approach">
-          <div className="section-label">
-            <span className="eyebrow">02 / THE BOTTOM LINE MULTIPLIED METHOD</span>
-            <span className="eyebrow">OBSERVE. BUILD. EMBED.</span>
-          </div>
-          <div className="section-heading">
-            <h2>
-              Not a seminar.
-              <br />
-              <em>A transformation from within.</em>
-            </h2>
-            <p>
-              We don’t arrive with answers.
-              <br />
-              We earn them on your floor.
-            </p>
-          </div>
-          <div className="method-layout">
-            <div className="method-photo">
-              <img
-                src="/images/pristine-occupied-dining.webp"
-                alt="Illustrative scene of an occupied, pristine fine dining room with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
-                loading="lazy"
-              />
-              <div className="method-photo-label">
-                <span>THE WORK BEGINS HERE.</span>
-                <span>Not in a classroom.</span>
-              </div>
-            </div>
-            <div className="method-steps">
-              {methods.map((m, i) => (
-                <div className={`method-item ${step === i ? "is-open" : ""}`} key={m.phase}>
-                  <button
-                    onClick={() => setStep(i)}
-                    aria-expanded={step === i}
-                    aria-controls={`method-${i}`}
-                  >
-                    <span className="method-number">0{i + 1}</span>
-                    <span className="method-title">
-                      <span className="eyebrow">{m.phase}</span>
-                      <span>{m.title}</span>
-                    </span>
-                    {step === i ? <Minus size={18} /> : <Plus size={18} />}
-                  </button>
-                  {step === i && (
-                    <div className="method-details" id={`method-${i}`}>
-                      <span className="timing">{m.time}</span>
-                      <p>{m.description}</p>
-                      <ul>
-                        {m.details.map((d) => (
-                          <li key={d}>{d}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="method-signoff">
-            <span className="serif-italic">Your menu. Your team. Your numbers.</span>
-            <span>NOTHING OFF THE SHELF.</span>
-          </div>
-        </section>
-
-        <section className="revenue section-shell" id="opportunity">
-          <div className="section-label">
-            <span className="eyebrow">03 / THE OPPORTUNITY IN PLAIN SIGHT</span>
-            <span className="eyebrow">AN ILLUSTRATION, NOT A PROMISE</span>
-          </div>
-          <div className="revenue-layout">
-            <div>
-              <h2>
-                A small shift.
-                <br />
-                <em>An extraordinary difference.</em>
-              </h2>
-              <p>
-                One considered recommendation. A more confident wine presentation. A team that knows
-                what to say, and when.
-              </p>
-              <p>
-                Slide to your room and see how quickly a higher average check pays for the program.
-              </p>
-            </div>
-            <PaybackCalculator />
-          </div>
-        </section>
-
-        <section className="lasting section-shell">
-          <span className="eyebrow">04 / STANDARDS WITH STAYING POWER</span>
-          <div className="lasting-heading">
-            <h2>
-              The work continues.
-              <br />
-              <em>Even when we don’t.</em>
-            </h2>
-            <p>
-              A great service shouldn’t depend on who is working.
-              <br />
-              Or whether the owner is watching.
-            </p>
-          </div>
-          <div className="lasting-grid">
-            <div>
-              <span className="small-index">I</span>
-              <h3>Learn it.</h3>
-              <p>
-                Custom modules and knowledge checks built around your actual service, not someone
-                else’s restaurant.
-              </p>
-            </div>
-            <div>
-              <span className="small-index">II</span>
-              <h3>Live it.</h3>
-              <p>
-                Floor exercises signed off by managers. Six competencies. A 1 to 5 grading system.
-                Clear, shared expectations.
-              </p>
-            </div>
-            <div>
-              <span className="small-index">III</span>
-              <h3>Prove it.</h3>
-              <p>
-                Live performance reports tied to sales data. Managers coach with evidence. Standards
-                become habits.
-              </p>
-            </div>
-          </div>
-          <div className="platform-line">
-            <span>YOUR CUSTOM PROGRAM. OUR PROPRIETARY PLATFORM.</span>
-            <span>
-              Included for the first 12 months. <ArrowUpRight size={15} />
-            </span>
-          </div>
-        </section>
-
-        <section className="deliverable section-shell" id="deliverable">
-          <div className="section-label">
-            <span className="eyebrow">05 / WHAT YOU RECEIVE</span>
-            <span className="eyebrow">ONE NUMBER. EVERY REASON BEHIND IT.</span>
-          </div>
-          <div className="deliverable-grid">
-            <div className="deliverable-heading">
-              <h2>
-                Everything we saw.
-                <br />
-                <em>Wrapped up in one figure.</em>
-              </h2>
-            </div>
-            <div className="deliverable-intro">
-              <p>
-                After the sixth shift you receive a written gap report: every gap we found and the
-                exact dollar value it costs you each year, with the arithmetic shown. Then we sit
-                down together, in person or on video, and walk through every page.
-              </p>
-              <p>
-                Below is a sample for a modeled dining room of 110 covers. In yours, every number
-                comes from your own room.
-              </p>
-              <dl className="deliverable-notes">
-                <div>
-                  <dt>BEFORE WE BEGIN</dt>
-                  <dd>Access to your POS reports.</dd>
-                </div>
-                <div>
-                  <dt>DEBRIEF</dt>
-                  <dd>In person or by video.</dd>
-                </div>
-                <div>
-                  <dt>TIMELINE</dt>
-                  <dd>5 to 6 weeks from the first shift to delivery.</dd>
-                </div>
-              </dl>
-            </div>
-          </div>
-          <SampleAudit />
-          <div className="report-contents">
-            <span className="eyebrow">INSIDE EVERY REPORT</span>
-            <ol className="report-chapters">
-              {reportChapters.map((c, i) => (
-                <li className="report-chapter" key={c.title}>
-                  <span className="report-numeral">{["I", "II", "III", "IV", "V", "VI"][i]}</span>
-                  <div>
-                    <h3>{c.title}</h3>
-                    <p>{c.body}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </section>
-
-        <section className="investment section-shell" id="investment">
-          <div className="section-label">
-            <span className="eyebrow">06 / THE INVESTMENT</span>
-            <span className="eyebrow">CLARITY BEFORE COMMITMENT.</span>
-          </div>
-          <div className="investment-grid">
-            <div>
-              <h2>
-                Know the gap.
-                <br />
-                <em>Then close it.</em>
-              </h2>
-              <p>
-                Start with a conversation. Then a paid diagnosis.
-                <br />
-                See the evidence before you commit to the solution.
-              </p>
-              <button className="text-link" onClick={openInquiry}>
-                Arrange a 20 minute discovery call <ArrowUpRight size={17} />
-              </button>
-            </div>
-            <div className="price-list">
-              <div className="price-row">
-                <div>
-                  <span className="eyebrow">THE UNDERCOVER AUDIT</span>
-                  <h3>Six shifts. The whole picture.</h3>
-                  <p>
-                    Two weekdays, two Fridays and two Saturdays over two weeks. A written gap report
-                    with every dollar figure worked out, a breakdown by server and a debrief.
-                  </p>
-                </div>
-                <span className="price">$10,000</span>
-              </div>
-              <div className="price-row">
-                <div>
-                  <span className="eyebrow">THE COMPLETE PROGRAM</span>
-                  <h3>Diagnose. Build. Install.</h3>
-                  <p>
-                    The audit, your custom training program, the first year of the platform at no
-                    charge, and a one day platform training for your staff and managers.
-                  </p>
-                </div>
-                <div className="program-prices">
-                  <span>
-                    <b>$85,000</b> pay as you go
-                    <em className="program-credit">$10,000 upfront · $75,000 on delivery</em>
-                  </span>
-                  <span>
-                    <b>$75,000</b> paid in full upfront
-                    <em className="program-credit">The audit is free. You save $10,000.</em>
-                  </span>
-                </div>
-              </div>
-              <div className="commit-offer">
-                <span className="eyebrow">THE GUARANTEE</span>
-                <h3>At least $150,000, or you walk away.</h3>
-                <ul>
-                  <li>
-                    <b>If the report doesn’t find it, you walk away.</b> If your gap report doesn’t
-                    reveal at least $150,000 in recoverable annual revenue, you get everything back
-                    except the $10,000 audit fee.
-                  </li>
-                  <li>
-                    <b>5 to 6 weeks, start to finish.</b> From the first audit shift to your program
-                    delivered and your team trained on the platform.
-                  </li>
-                </ul>
-              </div>
-              <button
-                className="terms-toggle"
-                onClick={() => setPricingOpen(!pricingOpen)}
-                aria-expanded={pricingOpen}
-              >
-                What’s included & the platform after year one{" "}
-                {pricingOpen ? <Minus size={16} /> : <Plus size={16} />}
-              </button>
-              {pricingOpen && (
-                <div className="payment-details">
-                  <p>
-                    <b>Included:</b> the first year of the platform at no charge, and a one day
-                    training on the platform for your staff and managers.
-                  </p>
-                  <p>
-                    <b>Year two onward:</b> the platform continues at <b>$350 to $450 a month</b>{" "}
-                    per location.
-                  </p>
-                  <p>
-                    <b>Two locations:</b> $140,000 for both rooms, each floor audited against one
-                    shared standard. Three or more are quoted individually.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        <OwnerQuestions />
-
         <section className="closing section-shell">
-          <span className="eyebrow">THE NEXT CHAPTER OF YOUR RESTAURANT</span>
+          <span className="eyebrow">THE NEXT CHAPTER OF YOUR ROOM</span>
           <h2>
             Your reputation is earned
             <br />
@@ -766,9 +1116,9 @@ export default function Home() {
             <em>Let’s make every one count.</em>
           </h2>
           <button className="hero-cta" onClick={openInquiry}>
-            Begin a private conversation <ArrowUpRight size={18} />
+            Book a 20 minute fit call <ArrowUpRight size={18} />
           </button>
-          <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
+          <span className="closing-note">20 MINUTES. YOUR ROOM. NO OBLIGATION.</span>
         </section>
       </main>
       <footer className="footer section-shell">
@@ -785,7 +1135,7 @@ export default function Home() {
         </div>
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Bottom Line Multiplied.</span>
-          <span>DIAGNOSTIC TRAINING FOR INDEPENDENT FINE DINING</span>
+          <span>DIAGNOSTIC TRAINING FOR FINE DINING AND HOTEL HOSPITALITY</span>
           <span>PRIVATE. PRECISE. BUILT TO LAST.</span>
         </div>
       </footer>
