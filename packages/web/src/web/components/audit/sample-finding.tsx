@@ -1,16 +1,6 @@
-import {
-  COVERS,
-  COVERS_PER_SERVICE,
-  FLOW_THROUGH,
-  PROFIT,
-  ROOM_NOW,
-  SALES_NOW,
-  SERVICES_PER_YEAR,
-  TOTAL,
-  findings,
-  servers,
-  usd,
-} from "./model";
+import { ArrowRight } from "lucide-react";
+import { COVERS_PER_SERVICE, FLOW_THROUGH, TOTAL, findings, servers, usd } from "./model";
+import { OPEN_AUDIT_METHOD } from "./sample-audit";
 
 // The highest value finding in the sample report, shown whole.
 const wine = findings.find((f) => f.title === "The wine list, explained")!;
@@ -79,15 +69,17 @@ export function SampleFinding() {
       <div className="sf-model">
         <span className="sf-tag">HOW THE SAMPLE ROOM WAS BUILT</span>
         <p>
-          The sample is a modeled restaurant, not a client. We chose figures typical of an
-          independent fine dining room: <b>{COVERS_PER_SERVICE} tickets a night</b>, open{" "}
-          <b>six nights a week</b> ({SERVICES_PER_YEAR} dinners a year,{" "}
-          {COVERS.toLocaleString("en-US")} tickets), <b>{servers.length} servers</b> and a $
-          {ROOM_NOW.toFixed(2)} average ticket, which comes to {usd(SALES_NOW)} in sales a year.
-          Every finding is calculated from those inputs. The eight findings add up to{" "}
-          <b>{usd(TOTAL)}</b> in estimated added sales and savings a year, of which{" "}
-          <b>{usd(PROFIT)}</b> is estimated contribution.
+          The sample is a modeled restaurant, not a client: {COVERS_PER_SERVICE} tickets a night,
+          six nights a week, {servers.length} servers. Every input and every calculation behind its{" "}
+          <b>{usd(TOTAL)}</b> is on the back page of the report.
         </p>
+        <button
+          type="button"
+          className="sf-to-method"
+          onClick={() => window.dispatchEvent(new Event(OPEN_AUDIT_METHOD))}
+        >
+          Open the back page · How the numbers were built <ArrowRight size={13} />
+        </button>
       </div>
     </div>
   );

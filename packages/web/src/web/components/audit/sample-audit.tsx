@@ -1,22 +1,35 @@
-import { type KeyboardEvent, type ReactNode, useEffect, useRef, useState } from "react";
+import {
+  type KeyboardEvent,
+  type ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   ADDED_SALES,
   BENCH,
+  CHECK_FINDINGS,
   CHECK_LIFT,
   COGS,
   COVERS,
   COVERS_EACH,
   COVERS_PER_SERVICE,
   FLOW_THROUGH,
+  LIQUOR_SHARE,
   NET_MARGIN,
+  NIGHTS_PER_WEEK,
   POUR,
+  POUR_COST,
   PROFIT,
   PROFIT_NOW,
   REST_AVG,
   ROOM_NOW,
   ROOM_TARGET,
   SALES_NOW,
+  SERVICES_PER_YEAR,
   SPREAD,
   TIP_RATE,
   TIPS,
@@ -38,8 +51,28 @@ const PAGES = [
   { id: "priorities", title: "What to fix first" },
   { id: "evidence", title: "What we saw" },
   { id: "bottom-line", title: "The bottom line" },
+  { id: "method", title: "How the numbers were built" },
 ] as const;
-const NUMERALS = ["I", "II", "III", "IV", "V"];
+const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
+const METHOD = PAGES.length - 1;
+
+/** Event the rest of the page can dispatch to open the report on its back page. */
+export const OPEN_AUDIT_METHOD = "audit:open-method";
+
+// Lets any page turn to the back page, where its arithmetic is worked out.
+const ToMethod = createContext<() => void>(() => {});
+
+function MethodLink({ children }: { children: ReactNode }) {
+  const open = useContext(ToMethod);
+  return (
+    <button type="button" className="ap-to-method" onClick={open}>
+      <span>{children}</span>
+      <em>
+        Page {NUMERALS[METHOD]} <ArrowRight size={11} />
+      </em>
+    </button>
+  );
+}
 
 function PageHead({
   index,
@@ -114,11 +147,7 @@ function Summary() {
             </li>
           ))}
         </ul>
-        <p className="ap-math-note">
-          {cents(CHECK_LIFT / COVERS)} per ticket × {COVERS.toLocaleString("en-US")} tickets a year
-          = {usd(CHECK_LIFT)} in higher checks, plus {usd(COVER_SALES)} in tables that walked,{" "}
-          {usd(COMPS)} in comps and {usd(POUR)} in pour. Every line is worked out under What we saw.
-        </p>
+        <MethodLink>How each of these figures was calculated</MethodLink>
       </figure>
     </>
   );
@@ -193,23 +222,9 @@ function Servers() {
           </span>
           <strong>+{usd(CHECK_LIFT)} a year</strong>
         </div>
-        <ServerMath />
+        <MethodLink>How each target and yearly figure was calculated</MethodLink>
       </figure>
     </>
-  );
-}
-
-function ServerMath() {
-  const ex = servers[2];
-  const perServer = COVERS_EACH.toLocaleString("en-US");
-  return (
-    <p className="ap-math-note">
-      How each line is worked out, using {ex.name}: half of the {cents(BENCH - ex.now)} between{" "}
-      {cents(ex.now)} and the top two at {cents(BENCH)} = {cents(ex.gap)} per ticket × {perServer}{" "}
-      tickets a year ({COVERS.toLocaleString("en-US")} tickets shared by {servers.length} servers) ={" "}
-      {usd(ex.annual)}. The room: {cents(CHECK_LIFT / COVERS)} per ticket ×{" "}
-      {COVERS.toLocaleString("en-US")} tickets = {usd(CHECK_LIFT)}.
-    </p>
   );
 }
 
@@ -223,7 +238,7 @@ function Priorities() {
         index={2}
         kicker="What to fix first"
         title="Eight leaks, ranked by what they’re worth."
-        lede={`The wine list and the starter at seating are ${pctOf(topTwo, TOTAL)} of the total. That is where the program starts. The math behind every figure is on the next page.`}
+        lede={`The wine list and the starter at seating are ${pctOf(topTwo, TOTAL)} of the total. That is where the program starts. The arithmetic behind every figure is on the back page.`}
       />
       <figure className="ap-rank" aria-label="Findings ranked by annual value">
         <ol>
@@ -253,7 +268,7 @@ function Evidence() {
         index={3}
         kicker="What we saw"
         title="Follow one table through the night."
-        lede="Observed from inside your team, across six shifts. Every finding shows what we measured, the target, and the arithmetic behind the dollar figure."
+        lede="Observed from inside your team, across six shifts. Every finding shows what we measured and the target. The arithmetic behind each dollar figure is on the back page."
       />
       <ol className="ap-evidence">
         {findings.map((f) => (
@@ -273,16 +288,11 @@ function Evidence() {
                 <dt>Target</dt>
                 <dd>{f.target}</dd>
               </div>
-              <div>
-                <dt>Gap</dt>
-                <dd>
-                  {f.math} = <strong>{usd(f.value)} per year</strong>
-                </dd>
-              </div>
             </dl>
           </li>
         ))}
       </ol>
+      <MethodLink>The arithmetic behind each of the eight figures</MethodLink>
     </>
   );
 }
@@ -377,17 +387,243 @@ function BottomLine() {
           </span>
         </div>
       </dl>
-      <p className="ap-assumptions">
-        Assumptions: {Math.round(FLOW_THROUGH * 100)}% of added sales kept after cost of goods and
-        card fees (estimated contribution); comps and pour savings kept in full; tips at{" "}
-        {Math.round(TIP_RATE * 100)}%; liquor at 18% of sales with a 20% pour cost;{" "}
-        {Math.round(NET_MARGIN * 100)}% net margin today (fine dining typically runs 5 to 10%).
+      <MethodLink>Every assumption behind this page, and the arithmetic</MethodLink>
+    </>
+  );
+}
+
+function Step({ n, title, children }: { n: string; title: string; children: ReactNode }) {
+  return (
+    <section className="ap-mt-block">
+      <h4 className="ap-mt-step">
+        <span>{n}</span>
+        {title}
+      </h4>
+      {children}
+    </section>
+  );
+}
+
+function HowBuilt() {
+  const n = (v: number) => v.toLocaleString("en-US");
+  const pct = (v: number) => `${Math.round(v * 100)}%`;
+  const [a, b] = servers;
+  const ex = servers[2];
+  const newSales = CHECK_LIFT + COVER_SALES;
+  const kept = Math.round(newSales * FLOW_THROUGH);
+  const inputs = [
+    ["Tickets a night", n(COVERS_PER_SERVICE), "Set for a typical independent fine dining room"],
+    ["Dinners a year", n(SERVICES_PER_YEAR), `${NIGHTS_PER_WEEK} services a week × 52 weeks`],
+    ["Tickets a year", n(COVERS), `${COVERS_PER_SERVICE} × ${SERVICES_PER_YEAR}`],
+    [
+      "Servers",
+      String(servers.length),
+      `Each carries ${n(COVERS_EACH)} tickets a year (${n(COVERS)} ÷ ${servers.length})`,
+    ],
+    [
+      "Average ticket today",
+      cents(ROOM_NOW),
+      "Net sales ÷ tickets for each server in step B; the room is the average of the eight",
+    ],
+    ["Sales a year", usd(SALES_NOW), `${cents(ROOM_NOW)} × ${n(COVERS)} tickets`],
+    [
+      "Kept from each added dollar",
+      pct(FLOW_THROUGH),
+      "Left after about 30% cost of goods and 4% card fees",
+    ],
+    ["Liquor", `${pct(LIQUOR_SHARE)} of sales`, `At a ${pct(POUR_COST)} pour cost`],
+    ["Tips", pct(TIP_RATE), "Of every added dollar on the check"],
+    ["Net margin today", pct(NET_MARGIN), "Fine dining typically runs 5 to 10%"],
+  ];
+  return (
+    <>
+      <PageHead
+        index={5}
+        kicker="How the numbers were built"
+        title="Every figure in this report, worked out."
+        lede="Where each number comes from, so any of it can be checked with a calculator. In your report, every input below is replaced with your own POS data and what we observe on your floor."
+      />
+
+      <Step n="A" title="The inputs">
+        <table className="ap-mt-table ap-mt-inputs">
+          <thead>
+            <tr>
+              <th scope="col">Input</th>
+              <th scope="col">Value</th>
+              <th scope="col">How it was set</th>
+            </tr>
+          </thead>
+          <tbody>
+            {inputs.map(([label, value, from]) => (
+              <tr key={label}>
+                <th scope="row">{label}</th>
+                <td className="is-num">{value}</td>
+                <td>{from}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="ap-mt-text">
+          In your report, tickets, sales and the average ticket by server come from your POS; the
+          rates seen at the table come from the six shifts we work; cost and margin figures come
+          from you.
+        </p>
+      </Step>
+
+      <Step n="B" title="Higher checks, server by server">
+        <p className="ap-mt-text">
+          Each target closes half the distance between a server’s average today and the average of
+          the room’s own top two, {cents(BENCH)} ({cents(a.now)} and {cents(b.now)}). Not an
+          industry benchmark. For {ex.name}: ({cents(BENCH)} less {cents(ex.now)}) ÷ 2 ={" "}
+          {cents(ex.gap)} per ticket × {n(COVERS_EACH)} tickets = <b>{usd(ex.annual)}</b> a year.
+        </p>
+        <table className="ap-mt-table ap-mt-servers">
+          <thead>
+            <tr>
+              <th scope="col">Server</th>
+              <th scope="col">Now</th>
+              <th scope="col">Target</th>
+              <th scope="col">Per ticket</th>
+              <th scope="col">A year</th>
+            </tr>
+          </thead>
+          <tbody>
+            {servers.map((s) => (
+              <tr key={s.name}>
+                <th scope="row">{s.name}</th>
+                <td className="is-num">{cents(s.now)}</td>
+                <td className="is-num">{cents(s.target)}</td>
+                <td className="is-num">{s.gap > 0 ? `+${cents(s.gap)}` : "Top"}</td>
+                <td className="is-num">{s.gap > 0 ? usd(s.annual) : "None"}</td>
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th scope="row">The room</th>
+              <td className="is-num">{cents(ROOM_NOW)}</td>
+              <td className="is-num">{cents(ROOM_TARGET)}</td>
+              <td className="is-num">+{cents(CHECK_LIFT / COVERS)}</td>
+              <td className="is-num">{usd(CHECK_LIFT)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      </Step>
+
+      <Step n="C" title="The eight findings">
+        <ol className="ap-mt-findings">
+          {findings.map((f) => (
+            <li key={f.title}>
+              <span className="ap-mt-f-title">{f.title}</span>
+              <span className="ap-mt-f-math">
+                {f.math} = <b>{usd(f.value)}</b>
+              </span>
+            </li>
+          ))}
+        </ol>
+        <p className="ap-mt-text">
+          The five habits at the table (starter, wine, features, call brands, dessert) add up to{" "}
+          <b>{usd(CHECK_FINDINGS)}</b>, the same lift as step B seen by habit instead of by server,
+          so it is counted once. All eight together: <b>{usd(TOTAL)}</b> a year in added sales and
+          savings.
+        </p>
+      </Step>
+
+      <Step n="D" title="From added sales to the bottom line">
+        <dl className="ap-mt-ledger">
+          <div>
+            <dt>Higher checks, from step B</dt>
+            <dd>{usd(CHECK_LIFT)}</dd>
+          </div>
+          <div>
+            <dt>
+              <i>+</i> Tables that walked
+            </dt>
+            <dd>{usd(COVER_SALES)}</dd>
+          </div>
+          <div className="is-sub">
+            <dt>
+              <i>=</i> New sales
+            </dt>
+            <dd>{usd(newSales)}</dd>
+          </div>
+          <div>
+            <dt>
+              <i>×</i> {pct(FLOW_THROUGH)} kept after cost of goods and card fees
+            </dt>
+            <dd>{usd(kept)}</dd>
+          </div>
+          <div>
+            <dt>
+              <i>+</i> Comps recovered, kept in full
+            </dt>
+            <dd>{usd(COMPS)}</dd>
+          </div>
+          <div>
+            <dt>
+              <i>+</i> Pour savings, kept in full
+            </dt>
+            <dd>{usd(POUR)}</dd>
+          </div>
+          <div className="is-total">
+            <dt>
+              <i>=</i> Estimated contribution
+            </dt>
+            <dd>{usd(PROFIT)}</dd>
+          </div>
+        </dl>
+        <p className="ap-mt-text">
+          Rent and salaries are already paid, so an added sale only carries its cost of goods and
+          card fees. Comps and overpour are kept in full: the food and liquor are already bought,
+          and the room simply stops giving them away.
+        </p>
+      </Step>
+
+      <Step n="E" title="The other figures in the report">
+        <ul className="ap-mt-others">
+          <li>
+            <span>Per ticket</span>
+            <p>
+              {usd(CHECK_LIFT)} ÷ {n(COVERS)} tickets = <b>+{cents(CHECK_LIFT / COVERS)}</b>
+            </p>
+          </li>
+          <li>
+            <span>Every week</span>
+            <p>
+              {usd(TOTAL)} ÷ 52 = <b>{usd(TOTAL / 52)}</b>
+            </p>
+          </li>
+          <li>
+            <span>Net profit today</span>
+            <p>
+              {usd(SALES_NOW)} × {pct(NET_MARGIN)} = <b>{usd(PROFIT_NOW)}</b>
+            </p>
+          </li>
+          <li>
+            <span>With the gap closed</span>
+            <p>
+              {usd(PROFIT_NOW)} + {usd(PROFIT)} = <b>{usd(PROFIT_NOW + PROFIT)}</b>
+            </p>
+          </li>
+          <li>
+            <span>Your servers</span>
+            <p>
+              {usd(newSales)} × {pct(TIP_RATE)} tips = {usd(TIPS)} ÷ {servers.length} servers ÷ 52
+              weeks = <b>{usd(TIPS_WEEK_EACH)} a week each</b>
+            </p>
+          </li>
+        </ul>
+      </Step>
+
+      <p className="ap-mt-close">
+        This is a model, not a forecast. Every target is set from the room’s own best servers and
+        best nights, and each server is asked to close only half the gap.
       </p>
     </>
   );
 }
 
-const RENDER = [Summary, Servers, Priorities, Evidence, BottomLine];
+const RENDER = [Summary, Servers, Priorities, Evidence, BottomLine, HowBuilt];
 
 export function SampleAudit() {
   const [page, setPage] = useState(0);
@@ -444,6 +680,17 @@ export function SampleAudit() {
     }
   };
 
+  // Elsewhere on the page, a link can open the report straight to its back page.
+  useEffect(() => {
+    const open = () => {
+      setInView(true);
+      setPage(METHOD);
+      paperRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
+    };
+    window.addEventListener(OPEN_AUDIT_METHOD, open);
+    return () => window.removeEventListener(OPEN_AUDIT_METHOD, open);
+  }, []);
+
   const Page = RENDER[page];
 
   return (
@@ -491,7 +738,9 @@ export function SampleAudit() {
           id={`audit-page-${PAGES[page].id}`}
           aria-labelledby={`audit-tab-${PAGES[page].id}`}
         >
-          <Page />
+          <ToMethod.Provider value={() => go(METHOD)}>
+            <Page />
+          </ToMethod.Provider>
         </section>
         <footer className="audit-foot">
           <button

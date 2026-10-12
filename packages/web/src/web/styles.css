@@ -8756,3 +8756,298 @@ select option {
     letter-spacing: 0.6px;
   }
 }
+
+/* Sample audit, page VI: how the numbers were built. */
+.ap-to-method {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  margin-top: 22px;
+  padding: 12px 0 0;
+  border: 0;
+  border-top: 1px solid var(--a-rule);
+  background: none;
+  color: var(--a-soft);
+  font: inherit;
+  font-size: 10px;
+  line-height: 1.6;
+  text-align: left;
+  cursor: pointer;
+}
+.ap-to-method em {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-style: normal;
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--a-gold);
+}
+.ap-to-method:hover span,
+.ap-to-method:focus-visible span {
+  color: var(--a-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.ap-to-method:focus-visible {
+  outline: 1px solid var(--a-gold);
+  outline-offset: 4px;
+}
+.ap-mt-block {
+  margin-top: 34px;
+  padding-top: 18px;
+  border-top: 1px solid var(--a-rule-2);
+}
+.ap-mt-step {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 21px;
+  line-height: 1.25;
+}
+.ap-mt-step span {
+  flex: none;
+  font-family: inherit;
+  font-size: 8px;
+  letter-spacing: 1.6px;
+  color: var(--a-gold);
+  transform: translateY(-3px);
+}
+.ap-mt-text {
+  margin-top: 14px;
+  max-width: 720px;
+  font-size: 10.5px;
+  line-height: 1.75;
+  color: var(--a-soft);
+  font-variant-numeric: tabular-nums;
+}
+.ap-mt-text b,
+.ap-mt-findings b,
+.ap-mt-others b {
+  font-weight: 600;
+  color: var(--a-ink);
+  white-space: nowrap;
+}
+.ap-mt-table {
+  width: 100%;
+  margin-top: 14px;
+  border-collapse: collapse;
+  font-size: 10px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+}
+.ap-mt-table th,
+.ap-mt-table td {
+  padding: 7px 14px 7px 0;
+  border-bottom: 1px solid var(--a-rule);
+  text-align: left;
+  vertical-align: top;
+  font-weight: 400;
+}
+.ap-mt-table th:last-child,
+.ap-mt-table td:last-child {
+  padding-right: 0;
+}
+.ap-mt-table thead th {
+  padding-top: 0;
+  font-size: 7.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  border-bottom-color: var(--a-rule-2);
+}
+.ap-mt-table tbody th {
+  color: var(--a-ink);
+}
+.ap-mt-table td {
+  color: var(--a-soft);
+}
+.ap-mt-table .is-num {
+  color: var(--a-ink);
+  white-space: nowrap;
+}
+.ap-mt-inputs th[scope="row"] {
+  width: 30%;
+}
+.ap-mt-inputs .is-num {
+  width: 16%;
+  font-weight: 600;
+}
+.ap-mt-servers th:not(:first-child),
+.ap-mt-servers td {
+  text-align: right;
+}
+.ap-mt-servers tfoot th,
+.ap-mt-servers tfoot td {
+  border-top: 1px solid var(--a-rule-2);
+  border-bottom: 0;
+  font-weight: 600;
+  color: var(--a-ink);
+}
+.ap-mt-findings {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  counter-reset: mtf;
+}
+.ap-mt-findings li {
+  counter-increment: mtf;
+  display: grid;
+  grid-template-columns: 22px minmax(0, 190px) minmax(0, 1fr);
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--a-rule);
+  font-size: 10px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+}
+.ap-mt-findings li:before {
+  content: counter(mtf, decimal-leading-zero);
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--a-gold);
+  padding-top: 2px;
+}
+.ap-mt-f-title {
+  color: var(--a-ink);
+}
+.ap-mt-f-math {
+  color: var(--a-soft);
+}
+.ap-mt-ledger {
+  margin: 14px 0 0;
+  max-width: 560px;
+  font-size: 10.5px;
+  font-variant-numeric: tabular-nums;
+}
+.ap-mt-ledger > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--a-rule);
+}
+.ap-mt-ledger dt {
+  color: var(--a-soft);
+}
+.ap-mt-ledger dt i {
+  display: inline-block;
+  width: 16px;
+  font-style: normal;
+  color: var(--a-gold);
+}
+.ap-mt-ledger dd {
+  margin: 0;
+  white-space: nowrap;
+  color: var(--a-ink);
+}
+.ap-mt-ledger .is-sub dt,
+.ap-mt-ledger .is-sub dd {
+  color: var(--a-ink);
+  font-weight: 600;
+}
+.ap-mt-ledger .is-total {
+  border-top: 1px solid var(--a-ink);
+  border-bottom: 0;
+  padding-top: 10px;
+}
+.ap-mt-ledger .is-total dt,
+.ap-mt-ledger .is-total dd {
+  color: var(--a-ink);
+  font-weight: 600;
+}
+.ap-mt-ledger .is-total dd {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 22px;
+}
+.ap-mt-others {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--a-soft);
+  font-variant-numeric: tabular-nums;
+}
+.ap-mt-others li {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 14px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--a-rule);
+}
+.ap-mt-others p {
+  margin: 0;
+}
+.ap-mt-others li span {
+  font-size: 7.5px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--a-muted);
+  padding-top: 3px;
+}
+.ap-mt-close {
+  margin-top: 26px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--a-soft);
+}
+.sf-to-method {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  text-align: left;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.sf-to-method:hover,
+.sf-to-method:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 760px) {
+  .ap-mt-findings li {
+    grid-template-columns: 22px minmax(0, 1fr);
+    gap: 4px 10px;
+  }
+  .ap-mt-f-math {
+    grid-column: 2;
+  }
+  .ap-mt-others li {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .ap-mt-table th,
+  .ap-mt-table td {
+    padding-right: 8px;
+  }
+  .ap-mt-inputs th[scope="row"] {
+    width: 32%;
+  }
+  .ap-mt-servers {
+    font-size: 9px;
+  }
+  .ap-to-method {
+    flex-direction: column;
+    gap: 6px;
+  }
+}

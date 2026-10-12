@@ -68,12 +68,18 @@ function perGuest(how: string, gap: number) {
 // check lift on the Servers page ($5.75 a ticket), so every page reconciles.
 const STARTER = perGuest("0.09 more starters per ticket × $15 average starter", 0.09 * 15);
 const WINE = perGuest("$19.90 target less $17.80 today", 19.9 - 17.8);
-const FEATURES = perGuest("6 more entrées in 100 as features × $14 above the average entrée", 0.06 * 14);
-const CALL = perGuest("0.22 house pours per ticket moved to a call brand × $2.50 upcharge", 0.22 * 2.5);
+const FEATURES = perGuest(
+  "6 more entrées in 100 as features × $14 above the average entrée",
+  0.06 * 14,
+);
+const CALL = perGuest(
+  "0.22 house pours per ticket moved to a call brand × $2.50 upcharge",
+  0.22 * 2.5,
+);
 const DESSERT = perGuest("0.07 more desserts per ticket × $13 average dessert", 0.07 * 13);
 
-const LIQUOR_SHARE = 0.18;
-const POUR_COST = 0.2;
+export const LIQUOR_SHARE = 0.18;
+export const POUR_COST = 0.2;
 const OVERPOUR = 0.25 / 2; // 0.25 oz over a 2 oz spec
 const POURS_OVER = 18 / 24;
 const WALKED_PER_NIGHT = 3;
@@ -147,8 +153,7 @@ export const findings: Finding[] = [
     from: "0.17 desserts per ticket",
     to: "0.24",
     now: "0.17 desserts per ticket.",
-    target:
-      "0.24, achieved when the server recommends one dessert by name as the menu goes down.",
+    target: "0.24, achieved when the server recommends one dessert by name as the menu goes down.",
     ...DESSERT,
     kind: "check",
   },
@@ -182,11 +187,16 @@ const sum = (k: Kind) => findings.filter((f) => f.kind === k).reduce((s, f) => s
 export const TOTAL = findings.reduce((s, f) => s + f.value, 0);
 // The check findings and the server by server model are two views of the same lift.
 if (import.meta.env.DEV && Math.abs(sum("check") - CHECK_LIFT) > 1) {
-  console.warn("Sample audit: check findings do not add up to the server lift", sum("check"), CHECK_LIFT);
+  console.warn(
+    "Sample audit: check findings do not add up to the server lift",
+    sum("check"),
+    CHECK_LIFT,
+  );
 }
 export const COMPS = sum("comps");
 export const COVER_SALES = sum("covers");
 export const POUR = sum("cost");
+export const CHECK_FINDINGS = sum("check");
 export const ADDED_SALES = CHECK_LIFT + COVER_SALES + COMPS;
 export const COGS = (CHECK_LIFT + COVER_SALES) * (1 - FLOW_THROUGH);
 export const PROFIT = ADDED_SALES - COGS + POUR;
