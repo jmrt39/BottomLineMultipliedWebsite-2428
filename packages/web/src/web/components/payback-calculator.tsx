@@ -9,7 +9,7 @@ const HORIZON = 24; // months shown on the timeline
 /** Weeks from the first audit shift to launch: two weeks on the floor, then the build. */
 const LEAD_MONTHS = 1.5;
 const PROGRAM = { 1: 85_000, 2: 140_000 } as const;
-const PLATFORM_MONTHLY = { 1: 450, 2: 650 } as const;
+const PLATFORM_MONTHLY = { 1: 650, 2: 900 } as const;
 
 const SCENARIOS = [
   { id: "conservative", label: "Conservative", factor: 0.5, note: "Half the lift" },
@@ -219,7 +219,9 @@ export function PaybackCalculator() {
         <div>
           <dt>
             Less the program fee
-            <small>{locations === 1 ? "One location, pay as you go" : "Two locations"}</small>
+            <small>
+              {locations === 1 ? "One location, audit first" : "Two locations, audit first"}
+            </small>
           </dt>
           <dd className="is-negative">{usd(-fee)}</dd>
         </div>
@@ -287,9 +289,10 @@ export function PaybackCalculator() {
       <p className="calculator-disclaimer">
         A model, not a promise. Estimated contribution is what remains of added sales after roughly
         30% cost of goods and 4% card fees, before tax and any added labor; rent and salaries are
-        already paid. The fee is $85,000 for one location pay as you go ($75,000 if paid in full
-        upfront), with the first year of the platform included. From year two the platform is{" "}
-        {usd(PLATFORM_MONTHLY[locations])} a month
+        already paid. The fee counts $85,000 for one location and $140,000 for two, the audit first
+        path, with the first year of the platform included. Commit before the audit and it is
+        $75,000 or $120,000; pay in full and it is $65,000 or $100,000. From year two the platform
+        is {usd(PLATFORM_MONTHLY[locations])} a month at the standard rate
         {locations === 2 ? " for both locations" : ""}. Results depend on your operation, costs,
         guest demand and how consistently the program is used.
       </p>

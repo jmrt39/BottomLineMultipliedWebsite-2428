@@ -8658,3 +8658,98 @@ select option {
     align-self: start;
   }
 }
+
+/* Three ways to start, and the price tables */
+.invest-options.is-three {
+  grid-template-columns: 1fr;
+}
+.invest-options.is-three > div {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: 18px;
+  row-gap: 2px;
+  padding: 14px 0;
+}
+.invest-options.is-three > div + div {
+  padding-left: 0;
+  border-left: 0;
+  border-top: 1px solid var(--rule);
+}
+.invest-options.is-three .invest-option {
+  grid-column: 1;
+  grid-row: 1;
+}
+.invest-options.is-three b {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 24px;
+}
+.invest-options.is-three span:last-child {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  line-height: 1.65;
+  align-self: center;
+}
+.price-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 4px 0 14px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.price-table caption {
+  text-align: left;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-bottom: 10px;
+}
+.price-table th,
+.price-table td {
+  padding: 9px 8px;
+  border-top: 1px solid var(--rule);
+  text-align: right;
+  font-weight: 400;
+  color: var(--ink);
+}
+.price-table thead th {
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  vertical-align: bottom;
+}
+.price-table th:first-child {
+  text-align: left;
+  padding-left: 0;
+  color: var(--muted);
+}
+.price-table td:last-child,
+.price-table thead th:last-child {
+  padding-right: 0;
+}
+@media (max-width: 560px) {
+  .invest-options.is-three > div {
+    grid-template-columns: 1fr;
+  }
+  .invest-options.is-three span:last-child {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: 4px;
+  }
+}
+@media (max-width: 560px) {
+  .price-table {
+    font-size: 11px;
+  }
+  .price-table th,
+  .price-table td {
+    padding: 8px 4px;
+  }
+  .price-table thead th {
+    font-size: 8px;
+    letter-spacing: 0.6px;
+  }
+}

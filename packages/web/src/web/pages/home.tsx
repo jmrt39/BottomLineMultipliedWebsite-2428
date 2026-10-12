@@ -675,8 +675,9 @@ export default function Home() {
             <p>
               Included for the first 12 months: the platform for your whole team, new hires entering
               the same program at no extra cost, monthly reports by server, and technical support.
-              From year two the platform is $450 a month for one location, and technical support
-              continues for as long as you use it.
+              From year two the platform is $650 a month for one location, or $450 locked for years
+              two and three when you pay in full. Technical support continues for as long as you use
+              it.
             </p>
           </div>
         </section>
@@ -782,7 +783,7 @@ export default function Home() {
         <section className="investment section-shell" id="investment">
           <div className="section-label">
             <span className="eyebrow">06 / THE INVESTMENT</span>
-            <span className="eyebrow">ONE PRICE. TWO WAYS TO PAY.</span>
+            <span className="eyebrow">ONE PROGRAM. THREE WAYS TO START.</span>
           </div>
           <div className="investment-grid">
             <div>
@@ -792,8 +793,8 @@ export default function Home() {
                 <em>Then close it.</em>
               </h2>
               <p>
-                Start with a 20 minute fit call. Then the audit. You see the evidence before you
-                commit to the build.
+                Start with a 20 minute fit call. Audit first and see the evidence before you commit,
+                or commit from the start and pay less.
               </p>
               <button className="text-link" onClick={openInquiry}>
                 Book a 20 minute fit call <ArrowUpRight size={17} />
@@ -811,16 +812,30 @@ export default function Home() {
                   year of the platform, a one day platform training for staff and managers, and
                   technical support.
                 </p>
-                <div className="invest-options">
+                <div className="invest-options is-three">
                   <div>
-                    <span className="invest-option">Option A · Pay as you go</span>
-                    <b>$10,000 to begin, $75,000 on delivery</b>
-                    <span>$85,000 in total. The $10,000 is the audit.</span>
+                    <span className="invest-option">Audit first</span>
+                    <b>$85,000</b>
+                    <span>
+                      $10,000 for the audit, then $75,000 for the program: half when you sign on,
+                      half when the platform is handed over. Decide after you see the report.
+                    </span>
                   </div>
                   <div>
-                    <span className="invest-option">Option B · Paid in full</span>
-                    <b>$75,000 upfront</b>
-                    <span>$10,000 less than paying as you go.</span>
+                    <span className="invest-option">Commit before the audit</span>
+                    <b>$75,000</b>
+                    <span>
+                      The audit fee is waived. Two payments: $37,500 when you sign on, $37,500 when
+                      the platform is handed over.
+                    </span>
+                  </div>
+                  <div>
+                    <span className="invest-option">Commit and pay in full</span>
+                    <b>$65,000</b>
+                    <span>
+                      One payment before the audit begins. $20,000 less than audit first, and your
+                      platform rate is locked for years two and three.
+                    </span>
                   </div>
                 </div>
               </div>
@@ -832,15 +847,17 @@ export default function Home() {
                 </div>
                 <p>
                   Two weekdays, two Fridays and two Saturdays over two weeks, a written gap report
-                  with every dollar figure worked out, a breakdown by server and a debrief. You keep
-                  the report. If you continue, the full $10,000 is credited toward the program.
+                  with every dollar figure worked out, a breakdown by server and a debrief. $5,000
+                  secures your dates (nonrefundable) and $5,000 is due when the report is delivered.
+                  You keep the report. If you go on to the program, it is $75,000, so $85,000 all
+                  in.
                 </p>
               </div>
               <div className="guarantee">
                 <span className="eyebrow">THE GUARANTEE</span>
                 <h3>
                   If the report finds less than $150,000 a year,
-                  <em> you don’t pay for the rest.</em>
+                  <em> you only pay for the audit.</em>
                 </h3>
                 <dl>
                   <div>
@@ -860,17 +877,27 @@ export default function Home() {
                     </dd>
                   </div>
                   <div>
-                    <dt>Option A</dt>
+                    <dt>Audit first</dt>
                     <dd>
-                      You have paid $10,000 for the audit. Under $150,000, you owe nothing more and
-                      keep the report.
+                      You have paid $10,000 for the audit. You owe nothing more and keep the report.
                     </dd>
                   </div>
                   <div>
-                    <dt>Option B</dt>
+                    <dt>Committed, two payments</dt>
                     <dd>
-                      You have paid $75,000. Under $150,000, $65,000 is refunded. The $10,000 covers
-                      the audit, and you keep the report.
+                      You have paid $37,500. $27,500 comes back, the second payment is never due,
+                      and you keep the report.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Paid in full</dt>
+                    <dd>You have paid $65,000. $55,000 comes back, and you keep the report.</dd>
+                  </div>
+                  <div>
+                    <dt>Two locations</dt>
+                    <dd>
+                      The same rule for each location: $150,000 a year per room, with $10,000 kept
+                      for each audit.
                     </dd>
                   </div>
                   <div>
@@ -887,18 +914,79 @@ export default function Home() {
                 onClick={() => setTermsOpen(!termsOpen)}
                 aria-expanded={termsOpen}
               >
-                More than one location, and the platform after year one{" "}
+                Two locations, and the platform after year one{" "}
                 {termsOpen ? <Minus size={16} /> : <Plus size={16} />}
               </button>
               {termsOpen && (
                 <div className="payment-details">
+                  <table className="price-table">
+                    <caption>The program, by location</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <span className="sr-only">Locations</span>
+                        </th>
+                        <th scope="col">Audit first</th>
+                        <th scope="col">Commit, two payments</th>
+                        <th scope="col">Commit, paid in full</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">One location</th>
+                        <td>$85,000</td>
+                        <td>$75,000</td>
+                        <td>$65,000</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Two locations</th>
+                        <td>$140,000</td>
+                        <td>$120,000</td>
+                        <td>$100,000</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <p>
-                    <b>Two locations:</b> $140,000 for both rooms, each floor audited against one
-                    shared standard. Three or more are quoted individually.
+                    Two locations audit first: $20,000 for the two audits, then $120,000 for the
+                    program. Both floors are audited against one shared standard. Three or more
+                    locations are quoted individually.
                   </p>
+                  <table className="price-table">
+                    <caption>The platform from year two, per month, by number of locations</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <span className="sr-only">Rate</span>
+                        </th>
+                        <th scope="col">1</th>
+                        <th scope="col">2</th>
+                        <th scope="col">3</th>
+                        <th scope="col">4</th>
+                        <th scope="col">5</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Standard rate</th>
+                        <td>$650</td>
+                        <td>$900</td>
+                        <td>$1,200</td>
+                        <td>$1,600</td>
+                        <td>$2,000</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Paid in full, years two and three</th>
+                        <td>$450</td>
+                        <td>$650</td>
+                        <td>$900</td>
+                        <td>$1,250</td>
+                        <td>$1,500</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <p>
-                    <b>Year two onward:</b> the platform is <b>$450 a month</b> for one location.
-                    Two locations $650 a month, three $900, four $1,250, five $1,500.
+                    Year one is included with the program. Only owners who pay in full lock the
+                    lower rate.
                   </p>
                 </div>
               )}
@@ -974,8 +1062,8 @@ export default function Home() {
             <div>
               <span className="eyebrow">FROM YEAR TWO</span>
               <p>
-                <b>$450 a month</b> for one location. Two $650, three $900, four $1,250, five
-                $1,500.
+                <b>$650 a month</b> for one location, up to $2,000 for five. Pay in full and it is
+                locked at <b>$450</b> for years two and three.
               </p>
             </div>
             <div>
