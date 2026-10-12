@@ -115,6 +115,7 @@ These are illustrative dining-room photographs, not claims that the pictured est
 - Module titles, page references and quiz facts come from the 1906 Bar & Grille training manual the owner supplied. Staff names, ratings, quotes and sales figures are fictional.
 - Files: master `/home/user/platform-demo/1906-platform-demo-v3.mp4` (1080p30, 183.8 s, 187 MB, −16.0 LUFS measured). Email copy `1906-platform-demo-v3-720p.mp4` (22 MB). The site serves `videos/platform-demo-v3.mp4`, a 1080p CRF 25 re-encode (52 MB), with captions `videos/platform-demo-v3.vtt` (14 cues). Poster `images/platform-demo-poster.webp` is the 3 s title frame. End card reads "The Platform" (no period), re-spliced from 177.6 s on 2026-10-07.
 - v2 (163 s) remains at `/home/user/platform-demo/1906-platform-demo-v2.mp4` and `videos/platform-demo-v2.mp4`; it is no longer served.
+- Short cut (homepage tour, `/platform?cut=90`): `videos/platform-demo-95s.mp4` (1280×720, 30 fps, 94.7 s, −16.0 LUFS) with `videos/platform-demo-95s.vtt`. Built 2026-10-12 from the earlier 89.7 s cut (`videos/platform-demo-90s.mp4`, no longer served) by holding the title, dissolving into Chris Ortega's ice shot (`platform-v3/clips/O3-ice.mp4`, 0 to 5.5 s, one uncut take, caption and grain matched) and joining the cut again at Camille's first tablet shot. Music is the v3 bed from 0 s, crossfaded into its ending. Tooling and QC sheets: `/home/user/platform-95/`.
 - v1 (90 s) remains at `/home/user/platform-demo/1906-platform-demo.mp4`; it is no longer served.
 
 
@@ -124,3 +125,10 @@ These are illustrative dining-room photographs, not claims that the pictured est
   - The 1.3 s hold after the serviette lands on the forearm was cut. The walk-away (`walk-away-v1.mp4`, from frame 3) now joins through a 0.25 s dissolve, so he turns and leaves as the drape settles. Work files: `/home/user/blm-sfs-pour/v9/`.
   - Dissolves at 9.275 / 12.275 / 15.275 / 18.275. No new generation.
 - `videos/evening-film-v8.mp4` is no longer referenced.
+
+## 2026-10-12 — Method photo rail (real photographs)
+- Two real photographs, not AI, sit in the left column of 03 / The Method, beside steps 02 and 03. Both are from Pexels under the Pexels License (free for commercial use, no attribution required; https://www.pexels.com/license/). Credited here anyway.
+  - `images/method-tablescape.webp` (1400×935): "Wine Glasses on Table" by Anastasia Lashkevich, Dec 4 2021, original 5514×3681. https://www.pexels.com/photo/wine-glasses-on-table-10445929/
+  - `images/method-gloved-service.webp` (1000×1499): "Gourmet Dessert Presentation in Fine Dining Restaurant" by Filipp Romanovski, Feb 16 2025, original 4000×5997. https://www.pexels.com/photo/gourmet-dessert-presentation-in-fine-dining-restaurant-30748774/
+- Neither shows a brand, logo or recognisable face. Neither is a client restaurant. Only resizing and webp conversion (quality 86), no colour changes.
+- The first Method photo (`images/pristine-occupied-dining.webp`) is unchanged and remains AI-generated and illustrative.

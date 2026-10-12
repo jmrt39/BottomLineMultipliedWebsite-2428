@@ -29,6 +29,7 @@ const REVEAL_TARGETS = [
   ".perspective-bottom",
   ".section-heading > *",
   ".method-photo",
+  ".method-figure",
   ".method-item",
   ".method-signoff",
   ".revenue-layout > div:first-child > *",
@@ -73,6 +74,10 @@ const methods = [
     title: "Then, your standard.",
     phase: "BUILD",
     time: "WEEKS 3 TO 5",
+    photo: {
+      src: "/images/method-tablescape.webp",
+      alt: "A fine dining table set in white linen, with crystal stemware, folded napkins and a small green centrepiece, beside a tufted banquette",
+    },
     description:
       "Your menu. Your people. Your gaps. The diagnosis becomes a custom training program, not a borrowed playbook, built for the way your restaurant should feel.",
     details: [
@@ -86,6 +91,10 @@ const methods = [
     title: "Finally, staying power.",
     phase: "INSTALL",
     time: "WEEK 6, THEN THE FIRST YEAR",
+    photo: {
+      src: "/images/method-gloved-service.webp",
+      alt: "A server in white gloves setting a plated course on a white linen table",
+    },
     description:
       "Your program goes live on our platform. Your team learns, practices and is signed off on the floor. Managers finally have a system for coaching, not just scheduling.",
     details: [
@@ -715,20 +724,34 @@ export default function Home() {
             </p>
           </div>
           <div className="method-layout">
-            <div className="method-photo">
-              <img
-                src="/images/pristine-occupied-dining.webp"
-                alt="Illustrative scene of an occupied, pristine fine dining restaurant with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
-                loading="lazy"
-              />
-              <div className="method-photo-label">
-                <span>THE WORK BEGINS HERE.</span>
-                <span>Not in a classroom.</span>
+            <div className="method-rail">
+              <div className="method-photo">
+                <img
+                  src="/images/pristine-occupied-dining.webp"
+                  alt="Illustrative scene of an occupied, pristine fine dining restaurant with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
+                  loading="lazy"
+                />
+                <div className="method-photo-label">
+                  <span>THE WORK BEGINS HERE.</span>
+                  <span>Not in a classroom.</span>
+                </div>
               </div>
+              {methods.map((m) =>
+                m.photo ? (
+                  <figure className="method-figure" key={m.phase}>
+                    <img src={m.photo.src} alt={m.photo.alt} loading="lazy" />
+                  </figure>
+                ) : null,
+              )}
             </div>
             <ol className="method-steps">
               {methods.map((m, i) => (
                 <li className="method-item is-open" key={m.phase}>
+                  {m.photo ? (
+                    <figure className="method-figure method-figure-inline" aria-hidden="true">
+                      <img src={m.photo.src} alt="" loading="lazy" />
+                    </figure>
+                  ) : null}
                   <div className="method-head">
                     <span className="method-number">0{i + 1}</span>
                     <span className="method-title">
@@ -1096,16 +1119,16 @@ export default function Home() {
           </div>
           <figure className="tour-film">
             <video
-              src="/videos/platform-demo-90s.mp4"
+              src="/videos/platform-demo-95s.mp4"
               poster="/images/platform-demo-poster.webp"
               controls
               playsInline
               preload="none"
-              aria-label="Platform tour, 90 seconds, music only"
+              aria-label="Platform tour, 1 minute 35 seconds, music only"
             >
               <track
                 kind="captions"
-                src="/videos/platform-demo-90s.vtt"
+                src="/videos/platform-demo-95s.vtt"
                 srcLang="en"
                 label="English"
               />

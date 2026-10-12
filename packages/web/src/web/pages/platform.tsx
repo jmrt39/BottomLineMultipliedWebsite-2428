@@ -88,10 +88,10 @@ function RenderStage() {
   );
 }
 
-// /platform plays the full film; /platform?cut=90 plays the 90 second cut.
+// /platform plays the full film; /platform?cut=90 plays the short cut (1 minute 35 seconds).
 const FILMS = {
   full: { file: "platform-demo-v3", length: "3 minutes 4 seconds" },
-  short: { file: "platform-demo-90s", length: "90 seconds" },
+  short: { file: "platform-demo-95s", length: "1 minute 35 seconds" },
 } as const;
 
 function Player() {

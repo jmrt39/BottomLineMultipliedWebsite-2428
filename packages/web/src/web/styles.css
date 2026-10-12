@@ -9244,3 +9244,71 @@ select option {
     padding-right: 16px;
   }
 }
+
+/* 03 Method: a photo rail on the left. The first photo stays whole; the two
+   below it fill the rest of the column, beside steps two and three. */
+.method-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  min-width: 0;
+}
+.method-rail > .method-photo {
+  flex: none;
+}
+.method-figure {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  background: #121211;
+}
+.method-rail > .method-figure {
+  flex: 1 1 0;
+  min-height: 220px;
+}
+.method-figure img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+  filter: none;
+  display: block;
+}
+.method-rail > .method-figure:last-child img {
+  object-position: 50% 78%;
+}
+.method-figure-inline {
+  display: none;
+}
+.method-figure[data-reveal] img {
+  transition: clip-path 1.4s cubic-bezier(0.65, 0, 0.35, 1) calc(var(--reveal-delay, 0ms) + 120ms);
+}
+.method-figure[data-reveal="pending"] img {
+  clip-path: inset(100% 0 0 0);
+}
+.method-figure[data-reveal="shown"] img {
+  clip-path: inset(0 0 0 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .method-figure[data-reveal] img {
+    clip-path: none !important;
+  }
+}
+@media (max-width: 560px) {
+  .method-rail > .method-figure {
+    display: none;
+  }
+  .method-figure-inline {
+    display: block;
+    aspect-ratio: 4 / 3;
+    margin: 30px 0 4px;
+  }
+  .method-item:has(.method-figure-inline) .method-figure-inline + .method-head {
+    padding-top: 22px;
+  }
+  .method-item:last-child .method-figure-inline img {
+    object-position: 50% 72%;
+  }
+}
