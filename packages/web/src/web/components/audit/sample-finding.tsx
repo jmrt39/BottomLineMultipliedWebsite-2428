@@ -23,7 +23,7 @@ export function SampleFinding() {
           </dt>
           <dd>
             Servers present the wine list as prices, not pairings. Wine per ticket sits at $17.80,
-            and the room’s own best nights show it can carry $19.90.
+            and the restaurant’s own best nights show it can carry $19.90.
           </dd>
         </div>
         <div>
@@ -67,7 +67,7 @@ export function SampleFinding() {
         </div>
       </dl>
       <div className="sf-model">
-        <span className="sf-tag">HOW THE SAMPLE ROOM WAS BUILT</span>
+        <span className="sf-tag">HOW THE SAMPLE RESTAURANT WAS BUILT</span>
         <p>
           The sample is a modeled restaurant, not a client: {COVERS_PER_SERVICE} tickets a night,
           six nights a week, {servers.length} servers. Every input and every calculation behind its{" "}

@@ -7755,7 +7755,7 @@ select option {
   gap: 16px;
 }
 .proof-story p {
-  color: var(--muted);
+  color: var(--ink);
 }
 .proof-results {
   display: grid;
@@ -9089,9 +9089,6 @@ select option {
 .proof-founder + .proof-story {
   margin-top: 22px;
 }
-.proof-story .proof-intro {
-  color: var(--ink);
-}
 @media (max-width: 420px) {
   .proof-founder {
     gap: 16px;
@@ -9099,5 +9096,47 @@ select option {
   .proof-founder img {
     width: 86px;
     height: 106px;
+  }
+}
+/* Long consultation label: wrap in even lines, never a lone word. */
+.hero-cta,
+.text-link {
+  text-wrap: balance;
+  text-align: left;
+}
+
+/* Proof: where Andrea's story lands, and the way into the audit */
+.proof-close {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: 8%;
+  align-items: start;
+  margin-top: 72px;
+  padding-top: 44px;
+  border-top: 1px solid var(--rule);
+}
+.proof .proof-close-lead {
+  font-family: var(--display);
+  font-size: clamp(30px, 2.9vw, 42px);
+  line-height: 1.18;
+  color: var(--ink);
+}
+.proof .proof-close-lead em {
+  color: var(--accent);
+}
+.proof-close-body p {
+  color: var(--ink);
+  max-width: 560px;
+}
+.proof-close-body .text-link {
+  display: inline-flex;
+  margin-top: 26px;
+}
+@media (max-width: 900px) {
+  .proof-close {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    margin-top: 52px;
+    padding-top: 36px;
   }
 }

@@ -61,7 +61,7 @@ const methods = [
     phase: "DIAGNOSE",
     time: "WEEKS 1 AND 2 · SIX SHIFTS INSIDE YOUR TEAM",
     description:
-      "I join your dining room as a new employee being trained. You know why I’m there; your staff don’t. Across six shifts (two weekdays, two Fridays and two Saturdays) I experience exactly what every new hire experiences, and see the habits a scheduled inspection never will.",
+      "I join your team as a new employee being trained. You know why I’m there; your staff don’t. Across six shifts (two weekdays, two Fridays and two Saturdays) I experience exactly what every new hire experiences, and see the habits a scheduled inspection never will.",
     details: [
       "A written gap report: every gap, what it is worth a year, and the arithmetic",
       "Spend per ticket by server, from your POS data",
@@ -74,7 +74,7 @@ const methods = [
     phase: "BUILD",
     time: "WEEKS 3 TO 5",
     description:
-      "Your menu. Your people. Your gaps. The diagnosis becomes a custom training program, not a borrowed playbook, built for the way your room should feel.",
+      "Your menu. Your people. Your gaps. The diagnosis becomes a custom training program, not a borrowed playbook, built for the way your restaurant should feel.",
     details: [
       "Your training program, written around your menu and your service",
       "Greeting, recommendation, wine and check scripts",
@@ -126,7 +126,7 @@ const reportChapters = [
 
 const fit = [
   {
-    label: "Your room",
+    label: "Your restaurant",
     yes: "A fine dining restaurant, or an upscale hotel bar or restaurant, where guests expect to be guided.",
     no: "Counter service, or a menu with little to recommend.",
   },
@@ -241,7 +241,7 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         <button className="close-dialog" aria-label="Close inquiry" onClick={onClose}>
           <X size={22} />
         </button>
-        <span className="eyebrow">A PRIVATE 20 MINUTE CONSULTATION</span>
+        <span className="eyebrow">A COMPLIMENTARY 20 MINUTE CONSULTATION</span>
         <h2 id="inquiry-title">
           Let’s see if
           <br />
@@ -337,7 +337,7 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                 <Select
                   id="inquiry-venue"
                   name="venue"
-                  label="Type of room"
+                  label="Type of venue"
                   options={VENUES}
                   defaultValue="restaurant"
                 />
@@ -426,7 +426,7 @@ export default function Home() {
             Client sign in
           </a>
           <button className="header-cta" onClick={openInquiry}>
-            Reserve a consultation <ArrowUpRight size={17} />
+            Book your consultation <ArrowUpRight size={17} />
           </button>
         </div>
         <button
@@ -452,7 +452,7 @@ export default function Home() {
             Client sign in
           </a>
           <button onClick={openInquiry}>
-            Reserve a consultation <ArrowUpRight size={16} />
+            Book your consultation <ArrowUpRight size={16} />
           </button>
         </nav>
       )}
@@ -486,7 +486,8 @@ export default function Home() {
             </ul>
             <div className="hero-actions">
               <button className="hero-cta" onClick={openInquiry}>
-                Reserve a private consultation <ArrowUpRight size={18} />
+                Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+                <ArrowUpRight size={18} />
               </button>
               <a className="hero-secondary" href="#sample-finding">
                 View a sample audit <ArrowDown size={16} />
@@ -588,8 +589,26 @@ export default function Home() {
               <p className="proof-caveat">
                 One restaurant’s result, shared as evidence of the method. No meaningful changes to
                 menu prices during the year. It is not a forecast for yours; your report prices your
-                own room.
+                own restaurant.
               </p>
+            </div>
+          </div>
+          <div className="proof-close">
+            <p className="proof-close-lead">
+              Now I do for other owners
+              <br />
+              <em>what I once did for myself.</em>
+            </p>
+            <div className="proof-close-body">
+              <p>
+                I work with owners of privately owned, upscale restaurants to win back the revenue
+                that slips away during service, often without anyone noticing. My proprietary six
+                shift audit shows you exactly where it’s happening and what it’s costing you, in
+                dollars. Then I give your team a system that fixes it, and keeps it fixed.
+              </p>
+              <a className="text-link" href="#approach">
+                How the six shift audit works <ArrowDown size={16} />
+              </a>
             </div>
           </div>
         </section>
@@ -611,7 +630,7 @@ export default function Home() {
               <h3>
                 But do you know what happens
                 <br />
-                when you’re not in the room?
+                when you’re not on the floor?
               </h3>
               <p>
                 The greeting that changes with every server. The wine list presented as prices, not
@@ -659,7 +678,7 @@ export default function Home() {
             <div className="method-photo">
               <img
                 src="/images/pristine-occupied-dining.webp"
-                alt="Illustrative scene of an occupied, pristine fine dining room with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
+                alt="Illustrative scene of an occupied, pristine fine dining restaurant with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
                 loading="lazy"
               />
               <div className="method-photo-label">
@@ -724,8 +743,8 @@ export default function Home() {
               </p>
               <p>
                 Start with one complete finding below, then open the full sample report. It is built
-                for a modeled dining room of 110 tickets a night. In yours, every number comes from
-                your own room.
+                for a modeled restaurant of 110 tickets a night. In yours, every number comes from
+                your own restaurant.
               </p>
               <dl className="deliverable-notes">
                 <div>
@@ -814,11 +833,12 @@ export default function Home() {
                 <em>Then close it.</em>
               </h2>
               <p>
-                Start with a private 20 minute consultation. Audit first and see the evidence before
-                you commit, or commit from the start and pay less.
+                Start with a complimentary 20 minute consultation. Audit first and see the evidence
+                before you commit, or commit from the start and pay less.
               </p>
               <button className="text-link" onClick={openInquiry}>
-                Reserve a private consultation <ArrowUpRight size={17} />
+                Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+                <ArrowUpRight size={17} />
               </button>
             </div>
             <div className="invest-cards">
@@ -917,8 +937,8 @@ export default function Home() {
                   <div>
                     <dt>Two locations</dt>
                     <dd>
-                      The same rule for each location: $150,000 a year per room, with $10,000 kept
-                      for each audit.
+                      The same rule for each location: $150,000 a year per restaurant, with $10,000
+                      kept for each audit.
                     </dd>
                   </div>
                   <div>
@@ -1104,12 +1124,12 @@ export default function Home() {
           </div>
           <div className="fit-heading">
             <h2 id="fit-title">
-              Right for some rooms.
+              Right for some restaurants.
               <br />
-              <em>Not for every room.</em>
+              <em>Not for every restaurant.</em>
             </h2>
             <p>
-              If most of the left column sounds like you, a private consultation is worth 20
+              If most of the left column sounds like you, a complimentary consultation is worth 20
               minutes.
             </p>
           </div>
@@ -1143,7 +1163,8 @@ export default function Home() {
             </tbody>
           </table>
           <button className="hero-cta fit-cta" onClick={openInquiry}>
-            Reserve a private consultation <ArrowUpRight size={18} />
+            Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+            <ArrowUpRight size={18} />
           </button>
         </section>
 
@@ -1156,7 +1177,7 @@ export default function Home() {
               <h2 id="culinary-title">
                 The kitchen sets the standard.
                 <br />
-                <em>The room must match it.</em>
+                <em>The service must match it.</em>
               </h2>
             </div>
             <p>
@@ -1182,7 +1203,7 @@ export default function Home() {
               <div className="course-image">
                 <img
                   src="/images/guests-laughing-real-v1.webp"
-                  alt="Guests framed below the eyes: a woman in a black dress smiles over a raised glass of champagne in a wood panelled dining room"
+                  alt="Guests framed below the eyes: a woman in a black dress smiles over a raised glass of champagne in a wood panelled restaurant"
                   loading="lazy"
                 />
                 <AmbientClip
@@ -1217,7 +1238,7 @@ export default function Home() {
         </section>
 
         <section className="closing section-shell">
-          <span className="eyebrow">THE NEXT CHAPTER OF YOUR ROOM</span>
+          <span className="eyebrow">THE NEXT CHAPTER OF YOUR RESTAURANT</span>
           <h2>
             Your reputation is earned
             <br />
@@ -1226,7 +1247,8 @@ export default function Home() {
             <em>Let’s make every one count.</em>
           </h2>
           <button className="hero-cta" onClick={openInquiry}>
-            Reserve a private consultation <ArrowUpRight size={18} />
+            Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+            <ArrowUpRight size={18} />
           </button>
           <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
         </section>
@@ -1235,7 +1257,7 @@ export default function Home() {
         <div className="footer-top">
           <Wordmark />
           <p>
-            Inside your dining room.
+            Inside your restaurant.
             <br />
             Beyond your expectations.
           </p>

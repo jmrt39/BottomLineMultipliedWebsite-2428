@@ -235,7 +235,7 @@ export function PaybackCalculator() {
       </dl>
 
       <div className="payback-compare">
-        <span className="eyebrow">THE SAME ROOM, THREE WAYS</span>
+        <span className="eyebrow">THE SAME RESTAURANT, THREE WAYS</span>
         <table>
           <thead>
             <tr>

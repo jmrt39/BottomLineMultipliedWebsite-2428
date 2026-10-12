@@ -22,13 +22,13 @@ const pop = (c: number, at: number) => ease(c, at, at + 0.35, easeOut);
 const CHECK = {
   open: {
     kicker: "Opening checklist · Tue, Oct 6",
-    title: "Dining room, open",
+    title: "Front of house, open",
     items: OPENING_CHECKLIST,
     done: "Submitted 8:02 am",
   },
   close: {
     kicker: "Closing checklist · Tue, Oct 6",
-    title: "Dining room, closed",
+    title: "Front of house, closed",
     items: CLOSING_CHECKLIST,
     done: "Submitted 11:52 pm",
   },

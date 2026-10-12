@@ -43,7 +43,7 @@ const questions = [
   {
     question: "What is the guarantee?",
     answer:
-      "If the written report finds less than $150,000 in recoverable annual revenue, you only pay for the audit. Audit first: you have paid $10,000 and owe nothing more. Committed in two payments: $27,500 of your $37,500 comes back and the second payment is never due. Paid in full: $55,000 of your $65,000 comes back. You keep the report either way. With two locations the same rule applies to each room. It covers what the report identifies, not results after training. Recoverable annual revenue is the yearly total of added sales and cost savings the report ties to specific, fixable gaps, each calculated from your POS data and the six observed shifts, with the arithmetic shown so you can check it.",
+      "If the written report finds less than $150,000 in recoverable annual revenue, you only pay for the audit. Audit first: you have paid $10,000 and owe nothing more. Committed in two payments: $27,500 of your $37,500 comes back and the second payment is never due. Paid in full: $55,000 of your $65,000 comes back. You keep the report either way. With two locations the same rule applies to each location. It covers what the report identifies, not results after training. Recoverable annual revenue is the yearly total of added sales and cost savings the report ties to specific, fixable gaps, each calculated from your POS data and the six observed shifts, with the arithmetic shown so you can check it.",
   },
   {
     question: "What's included?",
@@ -58,7 +58,7 @@ const questions = [
   {
     question: "Will my results match the case study?",
     answer:
-      "Not necessarily. The case study is one upscale fine dining bar over one year of consistent use: the average ticket went from $68 to $84 with no meaningful price changes. Your result depends on your room, your team and how consistently managers use the program. That is why the guarantee covers what the report finds, and the platform measures what actually changes.",
+      "Not necessarily. The case study is one upscale fine dining bar over one year of consistent use: the average ticket went from $68 to $84 with no meaningful price changes. Your result depends on your restaurant, your team and how consistently managers use the program. That is why the guarantee covers what the report finds, and the platform measures what actually changes.",
   },
   {
     question: "What's included in the first year of software?",

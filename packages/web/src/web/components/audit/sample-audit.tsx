@@ -103,7 +103,7 @@ function Summary() {
       <PageHead
         index={0}
         kicker="Executive summary"
-        title="What this modeled dining room is leaving on the table."
+        title="What this modeled restaurant is leaving on the table."
       />
       <div className="ap-summary">
         <div className="ap-hero-figure">
@@ -112,7 +112,7 @@ function Summary() {
         </div>
         <blockquote className="ap-pull">
           Two of your eight servers already average {cents(BENCH)} a ticket. The other six average{" "}
-          {cents(REST_AVG)}. The gap isn’t the menu, the room or the prices. It’s what happens at
+          {cents(REST_AVG)}. The gap isn’t the menu, the setting or the prices. It’s what happens at
           the table.
         </blockquote>
       </div>
@@ -165,7 +165,7 @@ function Servers() {
         kicker="Your servers"
         title={
           <>
-            Same menu. Same room. <br />A {cents(SPREAD)} spread per ticket.
+            Same menu. Same tables. <br />A {cents(SPREAD)} spread per ticket.
           </>
         }
         lede="Average spend per ticket by server, across six shifts over two weeks. Each target closes half the distance to your own top two."
@@ -185,7 +185,7 @@ function Servers() {
             <i className="k-bench" /> Top two · {cents(BENCH)}
           </span>
           <span>
-            <i className="k-avg" /> Room today · {cents(ROOM_NOW)}
+            <i className="k-avg" /> Average today · {cents(ROOM_NOW)}
           </span>
         </div>
         <div className="ap-sv-chart">
@@ -216,7 +216,7 @@ function Servers() {
           </ul>
         </div>
         <div className="ap-sv-total">
-          <span>The room</span>
+          <span>The restaurant</span>
           <span>
             {cents(ROOM_NOW)} <em>→</em> {cents(ROOM_TARGET)} per ticket
           </span>
@@ -365,7 +365,7 @@ function BottomLine() {
               <strong className="ap-lg-value">{usd(PROFIT_NOW + PROFIT)}</strong>
             </li>
           </ul>
-          <p className="ap-lg-note">Nearly double, in this model. Same room, same rent.</p>
+          <p className="ap-lg-note">Nearly double, in this model. Same restaurant, same rent.</p>
         </figure>
       </div>
       <dl className="ap-stats ap-stats-foot">
@@ -412,7 +412,11 @@ function HowBuilt() {
   const newSales = CHECK_LIFT + COVER_SALES;
   const kept = Math.round(newSales * FLOW_THROUGH);
   const inputs = [
-    ["Tickets a night", n(COVERS_PER_SERVICE), "Set for a typical independent fine dining room"],
+    [
+      "Tickets a night",
+      n(COVERS_PER_SERVICE),
+      "Set for a typical independent fine dining restaurant",
+    ],
     ["Dinners a year", n(SERVICES_PER_YEAR), `${NIGHTS_PER_WEEK} services a week × 52 weeks`],
     ["Tickets a year", n(COVERS), `${COVERS_PER_SERVICE} × ${SERVICES_PER_YEAR}`],
     [
@@ -423,7 +427,7 @@ function HowBuilt() {
     [
       "Average ticket today",
       cents(ROOM_NOW),
-      "Net sales ÷ tickets for each server in step B; the room is the average of the eight",
+      "Net sales ÷ tickets for each server in step B; the restaurant is the average of the eight",
     ],
     ["Sales a year", usd(SALES_NOW), `${cents(ROOM_NOW)} × ${n(COVERS)} tickets`],
     [
@@ -473,7 +477,7 @@ function HowBuilt() {
       <Step n="B" title="Higher checks, server by server">
         <p className="ap-mt-text">
           Each target closes half the distance between a server’s average today and the average of
-          the room’s own top two, {cents(BENCH)} ({cents(a.now)} and {cents(b.now)}). Not an
+          the restaurant’s own top two, {cents(BENCH)} ({cents(a.now)} and {cents(b.now)}). Not an
           industry benchmark. For {ex.name}: ({cents(BENCH)} less {cents(ex.now)}) ÷ 2 ={" "}
           {cents(ex.gap)} per ticket × {n(COVERS_EACH)} tickets = <b>{usd(ex.annual)}</b> a year.
         </p>
@@ -500,7 +504,7 @@ function HowBuilt() {
           </tbody>
           <tfoot>
             <tr>
-              <th scope="row">The room</th>
+              <th scope="row">All eight</th>
               <td className="is-num">{cents(ROOM_NOW)}</td>
               <td className="is-num">{cents(ROOM_TARGET)}</td>
               <td className="is-num">+{cents(CHECK_LIFT / COVERS)}</td>
@@ -575,7 +579,7 @@ function HowBuilt() {
         <p className="ap-mt-text">
           Rent and salaries are already paid, so an added sale only carries its cost of goods and
           card fees. Comps and overpour are kept in full: the food and liquor are already bought,
-          and the room simply stops giving them away.
+          and the restaurant simply stops giving them away.
         </p>
       </Step>
 
@@ -616,8 +620,8 @@ function HowBuilt() {
       </Step>
 
       <p className="ap-mt-close">
-        This is a model, not a forecast. Every target is set from the room’s own best servers and
-        best nights, and each server is asked to close only half the gap.
+        This is a model, not a forecast. Every target is set from the restaurant’s own best servers
+        and best nights, and each server is asked to close only half the gap.
       </p>
     </>
   );
@@ -720,7 +724,7 @@ export function SampleAudit() {
           ))}
         </div>
         <p className="audit-rail-note">
-          A modeled dining room, not a client: {COVERS_PER_SERVICE} tickets a night, six nights a
+          A modeled restaurant, not a client: {COVERS_PER_SERVICE} tickets a night, six nights a
           week, eight servers. Every figure is illustrative. Yours is built from your POS data and
           your floor.
         </p>
