@@ -74,6 +74,22 @@ function MethodLink({ children }: { children: ReactNode }) {
   );
 }
 
+/** A note on the first page: where the arithmetic lives. */
+function MethodNote() {
+  const open = useContext(ToMethod);
+  return (
+    <aside className="ap-method-note">
+      <p>
+        <b>How the math was calculated.</b> Every figure in this report, and one finding worked
+        through in full, is on the last page.
+      </p>
+      <button type="button" onClick={open}>
+        Go to page {NUMERALS[METHOD]} · How the numbers were built <ArrowRight size={11} />
+      </button>
+    </aside>
+  );
+}
+
 function PageHead({
   index,
   kicker,
@@ -105,6 +121,7 @@ function Summary() {
         kicker="Executive summary"
         title="What this modeled restaurant is leaving on the table."
       />
+      <MethodNote />
       <div className="ap-summary">
         <div className="ap-hero-figure">
           <span className="ap-figure">{usd(TOTAL)}</span>
@@ -409,6 +426,7 @@ function HowBuilt() {
   const pct = (v: number) => `${Math.round(v * 100)}%`;
   const [a, b] = servers;
   const ex = servers[2];
+  const wine = findings.find((f) => f.title === "The wine list, explained")!;
   const newSales = CHECK_LIFT + COVER_SALES;
   const kept = Math.round(newSales * FLOW_THROUGH);
   const inputs = [
@@ -533,7 +551,64 @@ function HowBuilt() {
         </p>
       </Step>
 
-      <Step n="D" title="From added sales to the bottom line">
+      <Step n="D" title="One finding, worked in full">
+        <p className="ap-mt-text">
+          Every finding in a real report is laid out this way. Here is the largest one in this
+          sample: <i>{wine.title}</i>.
+        </p>
+        <dl className="ap-mt-case">
+          <div>
+            <dt>
+              <span>I</span>Finding
+            </dt>
+            <dd>
+              Servers present the wine list as prices, not pairings. Wine per ticket sits at $17.80,
+              and the restaurant’s own best nights show it can carry $19.90.
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <span>II</span>Evidence
+            </dt>
+            <dd>
+              {wine.saw} Wine per ticket comes from the POS, divided by tickets rung in across the
+              six observed shifts.
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <span>III</span>Estimated opportunity
+            </dt>
+            <dd>
+              <span className="ap-mt-case-math">
+                {wine.math} = <b>{usd(wine.value)} added sales a year</b>
+              </span>
+              <span className="ap-mt-case-math">
+                {usd(wine.value)} × {pct(FLOW_THROUGH)} after cost of goods and card fees ={" "}
+                <b>{usd(wine.value * FLOW_THROUGH)} estimated contribution</b>
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>
+              <span>IV</span>Recommended action
+            </dt>
+            <dd>
+              <ul>
+                <li>Every server learns two pairings for each entrée and one line on why.</li>
+                <li>A second glass is offered as the first runs low, every time.</li>
+                <li>Tables of four or more are offered a bottle by name.</li>
+                <li>
+                  Tracked monthly on the platform: wine per ticket by server, against the $17.80
+                  starting point.
+                </li>
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </Step>
+
+      <Step n="E" title="From added sales to the bottom line">
         <dl className="ap-mt-ledger">
           <div>
             <dt>Higher checks, from step B</dt>
@@ -583,7 +658,7 @@ function HowBuilt() {
         </p>
       </Step>
 
-      <Step n="E" title="The other figures in the report">
+      <Step n="F" title="The other figures in the report">
         <ul className="ap-mt-others">
           <li>
             <span>Per ticket</span>

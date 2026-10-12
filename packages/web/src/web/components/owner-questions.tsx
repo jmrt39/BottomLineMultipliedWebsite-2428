@@ -63,7 +63,7 @@ const questions = [
   {
     question: "What's included in the first year of software?",
     answer:
-      "Every current server and bartender gets a login, the full training program, knowledge checks and floor exercises signed off by managers, plus manager grading and monthly sales reports. New hires enter the same program at no extra cost during year one.",
+      "Every current server and bartender gets a login, the full training program, knowledge checks and floor exercises signed off by managers, plus manager grading and monthly sales reports. You get an owner login that shows everything still outstanding: sign offs managers have not completed, modules new hires have not finished and knowledge checks that are overdue. New hires enter the same program at no extra cost during year one.",
   },
   {
     question: "What happens after the first year?",

@@ -6,7 +6,6 @@ import { AmbientClip } from "../components/ambient-clip";
 import { OwnerQuestions } from "../components/owner-questions";
 import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
-import { SampleFinding } from "../components/audit/sample-finding";
 import { useReveal } from "../hooks/use-reveal";
 import { createInquiryOptions } from "../queries/inquiries";
 
@@ -37,13 +36,14 @@ const REVEAL_TARGETS = [
   ".tour-heading > *",
   ".tour-film",
   ".lasting-grid > div",
+  ".owner-view-copy > *",
+  ".owner-panel",
   ".tour-terms > div",
   ".investment-grid > div:first-child > *",
   ".invest-card",
   ".guarantee",
   ".deliverable-heading > *",
   ".deliverable-intro > *",
-  ".sample-finding",
   ".audit-viewer",
   ".report-contents > .eyebrow",
   ".report-chapter",
@@ -92,8 +92,48 @@ const methods = [
       "A login for every server and bartender",
       "A one day platform training for your staff and managers",
       "Monthly sales reports by server, against the audit starting point",
+      "An owner login that shows everything still outstanding, by manager, new hire and server",
       "Technical support for as long as you use the platform",
     ],
+  },
+];
+
+// The owner's view in the platform section. Demo data, fictional.
+const ownerOutstanding = [
+  {
+    who: "Managers",
+    what: "3 floor sign offs due",
+    detail: "Wine service for Maya and Theo, table touches for Jonah",
+    status: "Due Friday",
+    tone: "due",
+  },
+  {
+    who: "New hires",
+    what: "2 modules not finished",
+    detail: "Sofia and Luca, module 3: wine and pairings",
+    status: "In progress",
+    tone: "open",
+  },
+  {
+    who: "Servers",
+    what: "4 knowledge checks overdue",
+    detail: "The autumn menu, assigned 9 days ago",
+    status: "Overdue",
+    tone: "late",
+  },
+  {
+    who: "Bartenders",
+    what: "Pour consistency check",
+    detail: "Signed off for 2 of 3 bartenders",
+    status: "1 open",
+    tone: "open",
+  },
+  {
+    who: "Monthly report",
+    what: "September sales by server",
+    detail: "Against the audit starting point",
+    status: "Ready",
+    tone: "done",
   },
 ];
 
@@ -489,7 +529,7 @@ export default function Home() {
                 Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
                 <ArrowUpRight size={18} />
               </button>
-              <a className="hero-secondary" href="#sample-finding">
+              <a className="hero-secondary" href="#deliverable">
                 View a sample audit <ArrowDown size={16} />
               </a>
             </div>
@@ -713,11 +753,12 @@ export default function Home() {
           <div className="method-support">
             <span className="eyebrow">SUPPORT AFTER LAUNCH</span>
             <p>
-              Included for the first 12 months: the platform for your whole team, new hires entering
-              the same program at no extra cost, monthly reports by server, and technical support.
-              From year two the platform is $650 a month for one location, or $450 when you pay in
-              full: locked for years two and three, and kept after that when you renew for at least
-              24 months. Technical support continues for as long as you use it.
+              Included for the first 12 months: the platform for your whole team, an owner login
+              that shows what is still outstanding across the restaurant, new hires entering the
+              same program at no extra cost, monthly reports by server, and technical support. From
+              year two the platform is $650 a month for one location, or $450 when you pay in full:
+              locked for years two and three, and kept after that when you renew for at least 24
+              months. Technical support continues for as long as you use it.
             </p>
           </div>
         </section>
@@ -742,9 +783,9 @@ export default function Home() {
                 or on video, and walk through every page.
               </p>
               <p>
-                Start with one complete finding below, then open the full sample report. It is built
-                for a modeled restaurant of 110 tickets a night. In yours, every number comes from
-                your own restaurant.
+                Page through the full sample report below. It is built for a modeled restaurant of
+                110 tickets a night, and the last page shows how every number was calculated. In
+                yours, every number comes from your own restaurant.
               </p>
               <dl className="deliverable-notes">
                 <div>
@@ -762,7 +803,6 @@ export default function Home() {
               </dl>
             </div>
           </div>
-          <SampleFinding />
           <SampleAudit />
           <div className="report-contents">
             <span className="eyebrow">INSIDE EVERY REPORT</span>
@@ -1097,10 +1137,51 @@ export default function Home() {
               </p>
             </div>
           </div>
+          <div className="owner-view">
+            <div className="owner-view-copy">
+              <span className="small-index">IV</span>
+              <h3>
+                Oversee it.
+                <em>Everything still outstanding, in one view.</em>
+              </h3>
+              <p>
+                The platform is yours as well. From your own owner login you see what is still open
+                across the restaurant: the sign offs your managers have not yet completed, the
+                modules your new hires have not finished, the knowledge checks that are overdue, and
+                how every server is tracking against the audit starting point.
+              </p>
+              <p className="owner-view-goal">
+                The goal is owner transparency across every part of the business. You no longer have
+                to ask, or be on the floor, to know where things stand.
+              </p>
+            </div>
+            <figure className="owner-panel" aria-label="Example of the owner view, demo data">
+              <figcaption>
+                <span>Owner view · Outstanding</span>
+                <em>Demo restaurant</em>
+              </figcaption>
+              <ul>
+                {ownerOutstanding.map((o) => (
+                  <li key={o.who}>
+                    <span className="owner-panel-who">{o.who}</span>
+                    <span className="owner-panel-what">
+                      {o.what}
+                      <small>{o.detail}</small>
+                    </span>
+                    <span className={`owner-panel-status is-${o.tone}`}>{o.status}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="owner-panel-note">Demo data · names and figures are fictional.</p>
+            </figure>
+          </div>
           <div className="tour-terms">
             <div>
               <span className="eyebrow">YEAR ONE</span>
-              <p>Included with the program, for every server, bartender and manager.</p>
+              <p>
+                Included with the program, for every server, bartender and manager, and an owner
+                login for you.
+              </p>
             </div>
             <div>
               <span className="eyebrow">FROM YEAR TWO</span>
