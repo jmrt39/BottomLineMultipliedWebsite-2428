@@ -66,17 +66,17 @@ function perGuest(how: string, gap: number) {
 
 // Per ticket gaps for the five check findings. Together they are exactly the room's
 // check lift on the Servers page ($5.75 a ticket), so every page reconciles.
-const STARTER = perGuest("0.09 more starters per ticket × $15 average starter", 0.09 * 15);
+const STARTER = perGuest("9 more starters per 100 tickets × $15 average starter", 0.09 * 15);
 const WINE = perGuest("$19.90 target less $17.80 today", 19.9 - 17.8);
 const FEATURES = perGuest(
   "6 more entrées in 100 as features × $14 above the average entrée",
   0.06 * 14,
 );
 const CALL = perGuest(
-  "0.22 house pours per ticket moved to a call brand × $2.50 upcharge",
+  "22 house pours per 100 tickets moved to a call brand × $2.50 upcharge",
   0.22 * 2.5,
 );
-const DESSERT = perGuest("0.07 more desserts per ticket × $13 average dessert", 0.07 * 13);
+const DESSERT = perGuest("7 more desserts per 100 tickets × $13 average dessert", 0.07 * 13);
 
 export const LIQUOR_SHARE = 0.18;
 export const POUR_COST = 0.2;
@@ -105,10 +105,11 @@ export const findings: Finding[] = [
     moment: "Seating · first two minutes",
     title: "A starter, named at the table",
     saw: "A specific starter was recommended at 11 of 46 tables. Naming one dish sold a starter to 52% of tables; “any appetizers?” sold 19%.",
-    from: "0.24 starters per ticket",
-    to: "0.33",
-    now: "0.24 starters per ticket.",
-    target: "0.33, achieved when every server names one specific starter at seating.",
+    from: "24 starters per 100 tickets",
+    to: "33",
+    now: "24 starters for every 100 tickets.",
+    target:
+      "33 for every 100 tickets, achieved when every server names one specific starter at seating.",
     ...STARTER,
     kind: "check",
   },
@@ -150,10 +151,11 @@ export const findings: Finding[] = [
     moment: "After the entrée",
     title: "The last course",
     saw: "Dessert menus were dropped without a recommendation at 68% of tables. Coffee or an after dinner drink was offered at 1 table in 4.",
-    from: "0.17 desserts per ticket",
-    to: "0.24",
-    now: "0.17 desserts per ticket.",
-    target: "0.24, achieved when the server recommends one dessert by name as the menu goes down.",
+    from: "17 desserts per 100 tickets",
+    to: "24",
+    now: "17 desserts for every 100 tickets.",
+    target:
+      "24 for every 100 tickets, achieved when the server recommends one dessert by name as the menu goes down.",
     ...DESSERT,
     kind: "check",
   },
