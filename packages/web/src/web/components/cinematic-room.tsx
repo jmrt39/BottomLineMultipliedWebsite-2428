@@ -107,7 +107,7 @@ export function CinematicRoom() {
         <video
           ref={attach}
           className="room-film"
-          src="/videos/evening-film-v10.mp4"
+          src="/videos/evening-film-v11.mp4"
           poster="/images/pour-gloves-label-v6.webp"
           muted
           loop
