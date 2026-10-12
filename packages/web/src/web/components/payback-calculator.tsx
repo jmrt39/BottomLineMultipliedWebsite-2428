@@ -9,8 +9,6 @@ const HORIZON = 24; // months shown on the timeline
 /** Weeks from the first audit shift to launch: two weeks on the floor, then the build. */
 const LEAD_MONTHS = 1.5;
 const PROGRAM = { 1: 85_000, 2: 140_000 } as const;
-const PLATFORM_MONTHLY = { 1: 650, 2: 900 } as const;
-const PLATFORM_COMMITTED = { 1: 450, 2: 650 } as const;
 
 const SCENARIOS = [
   { id: "conservative", label: "Conservative", factor: 0.5, note: "Half the lift" },
@@ -292,11 +290,9 @@ export function PaybackCalculator() {
         30% cost of goods and 4% card fees, before tax and any added labor; rent and salaries are
         already paid. The fee counts $85,000 for one location and $140,000 for two, the audit first
         path, with the first year of the platform included. Commit before the audit and it is
-        $75,000 or $120,000; pay in full and it is $65,000 or $100,000. From year two the platform
-        is {usd(PLATFORM_MONTHLY[locations])} a month for{" "}
-        {locations === 2 ? "two locations" : "one location"} at the standard rate, or{" "}
-        {usd(PLATFORM_COMMITTED[locations])} with a 24 month commitment. Results depend on your
-        operation, costs, guest demand and how consistently the program is used.
+        $75,000 or $120,000; pay in full and it is $65,000 or $100,000. After the first year, the
+        platform continues on a subscription basis. Results depend on your operation, costs, guest
+        demand and how consistently the program is used.
       </p>
     </div>
   );

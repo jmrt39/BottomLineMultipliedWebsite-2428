@@ -38,7 +38,7 @@ const questions = [
   {
     question: "Why commit from the start?",
     answer:
-      "You pay less, and you are still protected. Committing before the audit waives the $10,000 audit fee. Paying in full takes off another $10,000 and locks the lower platform rate for years two and three: $450 a month for one location instead of $650, or $650 for two instead of $900. If the report finds less than $150,000 a year, everything you paid comes back except $10,000 for the audit.",
+      "You pay less, and you are still protected. Committing before the audit waives the $10,000 audit fee. Paying in full takes off another $10,000. If the report finds less than $150,000 of recoverable revenue available, everything you paid comes back except $10,000 for the audit.",
   },
   {
     question: "What is the guarantee?",
@@ -68,7 +68,7 @@ const questions = [
   {
     question: "What happens after the first year?",
     answer:
-      "Year one of the platform is included in the program. From year two the standard rate is $650 a month for one location ($900 for two, $1,200 for three, $1,600 for four, $2,000 for five). Any owner who commits to 24 months or more gets the lower rate paid in full clients receive: $450 for one location ($650 for two, $900 for three, $1,250 for four, $1,500 for five). Paying in full locks it for years two and three. If a commitment is cancelled before its 24 months are up, the cancellation fee is 50% of the remaining agreement, and any new agreement is at the rate in place at the time, not the earlier one. Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
+      "Year one of the platform is included in the program. After the first year, the platform continues on a subscription basis. Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
   },
   {
     question: "What if I have more than one location?",

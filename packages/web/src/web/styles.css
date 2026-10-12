@@ -9425,34 +9425,6 @@ select option {
   color: var(--accent);
 }
 
-/* Tour terms: 24 month rates by location count */
-.tour-savings {
-  margin: 14px 0 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid var(--rule);
-}
-.tour-savings li {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  gap: 12px;
-  align-items: baseline;
-  padding: 7px 0;
-  border-bottom: 1px solid var(--rule);
-  font-size: 12px;
-  color: var(--muted);
-}
-.tour-savings li b {
-  font-weight: 500;
-  color: var(--ink);
-}
-.tour-savings li em {
-  font-style: normal;
-  font-size: 10px;
-  letter-spacing: 0.6px;
-  color: var(--accent);
-  white-space: nowrap;
-}
 @media (max-width: 900px) {
   .updates-view {
     grid-template-columns: 1fr;
@@ -9466,17 +9438,6 @@ select option {
   .updates-list b {
     font-size: 19px;
   }
-}
-.tour-savings-head {
-  display: block;
-  margin-top: 16px;
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.tour-savings-head + .tour-savings {
-  margin-top: 8px;
 }
 .owner-view-copy h3 em {
   text-wrap: pretty;

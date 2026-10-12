@@ -776,10 +776,8 @@ export default function Home() {
             <p>
               Included for the first 12 months: the platform for your whole team, an owner login
               that shows what is still outstanding across the restaurant, new hires entering the
-              same program at no extra cost, monthly reports by server, and technical support. From
-              year two the platform is $650 a month for one location, or $450 a month for one
-              location for any owner who commits to 24 months or more. Paying in full locks that
-              rate for years two and three. Technical support continues for as long as you use it.
+              same program at no extra cost, monthly reports by server, and technical support. After
+              the first year, the platform continues on a subscription basis.
             </p>
           </div>
         </section>
@@ -934,10 +932,7 @@ export default function Home() {
                   <div>
                     <span className="invest-option">Commit and pay in full</span>
                     <b>$65,000</b>
-                    <span>
-                      One payment before the audit begins. $20,000 less than audit first, and your
-                      platform is locked at the lower rate for years two and three.
-                    </span>
+                    <span>One payment before the audit begins. $20,000 less than audit first.</span>
                   </div>
                 </div>
               </div>
@@ -958,7 +953,7 @@ export default function Home() {
               <div className="guarantee">
                 <span className="eyebrow">THE GUARANTEE</span>
                 <h3>
-                  If the report finds less than $150,000 a year,
+                  If the report finds less than $150,000 of recoverable revenue available,
                   <em> you only pay for the audit.</em>
                 </h3>
                 <dl>
@@ -998,8 +993,8 @@ export default function Home() {
                   <div>
                     <dt>Two locations</dt>
                     <dd>
-                      The same rule for each location: $150,000 a year per restaurant, with $10,000
-                      kept for each audit.
+                      The same rule for each location: $150,000 of recoverable revenue per
+                      restaurant, with $10,000 kept for each audit.
                     </dd>
                   </div>
                   <div>
@@ -1053,45 +1048,9 @@ export default function Home() {
                     program. Both floors are audited against one shared standard. Three or more
                     locations are quoted individually.
                   </p>
-                  <table className="price-table">
-                    <caption>The platform from year two, per month, by number of locations</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">
-                          <span className="sr-only">Rate</span>
-                        </th>
-                        <th scope="col">1</th>
-                        <th scope="col">2</th>
-                        <th scope="col">3</th>
-                        <th scope="col">4</th>
-                        <th scope="col">5</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row">Standard rate</th>
-                        <td>$650</td>
-                        <td>$900</td>
-                        <td>$1,200</td>
-                        <td>$1,600</td>
-                        <td>$2,000</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">24 month commitment</th>
-                        <td>$450</td>
-                        <td>$650</td>
-                        <td>$900</td>
-                        <td>$1,250</td>
-                        <td>$1,500</td>
-                      </tr>
-                    </tbody>
-                  </table>
                   <p>
-                    Year one is included with the program. The lower rate is the one paid in full
-                    clients receive, and any owner can lock it by committing to 24 months or more;
-                    paying in full locks it for years two and three. Cancel within a 24 month
-                    commitment and the fee is 50% of the remaining agreement. A new agreement after
-                    that is at the rate in place at the time, not the earlier one.
+                    Year one of the platform is included with the program. After the first year, the
+                    platform continues on a subscription basis.
                   </p>
                 </div>
               )}
@@ -1253,27 +1212,8 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <span className="eyebrow">FROM YEAR TWO</span>
-              <p>
-                <b>$650 a month</b> for one location, up to $2,000 for five. Commit to 24 months or
-                more and one location is <b>$450 a month</b>, the rate paid in full clients receive.
-              </p>
-              <span className="tour-savings-head">24 month rate, by location</span>
-              <ul className="tour-savings" aria-label="Monthly savings with a 24 month commitment">
-                {[
-                  ["1 location", "$450", "$200"],
-                  ["2 locations", "$650", "$250"],
-                  ["3 locations", "$900", "$300"],
-                  ["4 locations", "$1,250", "$350"],
-                  ["5 locations", "$1,500", "$500"],
-                ].map(([n, rate, save]) => (
-                  <li key={n}>
-                    <span>{n}</span>
-                    <b>{rate}</b>
-                    <em>saves {save} a month</em>
-                  </li>
-                ))}
-              </ul>
+              <span className="eyebrow">AFTER THE FIRST YEAR</span>
+              <p>The platform continues on a subscription basis.</p>
             </div>
             <div>
               <span className="eyebrow">SUPPORT</span>
