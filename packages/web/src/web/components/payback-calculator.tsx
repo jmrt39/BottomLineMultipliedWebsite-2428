@@ -293,10 +293,10 @@ export function PaybackCalculator() {
         already paid. The fee counts $85,000 for one location and $140,000 for two, the audit first
         path, with the first year of the platform included. Commit before the audit and it is
         $75,000 or $120,000; pay in full and it is $65,000 or $100,000. From year two the platform
-        is {usd(PLATFORM_MONTHLY[locations])} a month at the standard rate
-        {locations === 2 ? " for both locations" : ""}, or {usd(PLATFORM_COMMITTED[locations])} with
-        a 24 month commitment. Results depend on your operation, costs, guest demand and how
-        consistently the program is used.
+        is {usd(PLATFORM_MONTHLY[locations])} a month for{" "}
+        {locations === 2 ? "two locations" : "one location"} at the standard rate, or{" "}
+        {usd(PLATFORM_COMMITTED[locations])} with a 24 month commitment. Results depend on your
+        operation, costs, guest demand and how consistently the program is used.
       </p>
     </div>
   );

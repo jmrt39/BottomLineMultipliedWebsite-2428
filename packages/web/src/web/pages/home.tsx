@@ -176,7 +176,7 @@ const reportChapters = [
 const fit = [
   {
     label: "Your restaurant",
-    yes: "A fine dining restaurant, or an upscale hotel bar or restaurant, where guests expect to be guided.",
+    yes: "A fine dining restaurant, or an upscale hotel bar or restaurant, where guests expect exemplary guidance from informed, educated waitstaff who go above and beyond.",
     no: "Counter service, or a menu with little to recommend.",
   },
   {
@@ -677,8 +677,7 @@ export default function Home() {
             </h2>
             <div className="perspective-copy">
               <h3>
-                But do you know what happens
-                <br />
+                But do you know what happens <br />
                 when you’re not on the floor?
               </h3>
               <p>
@@ -697,8 +696,7 @@ export default function Home() {
           </div>
           <div className="perspective-bottom">
             <p>
-              For the owner whose reputation
-              <br />
+              For the owner whose reputation <br />
               is personal. And whose standards are, too.
             </p>
             <span>
@@ -779,9 +777,9 @@ export default function Home() {
               Included for the first 12 months: the platform for your whole team, an owner login
               that shows what is still outstanding across the restaurant, new hires entering the
               same program at no extra cost, monthly reports by server, and technical support. From
-              year two the platform is $650 a month for one location, or $450 a month for any owner
-              who commits to 24 months or more. Paying in full locks that rate for years two and
-              three. Technical support continues for as long as you use it.
+              year two the platform is $650 a month for one location, or $450 a month for one
+              location for any owner who commits to 24 months or more. Paying in full locks that
+              rate for years two and three. Technical support continues for as long as you use it.
             </p>
           </div>
         </section>
@@ -1104,7 +1102,7 @@ export default function Home() {
         <section className="tour section-shell" id="tour" aria-labelledby="tour-title">
           <div className="section-label">
             <span className="eyebrow">07 / THE PLATFORM TOUR</span>
-            <span className="eyebrow">90 SECONDS · NO LOGIN NEEDED</span>
+            <span className="eyebrow">95 SECONDS · NO LOGIN NEEDED</span>
           </div>
           <div className="tour-heading">
             <h2 id="tour-title">
@@ -1199,20 +1197,83 @@ export default function Home() {
               <p className="owner-panel-note">Demo data · names and figures are fictional.</p>
             </figure>
           </div>
+          <div className="updates-view">
+            <div className="owner-view-copy">
+              <span className="small-index">V</span>
+              <h3>
+                Keep it current.
+                <em>When the standard moves, the platform moves with it.</em>
+              </h3>
+              <p>
+                Quarterly updates are included in the platform. Each quarter we can add whatever
+                your team needs to learn, read or sign off on next, so it all lives in one place and
+                every sign off is on record.
+              </p>
+            </div>
+            <ul className="updates-list">
+              <li>
+                <span className="updates-kind">Every quarter</span>
+                <b>Seasonal rollouts</b>
+                <span>
+                  New menus, new wines and seasonal service notes, built into modules and knowledge
+                  checks.
+                </span>
+              </li>
+              <li>
+                <span className="updates-kind">Every quarter</span>
+                <b>New standards</b>
+                <span>
+                  A standard that was never set out at the start but has recently become a problem,
+                  written up and trained.
+                </span>
+              </li>
+              <li>
+                <span className="updates-kind">Every quarter</span>
+                <b>New policies</b>
+                <span>
+                  A policy every server must read and sign off on, with each signature recorded.
+                </span>
+              </li>
+              <li className="is-feature">
+                <span className="updates-kind">Included in year one</span>
+                <b>Up to four further customizations</b>
+                <span>
+                  Beyond your original custom program. If something needs refining once it is live,
+                  we refine it.
+                </span>
+              </li>
+            </ul>
+          </div>
           <div className="tour-terms">
             <div>
               <span className="eyebrow">YEAR ONE</span>
               <p>
                 Included with the program, for every server, bartender and manager, and an owner
-                login for you.
+                login for you. Up to <b>four further customizations</b> are included too.
               </p>
             </div>
             <div>
               <span className="eyebrow">FROM YEAR TWO</span>
               <p>
                 <b>$650 a month</b> for one location, up to $2,000 for five. Commit to 24 months or
-                more and it is <b>$450</b>, the rate paid in full clients receive.
+                more and one location is <b>$450 a month</b>, the rate paid in full clients receive.
               </p>
+              <span className="tour-savings-head">24 month rate, by location</span>
+              <ul className="tour-savings" aria-label="Monthly savings with a 24 month commitment">
+                {[
+                  ["1 location", "$450", "$200"],
+                  ["2 locations", "$650", "$250"],
+                  ["3 locations", "$900", "$300"],
+                  ["4 locations", "$1,250", "$350"],
+                  ["5 locations", "$1,500", "$500"],
+                ].map(([n, rate, save]) => (
+                  <li key={n}>
+                    <span>{n}</span>
+                    <b>{rate}</b>
+                    <em>saves {save} a month</em>
+                  </li>
+                ))}
+              </ul>
             </div>
             <div>
               <span className="eyebrow">SUPPORT</span>
@@ -1236,8 +1297,8 @@ export default function Home() {
               <em>Not for every restaurant.</em>
             </h2>
             <p>
-              If most of the left column sounds like you, a complimentary consultation is worth 20
-              minutes.
+              If most of what is marked a good fit sounds like you, a complimentary consultation is
+              worth 20 minutes.
             </p>
           </div>
           <table className="fit-table">
@@ -1247,8 +1308,13 @@ export default function Home() {
                 <th scope="col">
                   <span className="sr-only">Area</span>
                 </th>
-                <th scope="col">A good fit</th>
-                <th scope="col">Probably not yet</th>
+                <th scope="col">
+                  <Check size={15} aria-hidden="true" />A good fit
+                </th>
+                <th scope="col">
+                  <X size={15} aria-hidden="true" />
+                  Probably not yet
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -1259,11 +1325,21 @@ export default function Home() {
                   </th>
                   <td className="fit-yes">
                     <Check size={15} aria-hidden="true" />
-                    {f.yes}
+                    <span>
+                      <span className="fit-tag" aria-hidden="true">
+                        A good fit
+                      </span>
+                      {f.yes}
+                    </span>
                   </td>
                   <td className="fit-no">
                     <X size={15} aria-hidden="true" />
-                    {f.no}
+                    <span>
+                      <span className="fit-tag" aria-hidden="true">
+                        Probably not yet
+                      </span>
+                      {f.no}
+                    </span>
                   </td>
                 </tr>
               ))}

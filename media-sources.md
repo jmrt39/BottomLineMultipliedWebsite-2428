@@ -132,3 +132,8 @@ These are illustrative dining-room photographs, not claims that the pictured est
   - `images/method-gloved-service.webp` (1000×1499): "Gourmet Dessert Presentation in Fine Dining Restaurant" by Filipp Romanovski, Feb 16 2025, original 4000×5997. https://www.pexels.com/photo/gourmet-dessert-presentation-in-fine-dining-restaurant-30748774/
 - Neither shows a brand, logo or recognisable face. Neither is a client restaurant. Only resizing and webp conversion (quality 86), no colour changes.
 - The first Method photo (`images/pristine-occupied-dining.webp`) is unchanged and remains AI-generated and illustrative.
+
+## 2026-10-12 — film v10, the pour as one uncut take
+- **Hero film** `public/videos/evening-film-v10.mp4` (18.4 s, 1344×768, 24 fps, silent) replaces v9. v9's opening was three generations joined together (two pour takes spliced at 3.5 s, then a separate walk away clip from 6.6 s).
+- The opening is now one continuous AI take (Kling 3.0 Pro image to video, 10 s, no audio), generated from v9's own first frame: white gloves finish the pour, the napkin wipes the bottle lip, goes back over the forearm, and the server turns and walks off into the restaurant. Only one napkin is in the shot, and no face is shown. Source: `/home/user/blm-pour-v10/take1.mp4` (1904×1088); keyframe `keyframe-v10.png`.
+- The first 10.0 s of the take dissolve (0.6 s) into v9's food sequence from 9.875 s, unchanged. Dissolves now fall at 9.4 / 11.8 / 14.8 / 17.8 s; the loop still ends on the opening pour frame. `FILM_FOCAL` in `cinematic-room.tsx` was shifted to match, with a 54% phone crop while he walks off.
