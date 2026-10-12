@@ -486,7 +486,7 @@ export default function Home() {
             </ul>
             <div className="hero-actions">
               <button className="hero-cta" onClick={openInquiry}>
-                Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+                Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
                 <ArrowUpRight size={18} />
               </button>
               <a className="hero-secondary" href="#sample-finding">
@@ -715,9 +715,9 @@ export default function Home() {
             <p>
               Included for the first 12 months: the platform for your whole team, new hires entering
               the same program at no extra cost, monthly reports by server, and technical support.
-              From year two the platform is $650 a month for one location, or $450 locked for years
-              two and three when you pay in full. Technical support continues for as long as you use
-              it.
+              From year two the platform is $650 a month for one location, or $450 when you pay in
+              full: locked for years two and three, and kept after that when you renew for at least
+              24 months. Technical support continues for as long as you use it.
             </p>
           </div>
         </section>
@@ -837,7 +837,7 @@ export default function Home() {
                 before you commit, or commit from the start and pay less.
               </p>
               <button className="text-link" onClick={openInquiry}>
-                Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+                Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
                 <ArrowUpRight size={17} />
               </button>
             </div>
@@ -875,7 +875,8 @@ export default function Home() {
                     <b>$65,000</b>
                     <span>
                       One payment before the audit begins. $20,000 less than audit first, and your
-                      platform rate is locked for years two and three.
+                      platform rate is locked for years two and three, and beyond when you renew for
+                      at least 24 months.
                     </span>
                   </div>
                 </div>
@@ -1016,7 +1017,7 @@ export default function Home() {
                         <td>$2,000</td>
                       </tr>
                       <tr>
-                        <th scope="row">Paid in full, years two and three</th>
+                        <th scope="row">Paid in full</th>
                         <td>$450</td>
                         <td>$650</td>
                         <td>$900</td>
@@ -1026,8 +1027,9 @@ export default function Home() {
                     </tbody>
                   </table>
                   <p>
-                    Year one is included with the program. Only owners who pay in full lock the
-                    lower rate.
+                    Year one is included with the program. Only owners who pay in full get the lower
+                    rate: locked for years two and three, and kept after that when they renew for at
+                    least 24 months.
                   </p>
                 </div>
               )}
@@ -1104,7 +1106,8 @@ export default function Home() {
               <span className="eyebrow">FROM YEAR TWO</span>
               <p>
                 <b>$650 a month</b> for one location, up to $2,000 for five. Pay in full and it is
-                locked at <b>$450</b> for years two and three.
+                locked at <b>$450</b> for years two and three, and kept when you renew for at least
+                24 months.
               </p>
             </div>
             <div>
@@ -1163,7 +1166,7 @@ export default function Home() {
             </tbody>
           </table>
           <button className="hero-cta fit-cta" onClick={openInquiry}>
-            Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+            Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
             <ArrowUpRight size={18} />
           </button>
         </section>
@@ -1247,7 +1250,7 @@ export default function Home() {
             <em>Let’s make every one count.</em>
           </h2>
           <button className="hero-cta" onClick={openInquiry}>
-            Book your complimentary consultation &amp; secure your audit&nbsp;date{" "}
+            Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
             <ArrowUpRight size={18} />
           </button>
           <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>

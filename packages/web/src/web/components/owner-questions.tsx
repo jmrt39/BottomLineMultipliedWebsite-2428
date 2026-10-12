@@ -38,12 +38,12 @@ const questions = [
   {
     question: "Why commit from the start?",
     answer:
-      "You pay less, and you are still protected. Committing before the audit waives the $10,000 audit fee. Paying in full takes off another $10,000 and locks your platform rate for years two and three: $450 a month for one location instead of $650, or $650 for two instead of $900. If the report finds less than $150,000 a year, everything you paid comes back except $10,000 for the audit.",
+      "You pay less, and you are still protected. Committing before the audit waives the $10,000 audit fee. Paying in full takes off another $10,000 and locks your platform rate for years two and three: $450 a month for one location instead of $650, or $650 for two instead of $900. Renew for at least 24 months after that and you keep it. If the report finds less than $150,000 a year, everything you paid comes back except $10,000 for the audit.",
   },
   {
     question: "What is the guarantee?",
     answer:
-      "If the written report finds less than $150,000 in recoverable annual revenue, you only pay for the audit. Audit first: you have paid $10,000 and owe nothing more. Committed in two payments: $27,500 of your $37,500 comes back and the second payment is never due. Paid in full: $55,000 of your $65,000 comes back. You keep the report either way. With two locations the same rule applies to each location. It covers what the report identifies, not results after training. Recoverable annual revenue is the yearly total of added sales and cost savings the report ties to specific, fixable gaps, each calculated from your POS data and the six observed shifts, with the arithmetic shown so you can check it.",
+      "If the written report finds less than $150,000 in recoverable annual revenue, you only pay for the audit. Audit first: you have paid $10,000 and owe nothing more. Committed in two payments: $27,500 of your $37,500 comes back and the second payment is never due. Paid in full: $55,000 of your $65,000 comes back. You keep the report either way. With two locations the $150,000 test applies to each restaurant separately. It covers what the report identifies, not results after training. Recoverable annual revenue is the yearly total of added sales and cost savings the report ties to specific, fixable gaps, each calculated from your POS data and the six observed shifts, with the arithmetic shown so you can check it.",
   },
   {
     question: "What's included?",
@@ -68,7 +68,7 @@ const questions = [
   {
     question: "What happens after the first year?",
     answer:
-      "Year one of the platform is included in the program. From year two the standard rate is $650 a month for one location ($900 for two, $1,200 for three, $1,600 for four, $2,000 for five). Owners who paid in full from the start lock a lower rate for years two and three: $450 for one location ($650 for two, $900 for three, $1,250 for four, $1,500 for five). Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
+      "Year one of the platform is included in the program. From year two the standard rate is $650 a month for one location ($900 for two, $1,200 for three, $1,600 for four, $2,000 for five). Owners who paid in full from the start lock a lower rate for years two and three: $450 for one location ($650 for two, $900 for three, $1,250 for four, $1,500 for five). After year three, renewing for at least 24 months keeps that rate; otherwise the standard rate applies. Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
   },
   {
     question: "What if I have more than one location?",
