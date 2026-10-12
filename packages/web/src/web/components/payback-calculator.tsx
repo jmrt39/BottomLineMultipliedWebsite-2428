@@ -10,6 +10,7 @@ const HORIZON = 24; // months shown on the timeline
 const LEAD_MONTHS = 1.5;
 const PROGRAM = { 1: 85_000, 2: 140_000 } as const;
 const PLATFORM_MONTHLY = { 1: 650, 2: 900 } as const;
+const PLATFORM_COMMITTED = { 1: 450, 2: 650 } as const;
 
 const SCENARIOS = [
   { id: "conservative", label: "Conservative", factor: 0.5, note: "Half the lift" },
@@ -293,8 +294,9 @@ export function PaybackCalculator() {
         path, with the first year of the platform included. Commit before the audit and it is
         $75,000 or $120,000; pay in full and it is $65,000 or $100,000. From year two the platform
         is {usd(PLATFORM_MONTHLY[locations])} a month at the standard rate
-        {locations === 2 ? " for both locations" : ""}. Results depend on your operation, costs,
-        guest demand and how consistently the program is used.
+        {locations === 2 ? " for both locations" : ""}, or {usd(PLATFORM_COMMITTED[locations])} with
+        a 24 month commitment. Results depend on your operation, costs, guest demand and how
+        consistently the program is used.
       </p>
     </div>
   );

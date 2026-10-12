@@ -756,9 +756,9 @@ export default function Home() {
               Included for the first 12 months: the platform for your whole team, an owner login
               that shows what is still outstanding across the restaurant, new hires entering the
               same program at no extra cost, monthly reports by server, and technical support. From
-              year two the platform is $650 a month for one location, or $450 when you pay in full:
-              locked for years two and three, and kept after that when you renew for at least 24
-              months. Technical support continues for as long as you use it.
+              year two the platform is $650 a month for one location, or $450 a month for any owner
+              who commits to 24 months or more. Paying in full locks that rate for years two and
+              three. Technical support continues for as long as you use it.
             </p>
           </div>
         </section>
@@ -915,8 +915,7 @@ export default function Home() {
                     <b>$65,000</b>
                     <span>
                       One payment before the audit begins. $20,000 less than audit first, and your
-                      platform rate is locked for years two and three, and beyond when you renew for
-                      at least 24 months.
+                      platform is locked at the lower rate for years two and three.
                     </span>
                   </div>
                 </div>
@@ -1057,7 +1056,7 @@ export default function Home() {
                         <td>$2,000</td>
                       </tr>
                       <tr>
-                        <th scope="row">Paid in full</th>
+                        <th scope="row">24 month commitment</th>
                         <td>$450</td>
                         <td>$650</td>
                         <td>$900</td>
@@ -1067,9 +1066,11 @@ export default function Home() {
                     </tbody>
                   </table>
                   <p>
-                    Year one is included with the program. Only owners who pay in full get the lower
-                    rate: locked for years two and three, and kept after that when they renew for at
-                    least 24 months.
+                    Year one is included with the program. The lower rate is the one paid in full
+                    clients receive, and any owner can lock it by committing to 24 months or more;
+                    paying in full locks it for years two and three. Cancel within a 24 month
+                    commitment and the fee is 50% of the remaining agreement. A new agreement after
+                    that is at the rate in place at the time, not the earlier one.
                   </p>
                 </div>
               )}
@@ -1186,9 +1187,8 @@ export default function Home() {
             <div>
               <span className="eyebrow">FROM YEAR TWO</span>
               <p>
-                <b>$650 a month</b> for one location, up to $2,000 for five. Pay in full and it is
-                locked at <b>$450</b> for years two and three, and kept when you renew for at least
-                24 months.
+                <b>$650 a month</b> for one location, up to $2,000 for five. Commit to 24 months or
+                more and it is <b>$450</b>, the rate paid in full clients receive.
               </p>
             </div>
             <div>
