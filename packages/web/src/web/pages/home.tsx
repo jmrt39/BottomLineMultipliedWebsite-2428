@@ -501,7 +501,7 @@ export default function Home() {
         <section className="proof section-shell" id="proof" aria-labelledby="proof-title">
           <div className="section-label">
             <span className="eyebrow">01 / THE PROOF</span>
-            <span className="eyebrow">ONE ROOM. ONE YEAR. NO PRICE CHANGES.</span>
+            <span className="eyebrow">ONE RESTAURANT. ONE YEAR.</span>
           </div>
           <div className="proof-grid">
             <div className="proof-heading">
@@ -544,7 +544,7 @@ export default function Home() {
               <dl className="proof-facts">
                 <div>
                   <dt>Venue</dt>
-                  <dd>An upscale fine dining bar, kept anonymous</dd>
+                  <dd>Upscale fine dining bar</dd>
                 </div>
                 <div>
                   <dt>Service</dt>
@@ -562,14 +562,11 @@ export default function Home() {
                   <dt>How long</dt>
                   <dd>One year of consistent use</dd>
                 </div>
-                <div>
-                  <dt>Menu prices</dt>
-                  <dd>No meaningful changes during the year</dd>
-                </div>
               </dl>
               <p className="proof-caveat">
-                One room’s result, shared as evidence of the method. It is not a forecast for yours;
-                your report prices your own room.
+                One restaurant’s result, shared as evidence of the method. No meaningful changes to
+                menu prices during the year. It is not a forecast for yours; your report prices your
+                own room.
               </p>
             </div>
           </div>

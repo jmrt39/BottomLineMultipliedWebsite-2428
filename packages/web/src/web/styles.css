@@ -7811,6 +7811,9 @@ select option {
   padding-left: 18px;
   border-left: 1px solid var(--rule);
 }
+.proof-facts > div:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
 .proof-facts dt {
   font-size: 9px;
   letter-spacing: 1.4px;
