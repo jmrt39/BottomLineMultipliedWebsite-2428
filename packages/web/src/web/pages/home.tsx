@@ -241,11 +241,11 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         <button className="close-dialog" aria-label="Close inquiry" onClick={onClose}>
           <X size={22} />
         </button>
-        <span className="eyebrow">A 20 MINUTE FIT CALL</span>
+        <span className="eyebrow">A PRIVATE 20 MINUTE CONSULTATION</span>
         <h2 id="inquiry-title">
           Let’s see if
           <br />
-          <em>this fits your room.</em>
+          <em>this fits your restaurant.</em>
         </h2>
         {send.isSuccess ? (
           <div className="inquiry-success" aria-live="polite">
@@ -262,8 +262,8 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <p className="inquiry-intro">
-              Six quick questions so the call is about your room, not a pitch. If it isn’t a fit,
-              I’ll tell you.
+              Six quick questions so our conversation is about your restaurant, not a pitch. If it
+              isn’t a fit, I’ll tell you.
             </p>
             <form
               onSubmit={(e) => {
@@ -426,7 +426,7 @@ export default function Home() {
             Client sign in
           </a>
           <button className="header-cta" onClick={openInquiry}>
-            Book a fit call <ArrowUpRight size={17} />
+            Reserve a consultation <ArrowUpRight size={17} />
           </button>
         </div>
         <button
@@ -452,7 +452,7 @@ export default function Home() {
             Client sign in
           </a>
           <button onClick={openInquiry}>
-            Book a fit call <ArrowUpRight size={16} />
+            Reserve a consultation <ArrowUpRight size={16} />
           </button>
         </nav>
       )}
@@ -464,17 +464,19 @@ export default function Home() {
           </div>
           <div className="hero-content">
             <span className="eyebrow">
-              <span className="tiny-line" /> FOR FINE DINING AND UPSCALE HOTEL ROOMS
+              <span className="tiny-line" /> FOR FINE DINING AND UPSCALE HOTEL RESTAURANTS
             </span>
             <h1 id="hero-title">
               <span className="headline-primary">Train the habits. Hold the standard.</span>{" "}
               <em className="headline-promise">Multiply your bottom line.</em>
             </h1>
             <p>
-              Your servers are leaving money on the table. I join your team as a new hire; only you
-              know who I am. After <strong>six shifts</strong> you get a written report that prices
-              every gap from your own POS data. Then I build the training that closes them, and
-              install it on our platform so it holds.
+              Every night, small moments at the table decide how much each guest spends. To see them
+              the way your guests do, I join your team as a new hire, and only you know why I’m
+              there. After <strong>six shifts</strong>, you receive a written report that puts a
+              dollar figure on every gap, drawn from your own POS data. Then I build the training
+              that closes those gaps and install it on our platform, so the standard holds long
+              after I leave.
             </p>
             <ul className="hero-glance" aria-label="At a glance">
               <li>Six shifts</li>
@@ -484,7 +486,7 @@ export default function Home() {
             </ul>
             <div className="hero-actions">
               <button className="hero-cta" onClick={openInquiry}>
-                Book a 20 minute fit call <ArrowUpRight size={18} />
+                Reserve a private consultation <ArrowUpRight size={18} />
               </button>
               <a className="hero-secondary" href="#sample-finding">
                 View a sample audit <ArrowDown size={16} />
@@ -510,7 +512,27 @@ export default function Home() {
                 <br />
                 <em>Same menu, one year later.</em>
               </h2>
+              <figure className="proof-founder">
+                <img
+                  src="/images/andrea-martin.webp"
+                  alt="Andrea Martin"
+                  width={640}
+                  height={788}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  <span className="proof-founder-name">I’m Andrea Martin.</span>
+                  <span className="proof-founder-role">Founder · 15+ years in hospitality</span>
+                </figcaption>
+              </figure>
               <div className="proof-story">
+                <p className="proof-intro">
+                  For more than 15 years I’ve worked in hospitality, front of house as a server in
+                  upscale restaurants and at corporate events, galas and weddings. Everywhere, I saw
+                  the same thing: how a company onboards, trains and keeps developing its people can
+                  make or break the reputation of the entire establishment.
+                </p>
                 <p>
                   This method didn’t start in an office. I was a server at an upscale fine dining
                   bar. On day one my manager told me to memorize the menu and the table numbers.
@@ -611,7 +633,9 @@ export default function Home() {
               <br />
               is personal. And whose standards are, too.
             </p>
-            <span>FINE DINING ROOMS AND UPSCALE HOTEL BARS. ONE UNCOMPROMISING STANDARD.</span>
+            <span>
+              FINE DINING RESTAURANTS AND UPSCALE HOTEL BARS. ONE UNCOMPROMISING STANDARD.
+            </span>
           </div>
         </section>
 
@@ -790,11 +814,11 @@ export default function Home() {
                 <em>Then close it.</em>
               </h2>
               <p>
-                Start with a 20 minute fit call. Audit first and see the evidence before you commit,
-                or commit from the start and pay less.
+                Start with a private 20 minute consultation. Audit first and see the evidence before
+                you commit, or commit from the start and pay less.
               </p>
               <button className="text-link" onClick={openInquiry}>
-                Book a 20 minute fit call <ArrowUpRight size={17} />
+                Reserve a private consultation <ArrowUpRight size={17} />
               </button>
             </div>
             <div className="invest-cards">
@@ -1084,7 +1108,10 @@ export default function Home() {
               <br />
               <em>Not for every room.</em>
             </h2>
-            <p>If most of the left column sounds like you, a fit call is worth 20 minutes.</p>
+            <p>
+              If most of the left column sounds like you, a private consultation is worth 20
+              minutes.
+            </p>
           </div>
           <table className="fit-table">
             <caption className="sr-only">Who this fits</caption>
@@ -1116,7 +1143,7 @@ export default function Home() {
             </tbody>
           </table>
           <button className="hero-cta fit-cta" onClick={openInquiry}>
-            Book a 20 minute fit call <ArrowUpRight size={18} />
+            Reserve a private consultation <ArrowUpRight size={18} />
           </button>
         </section>
 
@@ -1199,9 +1226,9 @@ export default function Home() {
             <em>Let’s make every one count.</em>
           </h2>
           <button className="hero-cta" onClick={openInquiry}>
-            Book a 20 minute fit call <ArrowUpRight size={18} />
+            Reserve a private consultation <ArrowUpRight size={18} />
           </button>
-          <span className="closing-note">20 MINUTES. YOUR ROOM. NO OBLIGATION.</span>
+          <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
         </section>
       </main>
       <footer className="footer section-shell">

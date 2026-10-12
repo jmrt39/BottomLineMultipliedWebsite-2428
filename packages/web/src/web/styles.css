@@ -9051,3 +9051,53 @@ select option {
     gap: 6px;
   }
 }
+
+/* Proof: Andrea's introduction */
+.proof-founder {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin: 38px 0 0;
+}
+.proof-founder img {
+  flex: none;
+  width: 104px;
+  height: 128px;
+  object-fit: cover;
+  object-position: 50% 18%;
+  border: 1px solid var(--accent);
+  padding: 4px;
+  background: transparent;
+  filter: saturate(0.9);
+}
+.proof-founder figcaption {
+  display: grid;
+  gap: 8px;
+}
+.proof-founder-name {
+  font-family: var(--display);
+  font-size: clamp(26px, 2.3vw, 32px);
+  line-height: 1.1;
+  color: var(--ink);
+}
+.proof-founder-role {
+  font-size: 9px;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.proof-founder + .proof-story {
+  margin-top: 22px;
+}
+.proof-story .proof-intro {
+  color: var(--ink);
+}
+@media (max-width: 420px) {
+  .proof-founder {
+    gap: 16px;
+  }
+  .proof-founder img {
+    width: 86px;
+    height: 106px;
+  }
+}
