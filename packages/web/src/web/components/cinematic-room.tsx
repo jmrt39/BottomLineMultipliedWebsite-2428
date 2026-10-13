@@ -36,20 +36,59 @@ export const isTouchScreen = () =>
   typeof window !== "undefined" &&
   !!window.matchMedia?.("(hover: none), (pointer: coarse)").matches;
 
+const PHONE = "(max-width: 800px)";
+
+// Leave any fullscreen or floating player a browser opened on its own and settle on
+// the still. Some in-app browsers cannot play inline and take over the screen instead.
+function refuseTakeover(video: HTMLVideoElement, onRefused: () => void) {
+  const leave = () => {
+    const v = video as HTMLVideoElement & { webkitExitFullscreen?: () => void };
+    try {
+      v.webkitExitFullscreen?.();
+    } catch {
+      // Already left.
+    }
+    if (document.fullscreenElement) void document.exitFullscreen?.().catch(() => {});
+    if (document.pictureInPictureElement) {
+      void document.exitPictureInPicture?.().catch(() => {});
+    }
+    video.pause();
+    onRefused();
+  };
+  video.addEventListener("webkitbeginfullscreen", leave);
+  video.addEventListener("enterpictureinpicture", leave);
+  video.addEventListener("fullscreenchange", () => document.fullscreenElement === video && leave());
+}
+
 export function CinematicRoom() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const userPaused = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [failed, setFailed] = useState(false);
+  // Phones get the same film as an animated image cut for a tall screen. An image never
+  // opens a player window, goes fullscreen or floats over the page while scrolling.
+  const [phone, setPhone] = useState(() => !!window.matchMedia?.(PHONE).matches);
+  const [imagePlaying, setImagePlaying] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia?.(PHONE);
+    if (!mq) return;
+    const update = () => setPhone(mq.matches);
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const attach = useCallback((video: HTMLVideoElement | null) => {
     videoRef.current = video;
-    if (video) prepareForAutoplay(video);
+    if (video) {
+      prepareForAutoplay(video);
+      refuseTakeover(video, () => setFailed(true));
+    }
   }, []);
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || failed) return;
+    if (!video || failed || phone) return;
     let onScreen = true;
     const tryPlay = () => {
       if (userPaused.current || !onScreen || !video.paused) return;
@@ -82,9 +121,13 @@ export function CinematicRoom() {
       for (const name of events) window.removeEventListener(name, tryPlay);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, [failed]);
+  }, [failed, phone]);
 
   const togglePlayback = () => {
+    if (phone) {
+      setImagePlaying(!imagePlaying);
+      return;
+    }
     const video = videoRef.current;
     if (!video) return;
     if (video.paused) {
@@ -103,7 +146,19 @@ export function CinematicRoom() {
         alt="Illustrative close view of wine service, framed below the server's face: a server in a black shirt, tie and white gloves pours red wine with the bottle cradled at its base, a white serviette draped over his left forearm"
         fetchPriority="high"
       />
-      {!failed && (
+      {phone && imagePlaying && (
+        <picture>
+          <source srcSet="/images/hero-phone-v11.avif" type="image/avif" />
+          <img
+            className="room-film room-film-image"
+            src="/images/hero-phone-v11.webp"
+            alt=""
+            decoding="async"
+            onError={() => setImagePlaying(false)}
+          />
+        </picture>
+      )}
+      {!failed && !phone && (
         <video
           ref={attach}
           className="room-film"
@@ -126,7 +181,18 @@ export function CinematicRoom() {
           onError={() => setFailed(true)}
         />
       )}
-      {!failed && (
+      {phone && (
+        <button
+          className="film-control"
+          aria-label={imagePlaying ? "Pause background film" : "Play background film"}
+          onClick={togglePlayback}
+        >
+          <span>THE ART OF SERVICE</span>
+          {imagePlaying ? <Pause size={12} /> : <Play size={12} />}
+          <span className="film-state">{imagePlaying ? "PAUSE FILM" : "PLAY FILM"}</span>
+        </button>
+      )}
+      {!failed && !phone && (
         <button
           className="film-control"
           aria-label={playing ? "Pause background film" : "Play background film"}
@@ -137,7 +203,7 @@ export function CinematicRoom() {
           <span className="film-state">{playing ? "PAUSE FILM" : "PLAY FILM"}</span>
         </button>
       )}
-      {failed && (
+      {failed && !phone && (
         <div className="film-preview-label">
           <span>WHITE GLOVE SERVICE</span>
           <span>STILL VIEW</span>

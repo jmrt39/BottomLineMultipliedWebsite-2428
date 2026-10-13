@@ -1,5 +1,9 @@
 # White-linen refinement — media sources
 
+## Phone hero film: animated image cut from evening-film-v11.mp4
+- Phones (max width 800px) no longer load a <video> in the hero, so no browser can open it fullscreen or in a floating window while scrolling. They get public/images/hero-phone-v11.avif (460 x 768, 24fps, 18.4s, ~850 KB, SVT-AV1) with public/images/hero-phone-v11.webp (345 x 576, 15fps, ~2 MB) as fallback.
+- Both cut with ffmpeg from public/videos/evening-film-v11.mp4 using the same per shot focal points the phone crop already used (68/54/60/84/72%). No new generation. Wider screens keep the video, which now also leaves any fullscreen or picture in picture it is pushed into and falls back to the still.
+
 ## Chapter interludes: stills from the platform demo film (illustrative)
 - Source: public/videos/platform-demo-v3.mp4, the AI generated platform demo footage (fictional demo restaurant setting). Not client photography and not a real restaurant.
 - Frames g8, g20, g23, g146, g155, g158 and h59 extracted with ffmpeg; work files in /home/user/stills/. No new generation calls.

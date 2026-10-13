@@ -41,6 +41,8 @@ const FOLDS = [
 ] as const;
 type FoldId = (typeof FOLDS)[number];
 const isFold = (id: string): id is FoldId => (FOLDS as readonly string[]).includes(id);
+/** Anchors inside a chapter: following one opens its chapter first. */
+const INNER_ANCHORS = new Map<string, FoldId>([["founder", "investment"]]);
 
 const TABS: readonly (readonly [FoldId, string])[] = [
   ["proof", "Meet Andrea"],
@@ -264,7 +266,7 @@ function Select<T extends string>({
   );
 }
 
-function Inquiry({ onClose }: { onClose: () => void }) {
+function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }) {
   const send = useMutation(createInquiryOptions());
   const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
@@ -288,7 +290,9 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         <button className="close-dialog" aria-label="Close inquiry" onClick={onClose}>
           <X size={22} />
         </button>
-        <span className="eyebrow">A COMPLIMENTARY 20 MINUTE CONSULTATION</span>
+        <span className="eyebrow">
+          {founder ? "A FOUNDER PLACE · TWO RESTAURANTS" : "A COMPLIMENTARY 20 MINUTE CONSULTATION"}
+        </span>
         <h2 id="inquiry-title">
           Let’s see if
           <br />
@@ -309,9 +313,15 @@ function Inquiry({ onClose }: { onClose: () => void }) {
         ) : (
           <>
             <p className="inquiry-intro">
-              Six quick questions so our conversation is about your restaurant, not a pitch. If it
+              A few quick questions so our conversation is about your restaurant, not a pitch. If it
               isn’t a fit, I’ll tell you.
             </p>
+            {founder && (
+              <p className="inquiry-founder">
+                You are asking about one of two founder places. It starts with the same
+                complimentary 20 minute consultation. Audits begin the week of November 16.
+              </p>
+            )}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -328,6 +338,7 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                   volume: field("volume") as (typeof VOLUMES)[number]["value"],
                   pos: field("pos") as (typeof POS)[number]["value"],
                   message: field("message"),
+                  founder: field("founder") === "yes" ? "yes" : "no",
                   website: field("website"),
                 });
               }}
@@ -413,6 +424,13 @@ function Inquiry({ onClose }: { onClose: () => void }) {
                   defaultValue="yes"
                 />
               </div>
+              <label htmlFor="inquiry-founder">
+                Founder places
+                <select id="inquiry-founder" name="founder" defaultValue={founder ? "yes" : "no"}>
+                  <option value="yes">I would like to be considered for a founder place</option>
+                  <option value="no">Not for now</option>
+                </select>
+              </label>
               <label htmlFor="inquiry-message">
                 What would you most like to fix?
                 <textarea
@@ -441,14 +459,18 @@ function Inquiry({ onClose }: { onClose: () => void }) {
 
 export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false);
-  const [inquiry, setInquiry] = useState(false);
+  const [inquiry, setInquiry] = useState<false | "standard" | "founder">(false);
   const [termsOpen, setTermsOpen] = useState(false);
   const closeInquiry = useRef(() => setInquiry(false)).current;
   const siteRef = useRef<HTMLDivElement>(null);
   useReveal(siteRef, REVEAL_TARGETS);
   const openInquiry = () => {
     setMobileMenu(false);
-    setInquiry(true);
+    setInquiry("standard");
+  };
+  const openFounder = () => {
+    setMobileMenu(false);
+    setInquiry("founder");
   };
   const nav = TABS.filter(([id]) => HEADER_TABS.includes(id));
 
@@ -456,15 +478,23 @@ export default function Home() {
   const [openFold, setOpenFold] = useState<FoldId | null>(null);
   const openRef = useRef<FoldId | null>(null);
   openRef.current = openFold;
-  const move = useRef<{ id: FoldId; mode: "anchor" | "scroll" | "head"; top: number } | null>(null);
-  const show = useCallback((id: FoldId, mode: "anchor" | "scroll") => {
+  const move = useRef<{
+    id: FoldId;
+    mode: "anchor" | "scroll" | "head";
+    top: number;
+    target?: string;
+  } | null>(null);
+  const show = useCallback((id: FoldId, mode: "anchor" | "scroll", target?: string) => {
     const el = document.getElementById(id);
-    if (mode === "scroll") history.replaceState(null, "", `#${id}`);
+    if (mode === "scroll") history.replaceState(null, "", `#${target ?? id}`);
     if (openRef.current === id) {
-      if (mode === "scroll") el?.scrollIntoView({ block: "start", behavior: "smooth" });
+      if (mode === "scroll")
+        document
+          .getElementById(target ?? id)
+          ?.scrollIntoView({ block: "start", behavior: "smooth" });
       return;
     }
-    move.current = { id, mode, top: el?.getBoundingClientRect().top ?? 0 };
+    move.current = { id, mode, top: el?.getBoundingClientRect().top ?? 0, target };
     setOpenFold(id);
   }, []);
   const close = (id: FoldId, toHead: boolean) => {
@@ -484,7 +514,10 @@ export default function Home() {
       if (el.getBoundingClientRect().top < 0)
         el.scrollIntoView({ block: "start", behavior: "instant" });
     } else {
-      el.scrollIntoView({ block: "start", behavior: "smooth" });
+      (document.getElementById(m.target ?? m.id) ?? el).scrollIntoView({
+        block: "start",
+        behavior: "smooth",
+      });
     }
   }, [openFold]);
   // Any link to a chapter, anywhere on the page or in the address bar, opens it.
@@ -493,14 +526,16 @@ export default function Home() {
       if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
       const link = (e.target as Element | null)?.closest?.("a[href^='#']");
       const id = link?.getAttribute("href")?.slice(1) ?? "";
-      if (!isFold(id)) return;
+      const fold = isFold(id) ? id : INNER_ANCHORS.get(id);
+      if (!fold) return;
       e.preventDefault();
       setMobileMenu(false);
-      show(id, "scroll");
+      show(fold, "scroll", fold === id ? undefined : id);
     };
     const fromHash = () => {
       const id = decodeURIComponent(location.hash.slice(1));
-      if (isFold(id)) show(id, "scroll");
+      const fold = isFold(id) ? id : INNER_ANCHORS.get(id);
+      if (fold) show(fold, "scroll", fold === id ? undefined : id);
     };
     document.addEventListener("click", onClick);
     window.addEventListener("hashchange", fromHash);
@@ -636,6 +671,24 @@ export default function Home() {
               The $150,000 guarantee: if the report finds less, <em>you only pay for the audit</em>
             </li>
           </ul>
+          <aside className="founder-note" aria-labelledby="founder-note-title">
+            <span className="founder-note-mark">BY INVITATION · TWO FOUNDER RESTAURANTS</span>
+            <p className="founder-note-line" id="founder-note-title">
+              Two restaurants. <em>Their results, featured here.</em>
+            </p>
+            <p className="founder-note-sub">
+              The full program on founder terms for one location, in return for sharing your
+              results. Audits begin the week of November 16. Offered until both places are taken.
+            </p>
+            <div className="founder-note-actions">
+              <a className="founder-note-link" href="#founder">
+                Read the founder terms <ArrowRight size={15} />
+              </a>
+              <button className="fold-book" onClick={openFounder}>
+                Claim your founder place <ArrowUpRight size={16} />
+              </button>
+            </div>
+          </aside>
         </div>
 
         <Fold
@@ -1094,6 +1147,63 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+              <div className="founder-card" id="founder">
+                <span className="eyebrow">THE FOUNDER INVITATION · TWO RESTAURANTS</span>
+                <h3>
+                  The full program, <em>on founder terms.</em>
+                </h3>
+                <p>
+                  Two restaurants will be the ones whose results are featured on this website. In
+                  return, their program is offered on founder terms. Audits begin the week of
+                  November&nbsp;16.
+                </p>
+                <div className="invest-options founder-options">
+                  <div>
+                    <span className="invest-option">Founder, two payments</span>
+                    <b>$65,000</b>
+                    <span>$32,500 when you sign on, $32,500 when the platform is handed over.</span>
+                  </div>
+                  <div>
+                    <span className="invest-option">Founder, paid in full</span>
+                    <b>$45,000</b>
+                    <span>One payment when you sign on, before the audit begins.</span>
+                  </div>
+                </div>
+                <dl className="founder-terms">
+                  <div>
+                    <dt>In return</dt>
+                    <dd>
+                      I may share your results and quote you in marketing material and on this
+                      website. Named or anonymous: your choice.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>One location</dt>
+                    <dd>
+                      Founder terms cover one restaurant. Additional locations can be added at a
+                      preferred founder rate.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>The guarantee</dt>
+                    <dd>
+                      It applies in full, with $10,000 kept for the audit. Two payments: $22,500 of
+                      your $32,500 comes back and the second payment is never due. Paid in full:
+                      $35,000 of your $45,000 comes back. You keep the report.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Places</dt>
+                    <dd>Two, offered until both are taken.</dd>
+                  </div>
+                </dl>
+                <div className="founder-claim">
+                  <button className="fold-book" onClick={openFounder}>
+                    Claim your founder place <ArrowUpRight size={16} />
+                  </button>
+                  <span>It begins with a complimentary 20 minute consultation.</span>
+                </div>
+              </div>
               <div className="invest-card">
                 <span className="eyebrow">THE AUDIT ONLY</span>
                 <div className="invest-price">
@@ -1528,6 +1638,9 @@ export default function Home() {
             <ArrowUpRight size={18} />
           </button>
           <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
+          <a className="closing-founder" href="#founder">
+            Two founder places, audits from the week of November 16. <em>Read the terms</em>
+          </a>
         </section>
       </main>
       <footer className="footer section-shell">
@@ -1548,7 +1661,7 @@ export default function Home() {
           <span>PRIVATE. PRECISE. BUILT TO LAST.</span>
         </div>
       </footer>
-      {inquiry && <Inquiry onClose={closeInquiry} />}
+      {inquiry && <Inquiry onClose={closeInquiry} founder={inquiry === "founder"} />}
     </div>
   );
 }
