@@ -55,6 +55,9 @@ const PAGES = [
 ] as const;
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
 const METHOD = PAGES.length - 1;
+/** The short version an owner sees first: the summary and what to fix first. */
+const SHORT = [0, 2];
+const ALL = PAGES.map((_, i) => i);
 
 /** Event the rest of the page can dispatch to open the report on its back page. */
 export const OPEN_AUDIT_METHOD = "audit:open-method";
@@ -706,6 +709,9 @@ const RENDER = [Summary, Servers, Priorities, Evidence, BottomLine, HowBuilt];
 
 export function SampleAudit() {
   const [page, setPage] = useState(0);
+  const [full, setFull] = useState(false);
+  const visible = full ? ALL : SHORT;
+  const pos = Math.max(0, visible.indexOf(page));
   const [inView, setInView] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const paperRef = useRef<HTMLDivElement>(null);
@@ -740,22 +746,44 @@ export function SampleAudit() {
     list.scrollTo({ left: target, behavior: "smooth" });
   }, [page]);
 
-  const go = (next: number, focusTab = false) => {
-    const n = (next + PAGES.length) % PAGES.length;
-    setPage(n);
-    if (focusTab) tabs.current[n]?.focus();
+  const keepInView = () => {
     // On phones the pages differ in height: keep the top of the new page in view.
     const top = paperRef.current?.getBoundingClientRect().top ?? 0;
     if (top < 0) paperRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
   };
 
+  /** Turn to a page by its place in the report; opens the full report if it is hidden. */
+  const show = (index: number) => {
+    if (!visible.includes(index)) setFull(true);
+    setPage(index);
+    keepInView();
+  };
+
+  /** Step through the visible pages. */
+  const go = (next: number, focusTab = false) => {
+    const k = (next + visible.length) % visible.length;
+    const n = visible[k] ?? 0;
+    setPage(n);
+    if (focusTab) tabs.current[k]?.focus();
+    keepInView();
+  };
+
+  const toggleFull = () => {
+    if (full) {
+      setFull(false);
+      if (!SHORT.includes(page)) setPage(0);
+    } else {
+      setFull(true);
+    }
+  };
+
   const onKey = (e: KeyboardEvent) => {
     if (e.key === "ArrowRight" || e.key === "ArrowDown") {
       e.preventDefault();
-      go(page + 1, true);
+      go(pos + 1, true);
     } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
       e.preventDefault();
-      go(page - 1, true);
+      go(pos - 1, true);
     }
   };
 
@@ -763,6 +791,7 @@ export function SampleAudit() {
   useEffect(() => {
     const open = () => {
       setInView(true);
+      setFull(true);
       setPage(METHOD);
       paperRef.current?.scrollIntoView({ block: "start", behavior: "smooth" });
     };
@@ -780,24 +809,38 @@ export function SampleAudit() {
           <em>Sample report</em>
         </span>
         <div role="tablist" aria-orientation="vertical" tabIndex={-1} onKeyDown={onKey}>
-          {PAGES.map((p, i) => (
-            <button
-              key={p.id}
-              ref={(b) => {
-                tabs.current[i] = b;
-              }}
-              role="tab"
-              id={`audit-tab-${p.id}`}
-              aria-selected={page === i}
-              aria-controls={`audit-page-${p.id}`}
-              tabIndex={page === i ? 0 : -1}
-              onClick={() => go(i)}
-            >
-              <span>{NUMERALS[i]}</span>
-              {p.title}
-            </button>
-          ))}
+          {visible.map((i, k) => {
+            const p = PAGES[i];
+            return (
+              <button
+                key={p.id}
+                ref={(b) => {
+                  tabs.current[k] = b;
+                }}
+                role="tab"
+                id={`audit-tab-${p.id}`}
+                aria-selected={page === i}
+                aria-controls={`audit-page-${p.id}`}
+                tabIndex={page === i ? 0 : -1}
+                onClick={() => go(k)}
+              >
+                <span>{NUMERALS[i]}</span>
+                {p.title}
+              </button>
+            );
+          })}
         </div>
+        <button type="button" className="audit-expand" aria-expanded={full} onClick={toggleFull}>
+          {full ? (
+            <>
+              Show the short version <em>2 pages</em>
+            </>
+          ) : (
+            <>
+              See how every number was built <em>All 6 pages</em>
+            </>
+          )}
+        </button>
         <p className="audit-rail-note">
           A modeled restaurant, not a client: {COVERS_PER_SERVICE} tickets a night, six nights a
           week, eight servers. Every figure is illustrative. Yours is built from your POS data and
@@ -817,29 +860,33 @@ export function SampleAudit() {
           id={`audit-page-${PAGES[page].id}`}
           aria-labelledby={`audit-tab-${PAGES[page].id}`}
         >
-          <ToMethod.Provider value={() => go(METHOD)}>
+          <ToMethod.Provider value={() => show(METHOD)}>
             <Page />
           </ToMethod.Provider>
         </section>
         <footer className="audit-foot">
           <button
             type="button"
-            onClick={() => go(page - 1)}
+            onClick={() => go(pos - 1)}
             aria-label="Previous page"
-            disabled={page === 0}
+            disabled={pos === 0}
           >
             <ArrowLeft size={14} />
           </button>
           <span className="audit-folio">
-            {page + 1} <em>/</em> {PAGES.length}
+            {pos + 1} <em>/</em> {visible.length}
           </span>
-          {page < PAGES.length - 1 ? (
-            <button type="button" className="audit-next" onClick={() => go(page + 1)}>
-              Next · {PAGES[page + 1].title} <ArrowRight size={14} />
+          {pos < visible.length - 1 ? (
+            <button type="button" className="audit-next" onClick={() => go(pos + 1)}>
+              Next · {PAGES[visible[pos + 1] ?? 0].title} <ArrowRight size={14} />
             </button>
-          ) : (
+          ) : full ? (
             <button type="button" className="audit-next" onClick={() => go(0)}>
               Back to the summary <ArrowRight size={14} />
+            </button>
+          ) : (
+            <button type="button" className="audit-next" onClick={() => show(1)}>
+              See how every number was built <ArrowRight size={14} />
             </button>
           )}
         </footer>

@@ -529,9 +529,9 @@ export default function Home() {
             </p>
             <ul className="hero-glance" aria-label="At a glance">
               <li>Six shifts</li>
-              <li>Two weeks of observation</li>
-              <li>Custom program</li>
-              <li>First year of platform access</li>
+              <li>A dollar figure on every gap</li>
+              <li>A custom program</li>
+              <li>A $150,000 guarantee</li>
             </ul>
             <div className="hero-actions">
               <button className="hero-cta" onClick={openInquiry}>
@@ -802,9 +802,9 @@ export default function Home() {
                 or on video, and walk through every page.
               </p>
               <p>
-                Page through the full sample report below. It is built for a modeled restaurant of
-                110 tickets a night, and the last page shows how every number was calculated. In
-                yours, every number comes from your own restaurant.
+                Below is the short version of a sample report: the summary and what to fix first,
+                for a modeled restaurant of 110 tickets a night. Open all six pages to see how every
+                number was built. In yours, every number comes from your own restaurant.
               </p>
               <dl className="deliverable-notes">
                 <div>
@@ -1148,59 +1148,14 @@ export default function Home() {
               <p className="owner-panel-note">Demo data · names and figures are fictional.</p>
             </figure>
           </div>
-          <div className="updates-view">
-            <div className="owner-view-copy">
-              <span className="small-index">V</span>
-              <h3>
-                Keep it current.
-                <em>When the standard moves, the platform moves with it.</em>
-              </h3>
-              <p>
-                Quarterly updates are included in the platform. Each quarter we can add whatever
-                your team needs to learn, read or sign off on next, so it all lives in one place and
-                every sign off is on record.
-              </p>
-            </div>
-            <ul className="updates-list">
-              <li>
-                <span className="updates-kind">Every quarter</span>
-                <b>Seasonal rollouts</b>
-                <span>
-                  New menus, new wines and seasonal service notes, built into modules and knowledge
-                  checks.
-                </span>
-              </li>
-              <li>
-                <span className="updates-kind">Every quarter</span>
-                <b>New standards</b>
-                <span>
-                  A standard that was never set out at the start but has recently become a problem,
-                  written up and trained.
-                </span>
-              </li>
-              <li>
-                <span className="updates-kind">Every quarter</span>
-                <b>New policies</b>
-                <span>
-                  A policy every server must read and sign off on, with each signature recorded.
-                </span>
-              </li>
-              <li className="is-feature">
-                <span className="updates-kind">Included in year one</span>
-                <b>Up to four further customizations</b>
-                <span>
-                  Beyond your original custom program. If something needs refining once it is live,
-                  we refine it.
-                </span>
-              </li>
-            </ul>
-          </div>
           <div className="tour-terms">
             <div>
               <span className="eyebrow">YEAR ONE</span>
               <p>
                 Included with the program, for every server, bartender and manager, and an owner
-                login for you. Up to <b>four further customizations</b> are included too.
+                login for you. Quarterly updates are included: seasonal rollouts, new standards and
+                new policies, each sign off on record. Up to <b>four further customizations</b> are
+                included too.
               </p>
             </div>
             <div>
