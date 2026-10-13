@@ -90,10 +90,18 @@ export function CinematicRoom() {
     const video = videoRef.current;
     if (!video || failed || phone) return;
     let onScreen = true;
+    let retry: ReturnType<typeof setTimeout> | undefined;
     const tryPlay = () => {
       if (userPaused.current || !onScreen || !video.paused) return;
       prepareForAutoplay(video);
-      void video.play().catch(() => setPlaying(false));
+      void video.play().catch((error: unknown) => {
+        setPlaying(false);
+        // A pause on scroll can interrupt a pending play(); try once more if still in view.
+        if (error instanceof DOMException && error.name === "AbortError") {
+          clearTimeout(retry);
+          retry = setTimeout(tryPlay, 300);
+        }
+      });
     };
     tryPlay();
 
@@ -103,8 +111,12 @@ export function CinematicRoom() {
       observer = new IntersectionObserver(
         ([entry]) => {
           onScreen = !!entry?.isIntersecting;
-          if (onScreen) tryPlay();
-          else if (!video.paused) video.pause();
+          clearTimeout(retry);
+          if (onScreen) {
+            tryPlay();
+            // Chrome can hold a muted film it paused off screen; nudge it once more.
+            retry = setTimeout(tryPlay, 400);
+          } else if (!video.paused) video.pause();
         },
         { threshold: 0.2 },
       );
@@ -117,6 +129,7 @@ export function CinematicRoom() {
     const onVisible = () => document.visibilityState === "visible" && tryPlay();
     document.addEventListener("visibilitychange", onVisible);
     return () => {
+      clearTimeout(retry);
       observer?.disconnect();
       for (const name of events) window.removeEventListener(name, tryPlay);
       document.removeEventListener("visibilitychange", onVisible);
@@ -172,7 +185,11 @@ export function CinematicRoom() {
           aria-label="Silent, illustrative evening dining film: a server in a black shirt, tie and white gloves pours red wine, wipes the mouth of the bottle with the serviette and drapes it back over his forearm, followed by two guests clinking and sipping red wine, a plate of prawn risotto, and a guest cutting into and tasting a steak"
           disablePictureInPicture
           tabIndex={-1}
-          onPlay={() => setPlaying(true)}
+          onPlay={(event) => {
+            // A pause the visitor chose holds, whatever else tries to resume the film.
+            if (userPaused.current) event.currentTarget.pause();
+            else setPlaying(true);
+          }}
           onPause={() => setPlaying(false)}
           onTimeUpdate={(event) => {
             const video = event.currentTarget;

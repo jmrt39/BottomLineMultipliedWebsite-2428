@@ -4,6 +4,7 @@ import { ArrowUpRight, ArrowRight, ArrowDown, X, Menu, Check, Minus, Plus } from
 import { CinematicRoom } from "../components/cinematic-room";
 import { TourFilm } from "../components/tour-film";
 import { OwnerQuestions } from "../components/owner-questions";
+import { isFounderOpen } from "../lib/founder";
 import { Fold, Interlude } from "../components/fold";
 import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
@@ -268,6 +269,7 @@ function Select<T extends string>({
 
 function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }) {
   const send = useMutation(createInquiryOptions());
+  const founderOpen = isFounderOpen();
   const dialogRef = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     const previous = document.activeElement as HTMLElement;
@@ -316,7 +318,7 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
               A few quick questions so our conversation is about your restaurant, not a pitch. If it
               isn’t a fit, I’ll tell you.
             </p>
-            {founder && (
+            {founder && founderOpen && (
               <p className="inquiry-founder">
                 You are asking about one of two founder places. It starts with the same
                 complimentary 20 minute consultation. Audits begin the week of November 16.
@@ -424,13 +426,15 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
                   defaultValue="yes"
                 />
               </div>
-              <label htmlFor="inquiry-founder">
-                Founder places
-                <select id="inquiry-founder" name="founder" defaultValue={founder ? "yes" : "no"}>
-                  <option value="yes">I would like to be considered for a founder place</option>
-                  <option value="no">Not for now</option>
-                </select>
-              </label>
+              {founderOpen && (
+                <label htmlFor="inquiry-founder">
+                  Founder places
+                  <select id="inquiry-founder" name="founder" defaultValue={founder ? "yes" : "no"}>
+                    <option value="yes">I would like to be considered for a founder place</option>
+                    <option value="no">Not for now</option>
+                  </select>
+                </label>
+              )}
               <label htmlFor="inquiry-message">
                 What would you most like to fix?
                 <textarea
@@ -461,6 +465,7 @@ export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [inquiry, setInquiry] = useState<false | "standard" | "founder">(false);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [founderOpen] = useState(() => isFounderOpen());
   const closeInquiry = useRef(() => setInquiry(false)).current;
   const siteRef = useRef<HTMLDivElement>(null);
   useReveal(siteRef, REVEAL_TARGETS);
@@ -671,24 +676,6 @@ export default function Home() {
               The $150,000 guarantee: if the report finds less, <em>you only pay for the audit</em>
             </li>
           </ul>
-          <aside className="founder-note" aria-labelledby="founder-note-title">
-            <span className="founder-note-mark">BY INVITATION · TWO FOUNDER RESTAURANTS</span>
-            <p className="founder-note-line" id="founder-note-title">
-              Two restaurants. <em>Their results, featured here.</em>
-            </p>
-            <p className="founder-note-sub">
-              The full program on founder terms for one location, in return for sharing your
-              results. Audits begin the week of November 16. Offered until both places are taken.
-            </p>
-            <div className="founder-note-actions">
-              <a className="founder-note-link" href="#founder">
-                Read the founder terms <ArrowRight size={15} />
-              </a>
-              <button className="fold-book" onClick={openFounder}>
-                Claim your founder place <ArrowUpRight size={16} />
-              </button>
-            </div>
-          </aside>
         </div>
 
         <Fold
@@ -804,6 +791,30 @@ export default function Home() {
             </div>
           </div>
         </Fold>
+
+        {founderOpen && (
+          <div className="founder-band section-shell">
+            <aside className="founder-note" aria-labelledby="founder-note-title">
+              <span className="founder-note-mark">TWO FOUNDER RESTAURANTS</span>
+              <p className="founder-note-line" id="founder-note-title">
+                Two restaurants. <em>Their results, featured here.</em>
+              </p>
+              <p className="founder-note-sub">
+                The full program for one location on founder terms, $10,000 less either way you pay,
+                in return for sharing your results. Audits begin the week of November 16. Offered
+                until both places are taken.
+              </p>
+              <div className="founder-note-actions">
+                <a className="founder-note-link" href="#founder">
+                  Read the founder terms <ArrowRight size={15} />
+                </a>
+                <button className="fold-book" onClick={openFounder}>
+                  Claim your founder place <ArrowUpRight size={16} />
+                </button>
+              </div>
+            </aside>
+          </div>
+        )}
 
         <Fold
           id="perspective"
@@ -1147,63 +1158,78 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="founder-card" id="founder">
-                <span className="eyebrow">THE FOUNDER INVITATION · TWO RESTAURANTS</span>
-                <h3>
-                  The full program, <em>on founder terms.</em>
-                </h3>
-                <p>
-                  Two restaurants will be the ones whose results are featured on this website. In
-                  return, their program is offered on founder terms. Audits begin the week of
-                  November&nbsp;16.
-                </p>
-                <div className="invest-options founder-options">
-                  <div>
-                    <span className="invest-option">Founder, two payments</span>
-                    <b>$65,000</b>
-                    <span>$32,500 when you sign on, $32,500 when the platform is handed over.</span>
+              {founderOpen && (
+                <div className="founder-card" id="founder">
+                  <span className="eyebrow">THE FOUNDER TERMS · TWO RESTAURANTS</span>
+                  <h3>
+                    The full program, <em>on founder terms.</em>
+                  </h3>
+                  <p>
+                    Two restaurants will be the ones whose results are featured on this website. In
+                    return, their program costs $10,000 less either way they pay. Audits begin the
+                    week of November&nbsp;16.
+                  </p>
+                  <div className="invest-options founder-options">
+                    <div>
+                      <span className="invest-option">Founder, two payments</span>
+                      <b>$65,000</b>
+                      <span>
+                        $32,500 when you sign on, $32,500 when the platform is handed over. The
+                        audit fee is waived, as when you commit before the audit. That is the
+                        standard paid in full price, in two payments.
+                      </span>
+                    </div>
+                    <div>
+                      <span className="invest-option">Founder, paid in full</span>
+                      <b>$55,000</b>
+                      <span>One payment when you sign on, before the audit begins.</span>
+                    </div>
                   </div>
-                  <div>
-                    <span className="invest-option">Founder, paid in full</span>
-                    <b>$45,000</b>
-                    <span>One payment when you sign on, before the audit begins.</span>
+                  <dl className="founder-terms">
+                    <div>
+                      <dt>In return</dt>
+                      <dd>
+                        I will share your results and quote you in marketing material and on this
+                        website. Named or anonymous: your choice.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Check in and references</dt>
+                      <dd>
+                        A 90 day results check in together, and up to two reference calls with
+                        prospective clients in year one.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>One location</dt>
+                      <dd>
+                        Founder terms cover one restaurant. Additional locations are quoted
+                        individually.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>The guarantee</dt>
+                      <dd>
+                        It applies in full, with $10,000 kept for the audit. Two payments: $22,500
+                        of your $32,500 comes back and the second payment is never due. Paid in
+                        full: $45,000 of your $55,000 comes back. You keep the report.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Places</dt>
+                      <dd>
+                        Two, offered until both are taken or November 16, whichever comes first.
+                      </dd>
+                    </div>
+                  </dl>
+                  <div className="founder-claim">
+                    <button className="fold-book" onClick={openFounder}>
+                      Claim your founder place <ArrowUpRight size={16} />
+                    </button>
+                    <span>It begins with a complimentary 20 minute consultation.</span>
                   </div>
                 </div>
-                <dl className="founder-terms">
-                  <div>
-                    <dt>In return</dt>
-                    <dd>
-                      I may share your results and quote you in marketing material and on this
-                      website. Named or anonymous: your choice.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>One location</dt>
-                    <dd>
-                      Founder terms cover one restaurant. Additional locations can be added at a
-                      preferred founder rate.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>The guarantee</dt>
-                    <dd>
-                      It applies in full, with $10,000 kept for the audit. Two payments: $22,500 of
-                      your $32,500 comes back and the second payment is never due. Paid in full:
-                      $35,000 of your $45,000 comes back. You keep the report.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Places</dt>
-                    <dd>Two, offered until both are taken.</dd>
-                  </div>
-                </dl>
-                <div className="founder-claim">
-                  <button className="fold-book" onClick={openFounder}>
-                    Claim your founder place <ArrowUpRight size={16} />
-                  </button>
-                  <span>It begins with a complimentary 20 minute consultation.</span>
-                </div>
-              </div>
+              )}
               <div className="invest-card">
                 <span className="eyebrow">THE AUDIT ONLY</span>
                 <div className="invest-price">
@@ -1247,7 +1273,8 @@ export default function Home() {
                       By rules fixed in your agreement before the first shift. Every input comes
                       from your own POS data and the six observed shifts, and every target comes
                       from your own restaurant (your best nights and your own top two servers),
-                      never an industry benchmark. We go through each line together at the debrief.
+                      never an industry benchmark. Your accountant can review every figure before
+                      the debrief, and we go through each line together.
                     </dd>
                   </div>
                   <div>
@@ -1326,8 +1353,12 @@ export default function Home() {
                     locations are quoted individually.
                   </p>
                   <p>
-                    Year one of the platform is included with the program. After the first year, the
-                    platform continues on a subscription basis.
+                    Year one of the platform is included with the program, for every server,
+                    bartender and manager, with an owner login for you. It includes quarterly
+                    updates (seasonal rollouts, new standards and new policies, each sign off on
+                    record) and up to four further customizations. Support is a one day platform
+                    training at launch, and technical support for as long as you use the platform.
+                    After the first year, the platform continues on a subscription basis.
                   </p>
                 </div>
               )}
@@ -1434,28 +1465,6 @@ export default function Home() {
               <p className="owner-panel-note">Demo data · names and figures are fictional.</p>
             </figure>
           </div>
-          <div className="tour-terms">
-            <div>
-              <span className="eyebrow">YEAR ONE</span>
-              <p>
-                Included with the program, for every server, bartender and manager, and an owner
-                login for you. Quarterly updates are included: seasonal rollouts, new standards and
-                new policies, each sign off on record. Up to <b>four further customizations</b> are
-                included too.
-              </p>
-            </div>
-            <div>
-              <span className="eyebrow">AFTER THE FIRST YEAR</span>
-              <p>The platform continues on a subscription basis.</p>
-            </div>
-            <div>
-              <span className="eyebrow">SUPPORT</span>
-              <p>
-                A one day platform training at launch, and technical support for as long as you use
-                the platform.
-              </p>
-            </div>
-          </div>
         </Fold>
 
         <Fold
@@ -1559,7 +1568,7 @@ export default function Home() {
           cta="Still have a question? Ask it on the call."
           {...foldProps("questions")}
         >
-          <OwnerQuestions />
+          <OwnerQuestions founder={founderOpen} />
         </Fold>
 
         <section className="culinary section-shell" aria-labelledby="culinary-title">
@@ -1638,9 +1647,11 @@ export default function Home() {
             <ArrowUpRight size={18} />
           </button>
           <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
-          <a className="closing-founder" href="#founder">
-            Two founder places, audits from the week of November 16. <em>Read the terms</em>
-          </a>
+          {founderOpen && (
+            <a className="closing-founder" href="#founder">
+              Two founder places, audits from the week of November 16. <em>Read the terms</em>
+            </a>
+          )}
         </section>
       </main>
       <footer className="footer section-shell">

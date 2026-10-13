@@ -8345,6 +8345,18 @@ select option {
     width: 34px;
     height: 34px;
   }
+  /* On phones the film is small: a compact pill, clear of the title card. */
+  .tour-play {
+    left: 8px;
+    bottom: 8px;
+    padding-right: 12px;
+  }
+  .tour-play-label {
+    display: none;
+  }
+  .tour-play em {
+    margin-left: 0;
+  }
 }
 .tour-film figcaption {
   margin-top: 10px;
@@ -8427,7 +8439,7 @@ select option {
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--accent);
-  padding: 12px 0;
+  padding: 22px 0 16px;
 }
 .fit-label {
   font-family: var(--display);
@@ -9451,7 +9463,7 @@ select option {
   }
   .fit-table .fit-yes,
   .fit-table .fit-no {
-    padding: 18px 18px 16px;
+    padding: 24px 20px 20px;
     border: 1px solid var(--rule);
   }
   .fit-yes {
@@ -9463,7 +9475,7 @@ select option {
   }
   .fit-tag {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-size: 9px;
     letter-spacing: 1.5px;
     line-height: 1.4;
@@ -10196,7 +10208,11 @@ select option {
   transition: none;
 }
 
-/* Founder restaurants: an invitation, not a promotion. */
+/* Founder restaurants: an invitation, not a promotion. It sits between Proof and Perspective. */
+.founder-band {
+  padding-top: 0;
+  padding-bottom: 48px;
+}
 .founder-note {
   flex: 1 1 100%;
   display: grid;

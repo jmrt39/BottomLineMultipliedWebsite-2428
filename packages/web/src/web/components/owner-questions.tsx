@@ -4,6 +4,14 @@ const chapters = [
   { title: "The platform", from: 8, to: 9 },
 ];
 
+/** Added to the pricing answers while the founder offer is on the site. */
+const FOUNDER_LINES: Record<string, string> = {
+  "Can I start with just the audit?":
+    "Founder restaurants commit before the audit, so the audit fee is waived: $65,000 in two payments or $55,000 paid in full, for one location.",
+  "What if I have more than one location?":
+    "Founder terms cover one restaurant; additional locations are quoted individually.",
+};
+
 const questions = [
   {
     question: "Can I start with just the audit?",
@@ -53,7 +61,7 @@ const questions = [
 ];
 
 /** The FAQ. The page wraps it in its own chapter. */
-export function OwnerQuestions() {
+export function OwnerQuestions({ founder = false }: { founder?: boolean }) {
   return (
     <div className="questions-layout">
       <div className="questions-heading">
@@ -84,7 +92,15 @@ export function OwnerQuestions() {
                     <span className="question-text">{question}</span>
                     <span className="question-mark" aria-hidden="true" />
                   </summary>
-                  <p>{answer}</p>
+                  <p>
+                    {answer}
+                    {founder && FOUNDER_LINES[question] && (
+                      <>
+                        {" "}
+                        <span className="question-founder">{FOUNDER_LINES[question]}</span>
+                      </>
+                    )}
+                  </p>
                 </details>
               );
             })}

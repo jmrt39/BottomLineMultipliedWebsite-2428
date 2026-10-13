@@ -31,12 +31,18 @@ export function TourFilm() {
           <track kind="captions" src="/videos/platform-demo-95s.vtt" srcLang="en" label="English" />
         </video>
         {!started && (
-          <button type="button" className="tour-play" onClick={start}>
+          <button
+            type="button"
+            className="tour-play"
+            onClick={start}
+            aria-label="Watch the tour, 1 minute 35 seconds"
+          >
             <span className="tour-play-icon" aria-hidden="true">
               <Play size={16} fill="currentColor" />
             </span>
-            <span>
-              Watch the tour <em>1:35</em>
+            <span aria-hidden="true">
+              <span className="tour-play-label">Watch the tour </span>
+              <em>1:35</em>
             </span>
           </button>
         )}
