@@ -3011,7 +3011,7 @@ select option {
   object-position: 50% 46%;
 }
 .course-lobster img {
-  object-position: 50% 0%;
+  object-position: 50% 28%;
 }
 .course-image {
   position: relative;
@@ -8244,6 +8244,67 @@ select option {
   background: #0d0d0c;
   border: 1px solid var(--rule);
 }
+.tour-stage {
+  position: relative;
+}
+.tour-play {
+  position: absolute;
+  left: 20px;
+  bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 6px 20px 6px 6px;
+  border: 1px solid rgba(197, 175, 135, 0.45);
+  border-radius: 999px;
+  background: rgba(13, 13, 12, 0.72);
+  color: #f1ede4;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
+}
+.tour-play:hover,
+.tour-play:focus-visible {
+  background: rgba(13, 13, 12, 0.9);
+  border-color: var(--accent);
+}
+.tour-play em {
+  font-style: normal;
+  color: var(--accent);
+  margin-left: 6px;
+}
+.tour-play-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #0d0d0c;
+}
+.tour-play-icon svg {
+  margin-left: 2px;
+}
+@media (max-width: 560px) {
+  .tour-play {
+    left: 10px;
+    bottom: 10px;
+    min-height: 44px;
+    padding: 4px 14px 4px 4px;
+    font-size: 10px;
+    gap: 9px;
+  }
+  .tour-play-icon {
+    width: 34px;
+    height: 34px;
+  }
+}
 .tour-film figcaption {
   margin-top: 10px;
   font-size: 10px;
@@ -9277,7 +9338,7 @@ select option {
   display: block;
 }
 .method-rail > .method-figure:last-child img {
-  object-position: 50% 78%;
+  object-position: 50% 30%;
 }
 .method-figure-inline {
   display: none;
@@ -9309,7 +9370,7 @@ select option {
     padding-top: 22px;
   }
   .method-item:last-child .method-figure-inline img {
-    object-position: 50% 72%;
+    object-position: 50% 34%;
   }
 }
 
@@ -9347,9 +9408,9 @@ select option {
     font-size: 22px;
     margin-bottom: 4px;
   }
-  .fit-yes,
-  .fit-no {
-    padding: 14px 16px;
+  .fit-table .fit-yes,
+  .fit-table .fit-no {
+    padding: 18px 18px 16px;
     border: 1px solid var(--rule);
   }
   .fit-yes {
@@ -9361,7 +9422,7 @@ select option {
   }
   .fit-tag {
     display: block;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     font-size: 9px;
     letter-spacing: 1.5px;
     line-height: 1.4;

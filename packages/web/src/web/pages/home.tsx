@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowUpRight, ArrowRight, ArrowDown, X, Menu, Check, Minus, Plus } from "lucide-react";
 import { CinematicRoom } from "../components/cinematic-room";
-import { AmbientClip } from "../components/ambient-clip";
+import { TourFilm } from "../components/tour-film";
 import { OwnerQuestions } from "../components/owner-questions";
 import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
@@ -66,7 +66,7 @@ const methods = [
     details: [
       "A written gap report: every gap, what it is worth a year, and the arithmetic",
       "Spend per ticket by server, from your POS data",
-      "A prioritised list of fixes",
+      "A prioritized list of fixes",
       "A debrief, in person or by video",
     ],
   },
@@ -76,7 +76,7 @@ const methods = [
     time: "WEEKS 3 TO 5",
     photo: {
       src: "/images/method-tablescape.webp",
-      alt: "A fine dining table set in white linen, with crystal stemware, folded napkins and a small green centrepiece, beside a tufted banquette",
+      alt: "A fine dining table set in white linen, with crystal stemware, folded napkins and a small green centerpiece, beside a tufted banquette",
     },
     description:
       "Your menu. Your people. Your gaps. The diagnosis becomes a custom training program, not a borrowed playbook, built for the way your restaurant should feel.",
@@ -92,8 +92,8 @@ const methods = [
     phase: "INSTALL",
     time: "WEEK 6, THEN THE FIRST YEAR",
     photo: {
-      src: "/images/method-gloved-service.webp",
-      alt: "A server in white gloves setting a plated course on a white linen table",
+      src: "/images/evening-chocolate-cake-natural.webp",
+      alt: "A slice of dark chocolate layer cake under a glossy ganache with a fleck of gold leaf, a quenelle of crème fraîche, raspberries and cocoa nibs on a matte white plate",
     },
     description:
       "Your program goes live on our platform. Your team learns, practices and is signed off on the floor. Managers finally have a system for coaching, not just scheduling.",
@@ -169,7 +169,7 @@ const reportChapters = [
   },
   {
     title: "What to fix first.",
-    body: "A prioritised list of fixes, each with what it is worth.",
+    body: "A prioritized list of fixes, each with what it is worth.",
   },
 ];
 
@@ -186,7 +186,7 @@ const fit = [
   },
   {
     label: "Dinner volume",
-    yes: "Roughly 60 tickets a night or more. At 60 tickets, five nights a week, $8 more per ticket recovers the fee in about a year.",
+    yes: "Roughly 75 tickets a night or more. At 75 tickets, five nights a week, $8 more per ticket adds $156,000 in sales a year and recovers the fee in about a year.",
     no: "Fewer tickets, where the numbers in the calculator above don’t work yet.",
   },
   {
@@ -725,8 +725,8 @@ export default function Home() {
             <div className="method-rail">
               <div className="method-photo">
                 <img
-                  src="/images/pristine-occupied-dining.webp"
-                  alt="Illustrative scene of an occupied, pristine fine dining restaurant with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
+                  src="/images/beef-tenderloin-medium-rare.webp"
+                  alt="Photograph of medium rare sliced beef tenderloin with dark jus, roasted potatoes under a light cream, microgreens and herb oil dots on an unobstructed white plate in low evening light"
                   loading="lazy"
                 />
                 <div className="method-photo-label">
@@ -974,6 +974,15 @@ export default function Home() {
                     </dd>
                   </div>
                   <div>
+                    <dt>How it is set</dt>
+                    <dd>
+                      By rules fixed in your agreement before the first shift. Every input comes
+                      from your own POS data and the six observed shifts, and every target comes
+                      from your own restaurant (your best nights and your own top two servers),
+                      never an industry benchmark. We go through each line together at the debrief.
+                    </dd>
+                  </div>
+                  <div>
                     <dt>Audit first</dt>
                     <dd>
                       You have paid $10,000 for the audit. You owe nothing more and keep the report.
@@ -1074,24 +1083,7 @@ export default function Home() {
               Here is the platform your program lives on, shown with a fictional demo restaurant.
             </p>
           </div>
-          <figure className="tour-film">
-            <video
-              src="/videos/platform-demo-95s.mp4"
-              poster="/images/platform-demo-poster.webp"
-              controls
-              playsInline
-              preload="none"
-              aria-label="Platform tour, 1 minute 35 seconds, music only"
-            >
-              <track
-                kind="captions"
-                src="/videos/platform-demo-95s.vtt"
-                srcLang="en"
-                label="English"
-              />
-            </video>
-            <figcaption>Demo data · staff names and figures are fictional.</figcaption>
-          </figure>
+          <TourFilm />
           <div className="lasting-grid">
             <div>
               <span className="small-index">I</span>
@@ -1312,8 +1304,8 @@ export default function Home() {
             <figure className="culinary-course course-scallops">
               <div className="course-image">
                 <img
-                  src="/images/beef-tenderloin-medium-rare.webp"
-                  alt="Photograph of medium rare sliced beef tenderloin with dark jus, roasted potatoes under a light cream, microgreens and herb oil dots on an unobstructed white plate in low evening light"
+                  src="/images/method-gloved-service.webp"
+                  alt="A server in white gloves setting a plated course on a white linen table"
                   loading="lazy"
                 />
               </div>
@@ -1325,14 +1317,9 @@ export default function Home() {
             <figure className="culinary-course course-lobster">
               <div className="course-image">
                 <img
-                  src="/images/guests-laughing-real-v1.webp"
-                  alt="Guests framed below the eyes: a woman in a black dress smiles over a raised glass of champagne in a wood panelled restaurant"
+                  src="/images/guest-served-pexels-3717879.webp"
+                  alt="A smiling guest in a black top looks up as a server in a white shirt sets down her plate"
                   loading="lazy"
-                />
-                <AmbientClip
-                  src="/videos/guests-laughing-real-v1.mp4"
-                  poster="/images/guests-laughing-real-v1-poster.webp"
-                  label="Silent loop of real guests framed below the eyes: a woman in a black dress smiles over champagne, then a man laughs as glasses meet in a toast"
                 />
               </div>
               <figcaption>
@@ -1343,8 +1330,8 @@ export default function Home() {
             <figure className="culinary-course course-duck">
               <div className="course-image">
                 <img
-                  src="/images/evening-chocolate-cake-natural.webp"
-                  alt="Illustrative plated dessert in soft window light: a tall slice of dark chocolate layer cake under a glossy ganache with a fleck of gold leaf, a quenelle of crème fraîche, raspberries and cocoa nibs on a matte white plate"
+                  src="/images/pristine-occupied-dining.webp"
+                  alt="Illustrative scene of an occupied, pristine fine dining restaurant with elegantly dressed guests, attentive black suited service, full ivory linen, polished crystal and cream upholstery"
                   loading="lazy"
                 />
               </div>

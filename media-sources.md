@@ -140,3 +140,7 @@ These are illustrative dining-room photographs, not claims that the pictured est
 
 ## Hero film v11 (evening-film-v11.mp4)
 - Pour: one uncut Kling 3.0 Pro image to video take (10s, no audio) from keyframe-v10.png, prompt written by the client: the napkin draped over the server's forearm wipes the bottle mouth in one smooth motion and goes back on the arm. Frames 0 to 239, then a 0.6s fade at 9.4s into the v9 food sequence (from frame 237). 1344x768, 24fps, 18.417s.
+
+## 2026-10-12 photo swap
+- Method rail: 01 is now `images/beef-tenderloin-medium-rare.webp`, 03 is `images/evening-chocolate-cake-natural.webp`. Culinary gallery: 01 CRAFT is `images/method-gloved-service.webp`, 03 REPUTATION is `images/pristine-occupied-dining.webp`.
+- **"Felt at every table." tile** replaced: real stock photo, Pexels 3717879, "Waitress serving food fro the customer", Pexels License, https://www.pexels.com/photo/waitress-serving-food-fro-the-customer-3717879/. Resized to 1200×1500, slight tone down → `images/guest-served-pexels-3717879.webp`. Stock models, not clients. The ambient loop (`videos/guests-laughing-real-v1.mp4`) is no longer referenced.

@@ -1,7 +1,7 @@
 const chapters = [
-  { title: "The audit", from: 0, to: 5 },
-  { title: "The program", from: 5, to: 11 },
-  { title: "The platform", from: 11, to: 14 },
+  { title: "The audit", from: 0, to: 6 },
+  { title: "The program", from: 6, to: 12 },
+  { title: "The platform", from: 12, to: 15 },
 ];
 
 const questions = [
@@ -26,6 +26,11 @@ const questions = [
       "Yes, hired through your normal process. We sign an agreement first that covers pay, tips, insurance and confidentiality.",
   },
   {
+    question: "When does my team find out?",
+    answer:
+      "When you choose, and I recommend before the program is built. I tell them myself, and I frame it as what it is: a look at the system and the training they were given, not a review of anyone personally. Server level figures stay with you and your managers.",
+  },
+  {
     question: "How long does it take?",
     answer:
       "5 to 6 weeks from the first audit shift to launch. Weeks 1 and 2 on your floor. The gap report and debrief follow, then your program is built, installed on the platform, and your team and managers are trained on it.",
@@ -43,7 +48,7 @@ const questions = [
   {
     question: "What is the guarantee?",
     answer:
-      "If the written report finds less than $150,000 in recoverable annual revenue, you only pay for the audit. Audit first: you have paid $10,000 and owe nothing more. Committed in two payments: $27,500 of your $37,500 comes back and the second payment is never due. Paid in full: $55,000 of your $65,000 comes back. You keep the report either way. With two locations the $150,000 test applies to each restaurant separately. It covers what the report identifies, not results after training. Recoverable annual revenue is the yearly total of added sales and cost savings the report ties to specific, fixable gaps, each calculated from your POS data and the six observed shifts, with the arithmetic shown so you can check it.",
+      "If the written report finds less than $150,000 in recoverable annual revenue, you only pay for the audit. Audit first: you have paid $10,000 and owe nothing more. Committed in two payments: $27,500 of your $37,500 comes back and the second payment is never due. Paid in full: $55,000 of your $65,000 comes back. You keep the report either way. With two locations the $150,000 test applies to each restaurant separately. It covers what the report identifies, not results after training. Recoverable annual revenue is the yearly total of added sales and cost savings the report ties to specific, fixable gaps, each calculated from your POS data and the six observed shifts, with the arithmetic shown so you can check it. The rules for every figure are fixed in your agreement before the first shift, and we go through each line together at the debrief.",
   },
   {
     question: "What's included?",
