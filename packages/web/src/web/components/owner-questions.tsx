@@ -52,54 +52,45 @@ const questions = [
   },
 ];
 
+/** The FAQ. The page wraps it in its own chapter. */
 export function OwnerQuestions() {
   return (
-    <section
-      className="owner-questions section-shell"
-      id="questions"
-      aria-labelledby="questions-title"
-    >
-      <div className="section-label">
-        <span className="eyebrow">09 / BEFORE WE BEGIN</span>
-        <span className="eyebrow">THE DETAILS MATTER.</span>
+    <div className="questions-layout">
+      <div className="questions-heading">
+        <h2 id="questions-title">
+          The questions
+          <br />
+          <em>owners ask first.</em>
+        </h2>
+        <p>Supporting detail: the commitment, the work, and what comes next.</p>
       </div>
-      <div className="questions-layout">
-        <div className="questions-heading">
-          <h2 id="questions-title">
-            The questions
-            <br />
-            <em>owners ask first.</em>
-          </h2>
-          <p>Supporting detail: the commitment, the work, and what comes next.</p>
-        </div>
-        <div className="questions-list">
-          {chapters.map((chapter, chapterIndex) => (
-            <div className="question-chapter" key={chapter.title}>
-              <div className="chapter-label">
-                <span>{["I", "II", "III"][chapterIndex]}</span>
-                {chapter.title}
-              </div>
-              {questions.slice(chapter.from, chapter.to).map(({ question, answer }, offset) => {
-                const index = chapter.from + offset;
-                return (
-                  <details
-                    className="question-item"
-                    key={question}
-                    open={index === 0 ? true : undefined}
-                  >
-                    <summary>
-                      <span className="question-number">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="question-text">{question}</span>
-                      <span className="question-mark" aria-hidden="true" />
-                    </summary>
-                    <p>{answer}</p>
-                  </details>
-                );
-              })}
+      <div className="questions-list">
+        {chapters.map((chapter, chapterIndex) => (
+          <div className="question-chapter" key={chapter.title}>
+            <div className="chapter-label">
+              <span>{["I", "II", "III"][chapterIndex]}</span>
+              {chapter.title}
             </div>
-          ))}
-        </div>
+            {questions.slice(chapter.from, chapter.to).map(({ question, answer }, offset) => {
+              const index = chapter.from + offset;
+              return (
+                <details
+                  className="question-item"
+                  key={question}
+                  open={index === 0 ? true : undefined}
+                >
+                  <summary>
+                    <span className="question-number">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="question-text">{question}</span>
+                    <span className="question-mark" aria-hidden="true" />
+                  </summary>
+                  <p>{answer}</p>
+                </details>
+              );
+            })}
+          </div>
+        ))}
       </div>
-    </section>
+    </div>
   );
 }

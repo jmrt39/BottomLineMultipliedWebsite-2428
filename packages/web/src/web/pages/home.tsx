@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowUpRight, ArrowRight, ArrowDown, X, Menu, Check, Minus, Plus } from "lucide-react";
 import { CinematicRoom } from "../components/cinematic-room";
 import { TourFilm } from "../components/tour-film";
 import { OwnerQuestions } from "../components/owner-questions";
+import { Fold, Interlude } from "../components/fold";
 import { PaybackCalculator } from "../components/payback-calculator";
 import { SampleAudit } from "../components/audit/sample-audit";
 import { useReveal } from "../hooks/use-reveal";
@@ -13,48 +14,45 @@ import { createInquiryOptions } from "../queries/inquiries";
 const PLATFORM_URL: string =
   import.meta.env.VITE_PLATFORM_URL ?? "https://theplat-hjcx7ui-preview-4200.runable.site/";
 
-// Everything below the hero eases in as it scrolls into view.
+// Everything outside the chapters eases in as it scrolls into view. Chapter content
+// has its own entrance when it opens.
 const REVEAL_TARGETS = [
-  ".proof-heading > *",
-  ".proof-story > *",
-  ".proof-results > div",
-  ".proof-facts",
+  ".interlude-frame",
+  ".interlude-caption",
   ".culinary-intro > div > *",
   ".culinary-intro > p",
   ".culinary-course",
   ".culinary-signoff",
-  ".section-label",
-  ".perspective-grid > h2",
-  ".perspective-copy > *",
-  ".perspective-bottom",
-  ".section-heading > *",
-  ".method-photo",
-  ".method-figure",
-  ".method-item",
-  ".method-signoff",
-  ".revenue-layout > div:first-child > *",
-  ".calculator",
-  ".tour-heading > *",
-  ".tour-film",
-  ".lasting-grid > div",
-  ".owner-view-copy > *",
-  ".owner-panel",
-  ".tour-terms > div",
-  ".investment-grid > div:first-child > *",
-  ".invest-card",
-  ".guarantee",
-  ".deliverable-heading > *",
-  ".deliverable-intro > *",
-  ".audit-viewer",
-  ".report-contents > .eyebrow",
-  ".report-chapter",
-  ".fit-heading > *",
-  ".fit-row",
-  ".questions-heading > *",
-  ".question-chapter",
   ".closing > *",
   ".footer-top > *",
 ];
+
+// The chapters of the home page, in order. Each opens on its own; one at a time.
+const FOLDS = [
+  "proof",
+  "perspective",
+  "approach",
+  "deliverable",
+  "opportunity",
+  "investment",
+  "tour",
+  "fit",
+  "questions",
+] as const;
+type FoldId = (typeof FOLDS)[number];
+const isFold = (id: string): id is FoldId => (FOLDS as readonly string[]).includes(id);
+
+const TABS: readonly (readonly [FoldId, string])[] = [
+  ["proof", "Meet Andrea"],
+  ["approach", "The method"],
+  ["deliverable", "Sample audit"],
+  ["opportunity", "Your numbers"],
+  ["investment", "Investment"],
+  ["tour", "Platform demo"],
+  ["fit", "Is it a fit"],
+  ["questions", "Questions"],
+];
+const HEADER_TABS: FoldId[] = ["proof", "approach", "deliverable", "tour", "investment"];
 
 const methods = [
   {
@@ -452,20 +450,80 @@ export default function Home() {
     setMobileMenu(false);
     setInquiry(true);
   };
-  const nav = [
-    ["#proof", "The proof"],
-    ["#approach", "The method"],
-    ["#deliverable", "Sample audit"],
-    ["#investment", "The investment"],
-  ] as const;
+  const nav = TABS.filter(([id]) => HEADER_TABS.includes(id));
+
+  // Which chapter is open, and how the page should move once it renders.
+  const [openFold, setOpenFold] = useState<FoldId | null>(null);
+  const openRef = useRef<FoldId | null>(null);
+  openRef.current = openFold;
+  const move = useRef<{ id: FoldId; mode: "anchor" | "scroll" | "head"; top: number } | null>(null);
+  const show = useCallback((id: FoldId, mode: "anchor" | "scroll") => {
+    const el = document.getElementById(id);
+    if (mode === "scroll") history.replaceState(null, "", `#${id}`);
+    if (openRef.current === id) {
+      if (mode === "scroll") el?.scrollIntoView({ block: "start", behavior: "smooth" });
+      return;
+    }
+    move.current = { id, mode, top: el?.getBoundingClientRect().top ?? 0 };
+    setOpenFold(id);
+  }, []);
+  const close = (id: FoldId, toHead: boolean) => {
+    move.current = toHead ? { id, mode: "head", top: 0 } : null;
+    setOpenFold(null);
+  };
+  useLayoutEffect(() => {
+    const m = move.current;
+    move.current = null;
+    const el = m && document.getElementById(m.id);
+    if (!m || !el) return;
+    if (m.mode === "anchor") {
+      // A chapter above may have just closed: keep the one you clicked where it was.
+      const shift = el.getBoundingClientRect().top - m.top;
+      if (Math.abs(shift) > 1) window.scrollBy({ top: shift, behavior: "instant" });
+    } else if (m.mode === "head") {
+      if (el.getBoundingClientRect().top < 0)
+        el.scrollIntoView({ block: "start", behavior: "instant" });
+    } else {
+      el.scrollIntoView({ block: "start", behavior: "smooth" });
+    }
+  }, [openFold]);
+  // Any link to a chapter, anywhere on the page or in the address bar, opens it.
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      const link = (e.target as Element | null)?.closest?.("a[href^='#']");
+      const id = link?.getAttribute("href")?.slice(1) ?? "";
+      if (!isFold(id)) return;
+      e.preventDefault();
+      setMobileMenu(false);
+      show(id, "scroll");
+    };
+    const fromHash = () => {
+      const id = decodeURIComponent(location.hash.slice(1));
+      if (isFold(id)) show(id, "scroll");
+    };
+    document.addEventListener("click", onClick);
+    window.addEventListener("hashchange", fromHash);
+    fromHash();
+    return () => {
+      document.removeEventListener("click", onClick);
+      window.removeEventListener("hashchange", fromHash);
+    };
+  }, [show]);
+  const foldProps = (id: FoldId) => ({
+    open: openFold === id,
+    onToggle: () => (openFold === id ? close(id, false) : show(id, "anchor")),
+    onClose: () => close(id, true),
+    onBook: openInquiry,
+  });
 
   return (
     <div className="site theme-noir selected-noir" id="top" ref={siteRef}>
       <header className="header">
         <Wordmark />
         <nav aria-label="Main navigation">
-          {nav.map(([href, label]) => (
-            <a key={href} href={href}>
+          {nav.map(([id, label]) => (
+            <a key={id} href={`#${id}`}>
               {label}
             </a>
           ))}
@@ -489,14 +547,11 @@ export default function Home() {
       </header>
       {mobileMenu && (
         <nav className="mobile-nav">
-          {nav.map(([href, label]) => (
-            <a key={href} href={href} onClick={() => setMobileMenu(false)}>
+          {TABS.map(([id, label]) => (
+            <a key={id} href={`#${id}`} onClick={() => setMobileMenu(false)}>
               {label}
             </a>
           ))}
-          <a href="#tour" onClick={() => setMobileMenu(false)}>
-            Platform tour
-          </a>
           <a href={PLATFORM_URL} rel="noopener" onClick={() => setMobileMenu(false)}>
             Client sign in
           </a>
@@ -550,18 +605,53 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="proof section-shell" id="proof" aria-labelledby="proof-title">
-          <div className="section-label">
-            <span className="eyebrow">01 / THE PROOF</span>
-            <span className="eyebrow">ONE RESTAURANT. ONE YEAR.</span>
+        <nav className="tabbar" aria-label="Chapters">
+          <div className="tabbar-inner">
+            <ul className="tabbar-tabs">
+              {TABS.map(([id, label]) => (
+                <li key={id}>
+                  <a href={`#${id}`} aria-current={openFold === id ? "true" : undefined}>
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <button className="tabbar-book" onClick={openInquiry}>
+              <span className="tabbar-book-long">Book your consultation</span>
+              <span className="tabbar-book-short">Book</span>
+              <ArrowUpRight size={15} />
+            </button>
           </div>
+        </nav>
+
+        <div className="chapters-intro section-shell">
+          <p className="chapters-hint">
+            <span className="eyebrow">NINE CHAPTERS</span>
+            Open the one you came for. Each takes a minute or two.
+          </p>
+          <ul className="assurance" aria-label="Before you book">
+            <li>A complimentary 20 minute consultation</li>
+            <li>No obligation</li>
+            <li>
+              The $150,000 guarantee: if the report finds less, <em>you only pay for the audit</em>
+            </li>
+          </ul>
+        </div>
+
+        <Fold
+          id="proof"
+          number="01"
+          label="THE PROOF"
+          kicker="ONE RESTAURANT. ONE YEAR."
+          headline="$68 to $84."
+          promise="Same menu, one year later."
+          action="See how"
+          className="proof"
+          cta="What could your own average ticket become? Let’s find out, in 20 minutes."
+          {...foldProps("proof")}
+        >
           <div className="proof-grid">
             <div className="proof-heading">
-              <h2 id="proof-title">
-                $68 to $84.
-                <br />
-                <em>Same menu, one year later.</em>
-              </h2>
               <figure className="proof-founder">
                 <img
                   src="/images/andrea-martin.webp"
@@ -660,13 +750,20 @@ export default function Home() {
               </a>
             </div>
           </div>
-        </section>
+        </Fold>
 
-        <section className="perspective section-shell" id="perspective">
-          <div className="section-label">
-            <span className="eyebrow">02 / THE OWNER’S BLIND SPOT</span>
-            <span className="small-motif">×</span>
-          </div>
+        <Fold
+          id="perspective"
+          number="02"
+          label="THE OWNER’S BLIND SPOT"
+          kicker="WHAT NEVER REACHES YOUR DESK"
+          headline="None of it reaches your desk."
+          promise="All of it reaches your bottom line."
+          action="See what I mean"
+          className="perspective"
+          cta="Twenty minutes, no obligation. Tell me about your floor."
+          {...foldProps("perspective")}
+        >
           <div className="perspective-grid">
             <h2>
               You know what
@@ -703,13 +800,31 @@ export default function Home() {
               FINE DINING RESTAURANTS AND UPSCALE HOTEL BARS. ONE UNCOMPROMISING STANDARD.
             </span>
           </div>
-        </section>
+        </Fold>
 
-        <section className="approach section-shell" id="approach">
-          <div className="section-label">
-            <span className="eyebrow">03 / THE METHOD</span>
-            <span className="eyebrow">DIAGNOSE. BUILD. INSTALL. ABOUT 6 WEEKS.</span>
-          </div>
+        <Interlude
+          kind="band"
+          images={[
+            {
+              src: "/images/band-before-doors.webp",
+              alt: "Illustrative still from the platform demo film: a manager in a gray jacket arrives in a wood paneled dining room as a server sets up behind him, tables dressed in white linen",
+            },
+          ]}
+          caption={["Before the doors open.", "The standard is set long before the first guest."]}
+        />
+
+        <Fold
+          id="approach"
+          number="03"
+          label="THE METHOD"
+          kicker="DIAGNOSE. BUILD. INSTALL. ABOUT 6 WEEKS."
+          headline="Six shifts on your floor."
+          promise="Every gap priced in dollars."
+          action="See the method"
+          className="approach"
+          cta="Your first shift starts with a 20 minute conversation. Reserve your audit dates on the call."
+          {...foldProps("approach")}
+        >
           <div className="section-heading">
             <h2>
               Three steps.
@@ -780,13 +895,20 @@ export default function Home() {
               the first year, the platform continues on a subscription basis.
             </p>
           </div>
-        </section>
+        </Fold>
 
-        <section className="deliverable section-shell" id="deliverable">
-          <div className="section-label">
-            <span className="eyebrow">04 / A SAMPLE AUDIT</span>
-            <span className="eyebrow">MODELED FIGURES · NOT A CLIENT</span>
-          </div>
+        <Fold
+          id="deliverable"
+          number="04"
+          label="A SAMPLE AUDIT"
+          kicker="MODELED FIGURES · NOT A CLIENT"
+          headline="Read the report"
+          promise="before you commit to anything."
+          action="Open the sample audit"
+          className="deliverable"
+          cta="Your own report, priced from your own POS data, starts with one call."
+          {...foldProps("deliverable")}
+        >
           <div className="deliverable-grid">
             <div className="deliverable-heading">
               <h2>
@@ -837,13 +959,42 @@ export default function Home() {
               ))}
             </ol>
           </div>
-        </section>
+        </Fold>
 
-        <section className="revenue section-shell" id="opportunity">
-          <div className="section-label">
-            <span className="eyebrow">05 / RUN YOUR OWN NUMBERS</span>
-            <span className="eyebrow">A SCENARIO MODEL, NOT A PROMISE</span>
-          </div>
+        <Interlude
+          kind="trio"
+          images={[
+            {
+              src: "/images/still-set-by-hand.webp",
+              alt: "Illustrative still from the platform demo film: a manager straightens a place setting on a white linen table",
+              label: "Set by hand.",
+            },
+            {
+              src: "/images/still-graded-on-floor.webp",
+              alt: "Illustrative still from the platform demo film: a smiling server rings in an order at the POS while her manager checks it beside her",
+              label: "Checked on the floor.",
+            },
+            {
+              src: "/images/still-napkins.webp",
+              alt: "Illustrative still from the platform demo film: a server and a colleague fold napkins together at the bar, both smiling",
+              label: "Practiced together.",
+            },
+          ]}
+          caption={["Three habits.", "Trained, practiced and signed off, shift after shift."]}
+        />
+
+        <Fold
+          id="opportunity"
+          number="05"
+          label="RUN YOUR OWN NUMBERS"
+          kicker="A SCENARIO MODEL, NOT A PROMISE"
+          headline="What is $8 a ticket worth"
+          promise="to your restaurant?"
+          action="Run your numbers"
+          className="revenue"
+          cta="Bring these numbers to your consultation and we’ll test them against your POS."
+          {...foldProps("opportunity")}
+        >
           <div className="revenue-layout">
             <div>
               <h2>
@@ -877,13 +1028,20 @@ export default function Home() {
             </div>
             <PaybackCalculator />
           </div>
-        </section>
+        </Fold>
 
-        <section className="investment section-shell" id="investment">
-          <div className="section-label">
-            <span className="eyebrow">06 / THE INVESTMENT</span>
-            <span className="eyebrow">ONE PROGRAM. THREE WAYS TO START.</span>
-          </div>
+        <Fold
+          id="investment"
+          number="06"
+          label="THE INVESTMENT"
+          kicker="ONE PROGRAM. THREE WAYS TO START."
+          headline="Less than $150,000 found?"
+          promise="You only pay for the audit."
+          action="See the investment"
+          className="investment"
+          cta="Start with a complimentary 20 minute consultation. No obligation."
+          {...foldProps("investment")}
+        >
           <div className="investment-grid">
             <div>
               <h2>
@@ -1065,13 +1223,31 @@ export default function Home() {
               )}
             </div>
           </div>
-        </section>
+        </Fold>
 
-        <section className="tour section-shell" id="tour" aria-labelledby="tour-title">
-          <div className="section-label">
-            <span className="eyebrow">07 / THE PLATFORM TOUR</span>
-            <span className="eyebrow">95 SECONDS · NO LOGIN NEEDED</span>
-          </div>
+        <Interlude
+          kind="band"
+          images={[
+            {
+              src: "/images/band-last-table.webp",
+              alt: "Illustrative still from the platform demo film: two staff smooth a fresh white cloth over a round table in a lamplit dining room",
+            },
+          ]}
+          caption={["The last table of the night.", "Dressed exactly like the first."]}
+        />
+
+        <Fold
+          id="tour"
+          number="07"
+          label="THE PLATFORM DEMO"
+          kicker="95 SECONDS · NO LOGIN NEEDED"
+          headline="The standard holds"
+          promise="even when you’re not watching."
+          action="Watch the demo"
+          className="tour"
+          cta="See the platform built around your menu, your team and your standard."
+          {...foldProps("tour")}
+        >
           <div className="tour-heading">
             <h2 id="tour-title">
               The work continues.
@@ -1170,13 +1346,19 @@ export default function Home() {
               </p>
             </div>
           </div>
-        </section>
+        </Fold>
 
-        <section className="fit section-shell" id="fit" aria-labelledby="fit-title">
-          <div className="section-label">
-            <span className="eyebrow">08 / WHO THIS FITS</span>
-            <span className="eyebrow">AN HONEST CHECK BEFORE WE TALK</span>
-          </div>
+        <Fold
+          id="fit"
+          number="08"
+          label="WHO THIS FITS"
+          kicker="AN HONEST CHECK BEFORE WE TALK"
+          headline="This is not for every restaurant."
+          promise="Is it right for yours?"
+          action="Check the fit"
+          className="fit"
+          {...foldProps("fit")}
+        >
           <div className="fit-heading">
             <h2 id="fit-title">
               Right for some restaurants.
@@ -1236,9 +1418,39 @@ export default function Home() {
             Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
             <ArrowUpRight size={18} />
           </button>
-        </section>
+        </Fold>
 
-        <OwnerQuestions />
+        <Interlude
+          kind="pair"
+          images={[
+            {
+              src: "/images/still-the-room.webp",
+              alt: "Illustrative still from the platform demo film: a manager stands in a wood paneled dining room set for service, under a chandelier",
+              label: "Seen by the owner.",
+            },
+            {
+              src: "/images/still-after-hours.webp",
+              alt: "Illustrative still from the platform demo film: after close, a server clears a bin of white flowers from a sideboard",
+              label: "Held after close.",
+            },
+          ]}
+          caption={["Whoever is working.", "Whether or not you are watching."]}
+        />
+
+        <Fold
+          id="questions"
+          number="09"
+          label="BEFORE WE BEGIN"
+          kicker="THE DETAILS MATTER."
+          headline="Am I really an employee?"
+          promise="And eight more questions owners ask first."
+          action="Read the answers"
+          className="owner-questions"
+          cta="Still have a question? Ask it on the call."
+          {...foldProps("questions")}
+        >
+          <OwnerQuestions />
+        </Fold>
 
         <section className="culinary section-shell" aria-labelledby="culinary-title">
           <div className="culinary-intro">

@@ -1,5 +1,12 @@
 # White-linen refinement — media sources
 
+## Chapter interludes: stills from the platform demo film (illustrative)
+- Source: public/videos/platform-demo-v3.mp4, the AI generated platform demo footage (fictional demo restaurant setting). Not client photography and not a real restaurant.
+- Frames g8, g20, g23, g146, g155, g158 and h59 extracted with ffmpeg; work files in /home/user/stills/. No new generation calls.
+- Installed in public/images: band-before-doors.webp, band-last-table.webp, still-set-by-hand.webp, still-graded-on-floor.webp (clean crop of h59, 1200 x 900, UI overlay removed by cropping only), still-napkins.webp, still-the-room.webp, still-after-hours.webp.
+- Every interlude on the home page carries the visible label "Stills from the platform demo film · illustrative". Removed still-closed-to-standard.webp (unused).
+- Fonts: public/fonts/bodoni-600-normal.woff2 and bodoni-600-italic.woff2, Bodoni Moda latin subset from Google Fonts (SIL Open Font License), for the chapter headlines.
+
 ## Owner-supplied logo
 - Source: /home/user/Attachments/B5B204CC-710A-49C5-8C5A-E6894412FEA1_IdsltK.png, black-and-gold monogram.
 - Original archived unchanged as public/images/blm-logo-original.png.
