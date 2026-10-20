@@ -4095,6 +4095,13 @@ select option {
   font-size: 20px;
   color: var(--a-soft);
 }
+.ap-figure-guarantee {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--a-soft);
+}
 .ap-pull {
   margin: 0 0 6px;
   padding-left: 28px;
@@ -8174,6 +8181,11 @@ select option {
 .invest-price .price {
   font-size: 40px;
 }
+.invest-card .invest-price-note {
+  margin: -2px 0 12px;
+  font-size: 12px;
+  line-height: 1.55;
+}
 .invest-card p {
   color: var(--muted);
 }
@@ -8623,6 +8635,9 @@ select option {
 
 /* Hero fits the first screen on small phones */
 @media (max-width: 560px) {
+  .selected-noir .hero-noir .hero-content {
+    padding-bottom: 106px;
+  }
   .hero .hero-content > p {
     line-height: 1.75;
   }

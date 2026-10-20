@@ -626,7 +626,7 @@ export default function Home() {
               <li>Six shifts</li>
               <li>A dollar figure on every gap</li>
               <li>A custom program</li>
-              <li>A $150,000 guarantee</li>
+              <li>A guarantee tied to your sales</li>
             </ul>
             <div className="hero-actions">
               <button className="hero-cta" onClick={openInquiry}>
@@ -673,7 +673,8 @@ export default function Home() {
             <li>A complimentary 20 minute consultation</li>
             <li>No obligation</li>
             <li>
-              The $150,000 guarantee: if the report finds less, <em>you only pay for the audit</em>
+              The guarantee: if the report finds less than 5% of your annual sales,{" "}
+              <em>you only pay for the audit</em>
             </li>
           </ul>
         </div>
@@ -1099,7 +1100,7 @@ export default function Home() {
           number="06"
           label="THE INVESTMENT"
           kicker="ONE PROGRAM. THREE WAYS TO START."
-          headline="Less than $150,000 found?"
+          headline="Find less than 5% of your sales?"
           promise="You only pay for the audit."
           action="See the investment"
           className="investment"
@@ -1127,8 +1128,12 @@ export default function Home() {
                 <span className="eyebrow">THE FULL PROGRAM · ONE LOCATION</span>
                 <div className="invest-price">
                   <h3>Diagnose. Build. Install.</h3>
-                  <span className="price">$85,000</span>
+                  <span className="price">From $85,000</span>
                 </div>
+                <p className="invest-price-note">
+                  Your final program fee is confirmed on your consultation, based on the size of
+                  your operation.
+                </p>
                 <p>
                   The audit and gap report, the debrief, your custom training program, the first
                   year of the platform, a one day platform training for staff and managers, and
@@ -1247,7 +1252,7 @@ export default function Home() {
               <div className="guarantee">
                 <span className="eyebrow">THE GUARANTEE</span>
                 <h3>
-                  If the report finds less than $150,000 of recoverable revenue available,
+                  If the report finds less than 5% of your annual sales in recoverable revenue,
                   <em> you only pay for the audit.</em>
                 </h3>
                 <dl>
@@ -1270,11 +1275,21 @@ export default function Home() {
                   <div>
                     <dt>How it is set</dt>
                     <dd>
+                      Your guarantee is 5% of your net sales for the last 12 months, confirmed from
+                      your own POS export and written into your agreement before the first shift.
                       By rules fixed in your agreement before the first shift. Every input comes
                       from your own POS data and the six observed shifts, and every target comes
                       from your own restaurant (your best nights and your own top two servers),
                       never an industry benchmark. Your accountant can review every figure before
                       the debrief, and we go through each line together.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Fit check</dt>
+                    <dd>
+                      After you sign, you send a 90 day POS export. We confirm your sales and your
+                      guarantee amount before the first shift. If the numbers don’t support
+                      the program, your deposit is returned in full.
                     </dd>
                   </div>
                   <div>
@@ -1297,8 +1312,8 @@ export default function Home() {
                   <div>
                     <dt>Two locations</dt>
                     <dd>
-                      The same rule for each location: $150,000 of recoverable revenue per
-                      restaurant, with $10,000 kept for each audit.
+                      The same rule for each location: 5% of that restaurant’s own annual
+                      sales, with $10,000 kept for each audit.
                     </dd>
                   </div>
                   <div>
@@ -1335,15 +1350,15 @@ export default function Home() {
                     <tbody>
                       <tr>
                         <th scope="row">One location</th>
-                        <td>$85,000</td>
-                        <td>$75,000</td>
-                        <td>$65,000</td>
+                        <td>From $85,000</td>
+                        <td>From $75,000</td>
+                        <td>From $65,000</td>
                       </tr>
                       <tr>
                         <th scope="row">Two locations</th>
-                        <td>$140,000</td>
-                        <td>$120,000</td>
-                        <td>$100,000</td>
+                        <td>From $140,000</td>
+                        <td>From $120,000</td>
+                        <td>From $100,000</td>
                       </tr>
                     </tbody>
                   </table>

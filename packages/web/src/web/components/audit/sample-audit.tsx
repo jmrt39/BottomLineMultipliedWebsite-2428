@@ -129,6 +129,9 @@ function Summary() {
         <div className="ap-hero-figure">
           <span className="ap-figure">{usd(TOTAL)}</span>
           <span className="ap-figure-note">estimated, every year</span>
+          <span className="ap-figure-guarantee">
+            This model finds 9.4% of annual sales. Our guarantee starts at 5%.
+          </span>
         </div>
         <blockquote className="ap-pull">
           Two of your eight servers already average {cents(BENCH)} a ticket. The other six average{" "}
