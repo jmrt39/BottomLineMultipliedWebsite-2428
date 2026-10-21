@@ -1289,7 +1289,8 @@ export default function Home() {
                     <dd>
                       After you sign, you send a 90 day POS export. We confirm your sales and your
                       guarantee amount before the first shift. If the numbers don’t support
-                      the program, your deposit is returned in full.
+                      the program, everything you’ve paid beyond the $10,000 audit fee is
+                      returned in full.
                     </dd>
                   </div>
                   <div>
