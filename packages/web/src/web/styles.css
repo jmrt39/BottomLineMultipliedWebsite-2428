@@ -10425,3 +10425,80 @@ select option {
     gap: 4px;
   }
 }
+
+/* 03 Investment: recoverable revenue defined under the guarantee headline */
+.guarantee-def {
+  margin: -4px 0 18px;
+  max-width: 560px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* 07 Platform: the rest of the modules */
+.platform-more {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 56px;
+  align-items: start;
+  margin-bottom: 56px;
+  padding-top: 48px;
+  border-top: 1px solid var(--rule);
+}
+.platform-more-head h3 {
+  margin-top: 15px;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: 34px;
+  line-height: 1.15;
+}
+.platform-more-head h3 em {
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+  color: var(--accent);
+}
+.platform-more ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+.platform-more li {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.platform-more li span {
+  padding-top: 3px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.platform-more li p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+@media (max-width: 900px) {
+  .platform-more {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+@media (max-width: 560px) {
+  .platform-more-head h3 {
+    font-size: 28px;
+  }
+  .platform-more-head h3 em {
+    font-size: 20px;
+  }
+  .platform-more li {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}

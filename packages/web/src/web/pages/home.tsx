@@ -103,8 +103,33 @@ const methods = [
       "A one day platform training for your staff and managers",
       "Monthly sales reports by server, against the audit starting point",
       "An owner login that shows everything still outstanding, by manager, new hire and server",
+      "Guest feedback and recognition tied to each team member",
       "Technical support for as long as you use the platform",
     ],
+  },
+];
+
+// The rest of the platform, as shown in the demo film.
+const platformMore = [
+  {
+    title: "Guest feedback",
+    body: "Post visit survey quotes, each tied to the team member the guest names. The best are read aloud at pre shift and kept on the profile.",
+  },
+  {
+    title: "Recognition and rewards",
+    body: "Every server’s average sale from your POS against a monthly target, with the rewards they are working toward and who has earned them.",
+  },
+  {
+    title: "Checklists",
+    body: "Glassware, silverware and end of shift checklists, with every sign off on record.",
+  },
+  {
+    title: "Add a Colleague",
+    body: "A new hire enters the same program on day one, with the same modules, checks and sign offs, at no extra cost.",
+  },
+  {
+    title: "Seasonal updates",
+    body: "New menus, standards and policies rolled out to the whole team, with each sign off on record.",
   },
 ];
 
@@ -187,7 +212,7 @@ const fit = [
   },
   {
     label: "Dinner volume",
-    yes: "Roughly 75 tickets a night or more. At 75 tickets, five nights a week, $8 more per ticket adds $156,000 in sales a year and recovers the fee in about a year.",
+    yes: "Roughly 100 tickets a night or more, about $2 million or more in annual sales. At 100 tickets, five nights a week, $8 more per ticket adds $208,000 in sales a year and recovers the $85,000 fee in under eight months.",
     no: "Fewer tickets, where the numbers in the calculator above don’t work yet.",
   },
   {
@@ -1255,6 +1280,11 @@ export default function Home() {
                   If the report finds less than 5% of your annual sales in recoverable revenue,
                   <em> you only pay for the audit.</em>
                 </h3>
+                <p className="guarantee-def">
+                  Recoverable revenue is more than added sales. It is the yearly total of added
+                  sales plus the comps and overpour the report shows you can stop giving away, each
+                  tied to a specific, fixable gap.
+                </p>
                 <dl>
                   <div>
                     <dt>What it covers</dt>
@@ -1275,9 +1305,10 @@ export default function Home() {
                   <div>
                     <dt>How it is set</dt>
                     <dd>
-                      Your guarantee is 5% of your net sales for the last 12 months, confirmed from
-                      your own POS export and written into your agreement before the first shift.
-                      By rules fixed in your agreement before the first shift. Every input comes
+                      Your guarantee is 5% of your actual net sales for the last 12 months, taken
+                      from your own POS and written into your agreement before the first shift.
+                      Nothing is annualized from a shorter period. The report follows rules fixed
+                      in that agreement: every input comes
                       from your own POS data and the six observed shifts, and every target comes
                       from your own restaurant (your best nights and your own top two servers),
                       never an industry benchmark. Your accountant can review every figure before
@@ -1287,8 +1318,10 @@ export default function Home() {
                   <div>
                     <dt>Fit check</dt>
                     <dd>
-                      After you sign, you send a 90 day POS export. We confirm your sales and your
-                      guarantee amount before the first shift. If the numbers don’t support
+                      After you sign, you send two POS exports: net sales for the last 12 months,
+                      which set your guarantee amount, and 90 days of sales by server, which set
+                      each server’s starting point. We confirm both before the first shift. If the
+                      numbers don’t support
                       the program, everything you’ve paid beyond the $10,000 audit fee is
                       returned in full.
                     </dd>
@@ -1480,6 +1513,23 @@ export default function Home() {
               </ul>
               <p className="owner-panel-note">Demo data · names and figures are fictional.</p>
             </figure>
+          </div>
+          <div className="platform-more">
+            <div className="platform-more-head">
+              <span className="small-index">V</span>
+              <h3>
+                Also in the platform.
+                <em>Shown in the demo above.</em>
+              </h3>
+            </div>
+            <ul>
+              {platformMore.map((m) => (
+                <li key={m.title}>
+                  <span>{m.title}</span>
+                  <p>{m.body}</p>
+                </li>
+              ))}
+            </ul>
           </div>
         </Fold>
 

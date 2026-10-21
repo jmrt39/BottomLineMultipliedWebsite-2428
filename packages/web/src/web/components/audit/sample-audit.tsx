@@ -335,7 +335,7 @@ function BottomLine() {
         index={4}
         kicker="The bottom line"
         title="From the floor to the bottom line."
-        lede="Rent and salaries are already paid. Added sales carry only their cost of goods and card fees, so most of every recovered dollar reaches the bottom line. We call that estimated contribution."
+        lede="Rent and salaries are already paid. Added sales carry only their cost of goods and card fees, so most of every recovered dollar reaches the bottom line. We call that estimated contribution. Every figure on this page is before tax and any added labor."
       />
       <div className="ap-ledger">
         <figure className="ap-ledger-block" aria-label="Annual sales recovered to profit kept">
@@ -388,7 +388,10 @@ function BottomLine() {
               <strong className="ap-lg-value">{usd(PROFIT_NOW + PROFIT)}</strong>
             </li>
           </ul>
-          <p className="ap-lg-note">Nearly double, in this model. Same restaurant, same rent.</p>
+          <p className="ap-lg-note">
+            Nearly double, in this model, before tax and any added labor. Same restaurant, same
+            rent.
+          </p>
         </figure>
       </div>
       <dl className="ap-stats ap-stats-foot">
@@ -660,7 +663,8 @@ function HowBuilt() {
         <p className="ap-mt-text">
           Rent and salaries are already paid, so an added sale only carries its cost of goods and
           card fees. Comps and overpour are kept in full: the food and liquor are already bought,
-          and the restaurant simply stops giving them away.
+          and the restaurant simply stops giving them away. Every figure here is before tax and any
+          added labor.
         </p>
       </Step>
 
