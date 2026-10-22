@@ -1,5 +1,10 @@
 # White-linen refinement — media sources
 
+## 2026-10-22: hero film back to v8 (owner's choice)
+- The owner chose v8 (`videos/evening-film-v8.mp4`, built 2026-10-06) over v11 after comparing every pour version. In v11 the gloved hand dabbed the bottle three times instead of one sweep with the draped napkin. No new generation.
+- Phones get `images/hero-phone-v8.avif` (460 x 768, 24fps) and `images/hero-phone-v8.webp` (345 x 576, 15fps), cut from v8 with its original focal points (68/60/84/72% until 9.1/12.1/15.1/18.1 s). Build script: `/home/user/phonefilm-v8/build.sh`.
+- v9, v10 and v11 files remain in `videos/` but are no longer referenced.
+
 ## Phone hero film: animated image cut from evening-film-v11.mp4
 - Phones (max width 800px) no longer load a <video> in the hero, so no browser can open it fullscreen or in a floating window while scrolling. They get public/images/hero-phone-v11.avif (460 x 768, 24fps, 18.4s, ~850 KB, SVT-AV1) with public/images/hero-phone-v11.webp (345 x 576, 15fps, ~2 MB) as fallback.
 - Both cut with ffmpeg from public/videos/evening-film-v11.mp4 using the same per shot focal points the phone crop already used (68/54/60/84/72%). No new generation. Wider screens keep the video, which now also leaves any fullscreen or picture in picture it is pushed into and falls back to the still.
