@@ -104,7 +104,9 @@ function Player() {
         <em>1906 Bar &amp; Grille · demo film</em>
       </header>
       <video
-        src={`/videos/${film.file}.mp4`}
+        src={film.file === "platform-demo-v3"
+              ? "https://media.bottomlinemultiplied.com/videos/platform-demo-v3.mp4"
+              : `/videos/${film.file}.mp4`}
         poster="/images/platform-demo-poster.webp"
         controls
         playsInline
