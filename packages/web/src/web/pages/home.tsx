@@ -117,7 +117,7 @@ const platformMore = [
   },
   {
     title: "Recognition and rewards",
-    body: "Every server’s average sale from your POS against a monthly target, with the rewards they are working toward and who has earned them.",
+    body: "Every server’s average sale from your POS against a monthly target, with the rewards they are working toward and who has earned them. Sections and shifts are never a reward.",
   },
   {
     title: "Checklists",
@@ -130,6 +130,30 @@ const platformMore = [
   {
     title: "Seasonal updates",
     body: "New menus, standards and policies rolled out to the whole team, with each sign off on record.",
+  },
+];
+
+// The core promise of the platform, in the order it runs.
+const coreLoop: [string, string][] = [
+  ["Find the gap", "The audit puts a dollar figure on each one."],
+  ["Teach the behavior", "Modules and scripts built from your menu."],
+  ["Verify execution", "Managers sign off each skill on the floor."],
+  ["Measure change", "Monthly sales by server, against the audit."],
+  ["Coach and reward", "Coaching from the numbers; rewards for the result."],
+];
+
+const platformRules = [
+  {
+    title: "Your policies, configured per restaurant",
+    body: "Conduct, attendance and uniform policies are yours, set up for your restaurant. The platform keeps the record; it applies no policy of its own. Every consequential decision about a team member is made and approved by a manager, never by the platform.",
+  },
+  {
+    title: "Coaching, opportunity and rewards, kept separate",
+    body: "Three separate decisions. Coaching goes first to whoever is furthest from target. Sections and shifts are assigned by your managers under your own scheduling rules, and are never a reward. Rewards are earned against a stated target that everyone on the team can reach.",
+  },
+  {
+    title: "Proven before onboarding",
+    body: "Before your team goes live, I demonstrate each promised capability with you on your own setup: private records and access restrictions by role, a failed import and how it is caught, a data correction, and a backup restored.",
   },
 ];
 
@@ -187,7 +211,7 @@ const reportChapters = [
   },
   {
     title: "Where money slips out.",
-    body: "Comps, voids, discounts and items never rung in; pour consistency and bar leakage; check delivery, closing out tables and end of shift side work; sections, staffing and tickets per server.",
+    body: "Comps, voids, price reductions and items never rung in; pour consistency and bar leakage; check delivery, closing out tables and end of shift side work; sections, staffing and tickets per server.",
   },
   {
     title: "What your numbers say.",
@@ -212,7 +236,7 @@ const fit = [
   },
   {
     label: "Dinner volume",
-    yes: "Roughly 100 tickets a night or more, about $2 million or more in annual sales. At 100 tickets, five nights a week, $8 more per ticket adds $208,000 in sales a year and recovers the $85,000 fee in under eight months.",
+    yes: "Roughly 100 tickets a night or more, about $2 million or more in annual sales. At 100 tickets, five nights a week, $8 more per ticket adds $208,000 in sales a year. After $6,000 a year in team rewards, $4,000 of training time and six months to full adoption, it recovers the $85,000 fee in about 11 months from launch.",
     no: "Fewer tickets, where the numbers in the calculator above don’t work yet.",
   },
   {
@@ -292,6 +316,63 @@ function Select<T extends string>({
   );
 }
 
+/** The founder engagement, defined again on the inquiry form. */
+function FounderTerms({ asking = false }: { asking?: boolean }) {
+  const body = (
+    <dl className="inquiry-founder-terms">
+      <div>
+        <dt>What it is</dt>
+        <dd>
+          A separate, limited offer: the full program for one location at $10,000 less than the
+          precommitment package price.
+        </dd>
+      </div>
+      <div>
+        <dt>The price</dt>
+        <dd>
+          $65,000 in two payments ($32,500 when you sign on, $32,500 when the platform is handed
+          over), or $55,000 paid in full before the audit begins.
+        </dd>
+      </div>
+      <div>
+        <dt>In return</dt>
+        <dd>
+          Your results are shared and you are quoted on this website and in marketing material,
+          named or anonymous, your choice. A 90 day results check in, and up to two reference calls
+          with prospective clients in year one.
+        </dd>
+      </div>
+      <div>
+        <dt>The guarantee</dt>
+        <dd>The Audit Opportunity Guarantee applies in full, with $10,000 kept for the audit.</dd>
+      </div>
+      <div>
+        <dt>Dates and places</dt>
+        <dd>
+          Two restaurants, one location each. Audits begin the week of December 15. Offered until
+          both places are taken or December 15, whichever comes first.
+        </dd>
+      </div>
+    </dl>
+  );
+  if (asking)
+    return (
+      <div className="inquiry-founder">
+        <p>
+          You are asking about one of two founder places. It starts with the same complimentary 20
+          minute consultation.
+        </p>
+        {body}
+      </div>
+    );
+  return (
+    <details className="inquiry-founder is-collapsed">
+      <summary>What the founder engagement is</summary>
+      {body}
+    </details>
+  );
+}
+
 function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }) {
   const send = useMutation(createInquiryOptions());
   const founderOpen = isFounderOpen();
@@ -318,7 +399,9 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
           <X size={22} />
         </button>
         <span className="eyebrow">
-          {founder ? "A FOUNDER PLACE · TWO RESTAURANTS" : "A COMPLIMENTARY 20 MINUTE CONSULTATION"}
+          {founder
+            ? "THE FOUNDER ENGAGEMENT · TWO RESTAURANTS"
+            : "A COMPLIMENTARY 20 MINUTE CONSULTATION"}
         </span>
         <h2 id="inquiry-title">
           Let’s see if
@@ -343,12 +426,7 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
               A few quick questions so our conversation is about your restaurant, not a pitch. If it
               isn’t a fit, I’ll tell you.
             </p>
-            {founder && founderOpen && (
-              <p className="inquiry-founder">
-                You are asking about one of two founder places. It starts with the same
-                complimentary 20 minute consultation. Audits begin the week of November 16.
-              </p>
-            )}
+            {founder && founderOpen && <FounderTerms asking />}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -452,13 +530,18 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
                 />
               </div>
               {founderOpen && (
-                <label htmlFor="inquiry-founder">
-                  Founder places
-                  <select id="inquiry-founder" name="founder" defaultValue={founder ? "yes" : "no"}>
-                    <option value="yes">I would like to be considered for a founder place</option>
-                    <option value="no">Not for now</option>
-                  </select>
-                </label>
+                <>
+                  <label htmlFor="inquiry-founder">
+                    The founder engagement
+                    <select id="inquiry-founder" name="founder" defaultValue={founder ? "yes" : "no"}>
+                      <option value="yes">
+                        I would like to be considered for a founder place
+                      </option>
+                      <option value="no">Not for now</option>
+                    </select>
+                  </label>
+                  {!founder && <FounderTerms />}
+                </>
               )}
               <label htmlFor="inquiry-message">
                 What would you most like to fix?
@@ -490,6 +573,7 @@ export default function Home() {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [inquiry, setInquiry] = useState<false | "standard" | "founder">(false);
   const [termsOpen, setTermsOpen] = useState(false);
+  const [guaranteeOpen, setGuaranteeOpen] = useState(false);
   const [founderOpen] = useState(() => isFounderOpen());
   const closeInquiry = useRef(() => setInquiry(false)).current;
   const siteRef = useRef<HTMLDivElement>(null);
@@ -651,7 +735,7 @@ export default function Home() {
               <li>Six shifts</li>
               <li>A dollar figure on every gap</li>
               <li>A custom program</li>
-              <li>A guarantee tied to your sales</li>
+              <li>The Audit Opportunity Guarantee</li>
             </ul>
             <div className="hero-actions">
               <button className="hero-cta" onClick={openInquiry}>
@@ -698,7 +782,8 @@ export default function Home() {
             <li>A complimentary 20 minute consultation</li>
             <li>No obligation</li>
             <li>
-              The guarantee: if the report finds less than 5% of your annual sales,{" "}
+              The Audit Opportunity Guarantee: if the audit identifies less than 5% of your annual
+              net sales in modeled opportunity,{" "}
               <em>you only pay for the audit</em>
             </li>
           </ul>
@@ -708,7 +793,7 @@ export default function Home() {
           id="proof"
           number="01"
           label="THE PROOF"
-          kicker="ONE RESTAURANT. ONE YEAR."
+          kicker="HISTORICAL RESULT · ONE RESTAURANT"
           headline="$68 to $84."
           promise="Same menu, one year later."
           action="See how"
@@ -753,13 +838,20 @@ export default function Home() {
               </div>
             </div>
             <div className="proof-panel">
+              <p className="proof-kind">
+                <b>Historical result</b> From one restaurant’s own POS. Not a model, and not the
+                sample audit.
+              </p>
               <div className="proof-results">
                 <div>
                   <span className="proof-label">Average ticket</span>
                   <span className="proof-figure">
                     $68 <em>to</em> $84
                   </span>
-                  <span className="proof-note">Up $16, about 24%, over one year</span>
+                  <span className="proof-note">
+                    Up $16, about 24%, over one year. Net sales divided by checks, before tax and
+                    tips.
+                  </span>
                 </div>
                 <div>
                   <span className="proof-label">Regional rank, total food & beverage revenue</span>
@@ -783,8 +875,23 @@ export default function Home() {
                   <dd>2 full time bartenders, 4 full time servers, 6 part time servers</dd>
                 </div>
                 <div>
+                  <dt>Average ticket</dt>
+                  <dd>Net sales divided by the number of checks, before tax and tips, from the POS</dd>
+                </div>
+                <div>
+                  <dt>My role</dt>
+                  <dd>
+                    A server on the team. I wrote the standard for myself; management then trained
+                    it to every server and bartender
+                  </dd>
+                </div>
+                <div>
                   <dt>What changed</dt>
                   <dd>One written service standard, trained to every member of the team</dd>
+                </div>
+                <div>
+                  <dt>What did not</dt>
+                  <dd>Menu prices, volume, staffing and menu mix: no changes during the year</dd>
                 </div>
                 <div>
                   <dt>How long</dt>
@@ -792,9 +899,9 @@ export default function Home() {
                 </div>
               </dl>
               <p className="proof-caveat">
-                One restaurant’s result, shared as evidence of the method. No meaningful changes to
-                menu prices during the year. It is not a forecast for yours; your report prices your
-                own restaurant.
+                One restaurant’s result, shared as evidence of the method. Its POS records are
+                confidential to that restaurant and cannot be shared. It is not a forecast for
+                yours; your report prices your own restaurant.
               </p>
             </div>
           </div>
@@ -821,14 +928,15 @@ export default function Home() {
         {founderOpen && (
           <div className="founder-band section-shell">
             <aside className="founder-note" aria-labelledby="founder-note-title">
-              <span className="founder-note-mark">TWO FOUNDER RESTAURANTS</span>
+              <span className="founder-note-mark">THE FOUNDER ENGAGEMENT · TWO RESTAURANTS</span>
               <p className="founder-note-line" id="founder-note-title">
                 Two restaurants. <em>Their results, featured here.</em>
               </p>
               <p className="founder-note-sub">
-                The full program for one location on founder terms, $10,000 less either way you pay,
-                in return for sharing your results. Audits begin the week of November 16. Offered
-                until both places are taken.
+                A separate, limited offer: the full program for one location at $10,000 less than
+                the precommitment package price, either way you pay, in return for sharing your
+                results. Audits begin the week of December 15. Offered until both places are taken
+                or December 15.
               </p>
               <div className="founder-note-actions">
                 <a className="founder-note-link" href="#founder">
@@ -1093,13 +1201,15 @@ export default function Home() {
                 <em>Three honest scenarios.</em>
               </h2>
               <p>
-                Set your tickets, your nights and the added spend per ticket you think is realistic.
-                The model shows a conservative case at half your estimate and a higher case at one
-                and a half times.
+                Set your tickets, your nights and the added spend per ticket you think is realistic,
+                then your own costs: team rewards, paid training time, anything else the program
+                adds, and how many months your team takes to adopt it. The model shows a
+                conservative case at half your estimate and a higher case at one and a half times.
               </p>
               <p>
                 Every result is <b>estimated contribution</b>: added sales less cost of goods and
-                card fees, the part that reaches your bottom line. Not sales, and not a guarantee.
+                card fees, the part that reaches your bottom line. Payback and the first year also
+                take off the costs you enter. Not sales, and not a guarantee.
               </p>
               <dl className="revenue-key">
                 <div>
@@ -1112,7 +1222,10 @@ export default function Home() {
                 </div>
                 <div>
                   <dt>Fee recovered</dt>
-                  <dd>When a year of contribution, month by month, adds up to the fee.</dd>
+                  <dd>
+                    When contribution, month by month as adoption builds, less your costs, adds up
+                    to the fee and training time.
+                  </dd>
                 </div>
               </dl>
             </div>
@@ -1124,7 +1237,7 @@ export default function Home() {
           id="investment"
           number="06"
           label="THE INVESTMENT"
-          kicker="ONE PROGRAM. THREE WAYS TO START."
+          kicker="ONE PROGRAM. TWO WAYS TO START."
           headline="Find less than 5% of your sales?"
           promise="You only pay for the audit."
           action="See the investment"
@@ -1140,8 +1253,8 @@ export default function Home() {
                 <em>Then close it.</em>
               </h2>
               <p>
-                Start with a complimentary 20 minute consultation. Audit first and see the evidence
-                before you commit, or commit from the start and pay less.
+                Two ways to start. Pay for the audit, read the report, then decide. Or commit to
+                implementation from the start, under terms written down before the first shift.
               </p>
               <button className="text-link" onClick={openInquiry}>
                 Book your complimentary consultation &amp; reserve your audit&nbsp;dates{" "}
@@ -1149,6 +1262,37 @@ export default function Home() {
               </button>
             </div>
             <div className="invest-cards">
+              <div className="invest-paths" aria-label="Two ways to start">
+                <div className="invest-path">
+                  <span className="invest-path-step">PATH ONE</span>
+                  <h3>Start with the audit</h3>
+                  <span className="invest-path-price">$10,000</span>
+                  <p>
+                    Pay $10,000, receive the report, then decide. Six shifts over two weeks, a
+                    written gap report with the arithmetic shown, a breakdown by server and a
+                    debrief. $5,000 secures your dates (nonrefundable) and $5,000 is due when the
+                    report is delivered. You keep the report and owe nothing more.
+                  </p>
+                  <span className="invest-path-then">
+                    If you go on, the program is $75,000. $85,000 all in.
+                  </span>
+                </div>
+                <div className="invest-path is-commit">
+                  <span className="invest-path-step">PATH TWO</span>
+                  <h3>Commit to implementation</h3>
+                  <span className="invest-path-price">
+                    From $75,000 <em>Precommitment package price</em>
+                  </span>
+                  <p>
+                    The defined audit to launch program in one agreement: the audit and report, your
+                    custom training program, the platform installed and trained, and its first
+                    year. The Audit Opportunity Guarantee applies.
+                  </p>
+                  <span className="invest-path-then">
+                    $65,000 if paid in full before the audit begins.
+                  </span>
+                </div>
+              </div>
               <div className="invest-card is-main">
                 <span className="eyebrow">THE FULL PROGRAM · ONE LOCATION</span>
                 <div className="invest-price">
@@ -1157,16 +1301,17 @@ export default function Home() {
                 </div>
                 <p className="invest-price-note">
                   Your final program fee is confirmed on your consultation, based on the size of
-                  your operation.
+                  your operation, and written into your agreement.
                 </p>
                 <p>
                   The audit and gap report, the debrief, your custom training program, the first
                   year of the platform, a one day platform training for staff and managers, and
                   technical support.
                 </p>
+                <span className="invest-pay-title">HOW TO PAY</span>
                 <div className="invest-options is-three">
                   <div>
-                    <span className="invest-option">Audit first</span>
+                    <span className="invest-option">Start with the audit</span>
                     <b>$85,000</b>
                     <span>
                       $10,000 for the audit, then $75,000 for the program: half when you sign on,
@@ -1174,39 +1319,168 @@ export default function Home() {
                     </span>
                   </div>
                   <div>
-                    <span className="invest-option">Commit before the audit</span>
+                    <span className="invest-option">Precommitment, two payments</span>
                     <b>$75,000</b>
                     <span>
-                      The audit fee is waived. Two payments: $37,500 when you sign on, $37,500 when
-                      the platform is handed over.
+                      The precommitment package price. $37,500 when you sign on, $37,500 when the
+                      platform is handed over.
                     </span>
                   </div>
                   <div>
-                    <span className="invest-option">Commit and pay in full</span>
+                    <span className="invest-option">Precommitment, paid in full</span>
                     <b>$65,000</b>
                     <span>One payment before the audit begins. $20,000 less than audit first.</span>
                   </div>
                 </div>
+                <p className="invest-renewal">
+                  <b>After year one.</b> The platform continues on a subscription basis. The year two
+                  rate is written into your agreement before you sign, so you know it before you
+                  buy.
+                </p>
+              </div>
+              <div className="guarantee">
+                <span className="eyebrow">THE AUDIT OPPORTUNITY GUARANTEE</span>
+                <h3>
+                  If the audit identifies less than 5% of your annual net sales in modeled annual
+                  improvement opportunity, <em>you are not committed to the remaining program fee.</em>
+                </h3>
+                <p className="guarantee-def">
+                  You keep the audit report. This is a diagnostic threshold, not a guarantee of
+                  realized results.
+                </p>
+                <dl>
+                  <div>
+                    <dt>Started with the audit</dt>
+                    <dd>
+                      You have paid $10,000 for the audit. You owe nothing more and keep the report.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Precommitted, two payments</dt>
+                    <dd>
+                      You have paid $37,500. $27,500 comes back, the second payment is never due,
+                      and you keep the report.
+                    </dd>
+                  </div>
+                  <div>
+                    <dt>Precommitted, paid in full</dt>
+                    <dd>You have paid $65,000. $55,000 comes back, and you keep the report.</dd>
+                  </div>
+                  <div>
+                    <dt>When</dt>
+                    <dd>Decided at the debrief, before your program is built.</dd>
+                  </div>
+                </dl>
+                <button
+                  className="guarantee-toggle"
+                  onClick={() => setGuaranteeOpen(!guaranteeOpen)}
+                  aria-expanded={guaranteeOpen}
+                >
+                  How the threshold is tested{" "}
+                  {guaranteeOpen ? <Minus size={16} /> : <Plus size={16} />}
+                </button>
+                {guaranteeOpen && (
+                  <dl className="guarantee-terms">
+                    <div>
+                      <dt>The threshold</dt>
+                      <dd>
+                        5% of your actual net sales for the last 12 months, taken from your own POS
+                        and written into your agreement before the first shift. Nothing is
+                        annualized from a shorter period.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>What counts</dt>
+                      <dd>
+                        Modeled annual improvement opportunity: the yearly total of added sales and
+                        cost savings the report ties to specific, fixable gaps seen on the six
+                        shifts. Each is valued by what actually changes: a comp collected counts its
+                        price, a remake prevented counts only its cost of goods, and product not used
+                        counts at cost.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Assumptions sheet</dt>
+                      <dd>
+                        Before the first shift, you and I agree a written assumptions sheet: cost
+                        of goods, card fees, nights open, tickets, and how each type of finding is
+                        valued. The report cannot change it.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Exclusions</dt>
+                      <dd>
+                        Left out of the count, and listed in the report: price increases, new menu
+                        items, anything not seen on the six shifts, and any gap you and I agree
+                        cannot be fixed by training.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Conservative case</dt>
+                      <dd>
+                        The threshold is tested on the report’s conservative case, never the
+                        expected or higher case. Each server’s target closes only half the
+                        distance to your own top two, never an industry benchmark.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Like for like</dt>
+                      <dd>
+                        Before assigning a target, we review whether differences reflect service
+                        behavior or different selling opportunities: party size, section, daypart,
+                        private events, comps and price reductions on the check, and shift mix.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Disputed inputs</dt>
+                      <dd>
+                        Your accountant can review every figure before the debrief. Any input you
+                        dispute in writing is settled from your POS records; if it cannot be
+                        settled, the lower figure is used.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Fit check</dt>
+                      <dd>
+                        After you sign, you send two POS exports: net sales for the last 12 months,
+                        which set the threshold, and 90 days of sales by server, which set each
+                        server’s starting point. We confirm both before the first shift. If the
+                        numbers don’t support the program, everything you’ve paid beyond the
+                        $10,000 audit fee is returned in full.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Two locations</dt>
+                      <dd>
+                        The same rule for each location: 5% of that restaurant’s own annual net
+                        sales, with $10,000 kept for each audit.
+                      </dd>
+                    </div>
+                  </dl>
+                )}
+                <p className="guarantee-note">
+                  The full terms are written into your agreement before the first shift.
+                </p>
               </div>
               {founderOpen && (
                 <div className="founder-card" id="founder">
-                  <span className="eyebrow">THE FOUNDER TERMS · TWO RESTAURANTS</span>
+                  <span className="eyebrow">A SEPARATE, LIMITED OFFER · TWO RESTAURANTS</span>
                   <h3>
-                    The full program, <em>on founder terms.</em>
+                    The founder engagement, <em>until December&nbsp;15.</em>
                   </h3>
                   <p>
-                    Two restaurants will be the ones whose results are featured on this website. In
-                    return, their program costs $10,000 less either way they pay. Audits begin the
-                    week of November&nbsp;16.
+                    Separate from the standard terms above. Two restaurants will be the ones whose
+                    results are featured on this website. In return, their program costs $10,000
+                    less than the precommitment package price, either way they pay. Audits begin
+                    the week of December&nbsp;15.
                   </p>
                   <div className="invest-options founder-options">
                     <div>
                       <span className="invest-option">Founder, two payments</span>
                       <b>$65,000</b>
                       <span>
-                        $32,500 when you sign on, $32,500 when the platform is handed over. The
-                        audit fee is waived, as when you commit before the audit. That is the
-                        standard paid in full price, in two payments.
+                        $32,500 when you sign on, $32,500 when the platform is handed over. That is
+                        the standard paid in full price, in two payments.
                       </span>
                     </div>
                     <div>
@@ -1240,15 +1514,16 @@ export default function Home() {
                     <div>
                       <dt>The guarantee</dt>
                       <dd>
-                        It applies in full, with $10,000 kept for the audit. Two payments: $22,500
-                        of your $32,500 comes back and the second payment is never due. Paid in
-                        full: $45,000 of your $55,000 comes back. You keep the report.
+                        The Audit Opportunity Guarantee applies in full, with $10,000 kept for the
+                        audit. Two payments: $22,500 of your $32,500 comes back and the second
+                        payment is never due. Paid in full: $45,000 of your $55,000 comes back. You
+                        keep the report.
                       </dd>
                     </div>
                     <div>
                       <dt>Places</dt>
                       <dd>
-                        Two, offered until both are taken or November 16, whichever comes first.
+                        Two, offered until both are taken or December 15, whichever comes first.
                       </dd>
                     </div>
                   </dl>
@@ -1260,105 +1535,6 @@ export default function Home() {
                   </div>
                 </div>
               )}
-              <div className="invest-card">
-                <span className="eyebrow">THE AUDIT ONLY</span>
-                <div className="invest-price">
-                  <h3>Six shifts. The whole picture.</h3>
-                  <span className="price">$10,000</span>
-                </div>
-                <p>
-                  Two weekdays, two Fridays and two Saturdays over two weeks, a written gap report
-                  with every dollar figure worked out, a breakdown by server and a debrief. $5,000
-                  secures your dates (nonrefundable) and $5,000 is due when the report is delivered.
-                  You keep the report. If you go on to the program, it is $75,000, so $85,000 all
-                  in.
-                </p>
-              </div>
-              <div className="guarantee">
-                <span className="eyebrow">THE GUARANTEE</span>
-                <h3>
-                  If the report finds less than 5% of your annual sales in recoverable revenue,
-                  <em> you only pay for the audit.</em>
-                </h3>
-                <p className="guarantee-def">
-                  Recoverable revenue is more than added sales. It is the yearly total of added
-                  sales plus the comps and overpour the report shows you can stop giving away, each
-                  tied to a specific, fixable gap.
-                </p>
-                <dl>
-                  <div>
-                    <dt>What it covers</dt>
-                    <dd>
-                      What the gap report identifies, not results after training. Results depend on
-                      your team using the program; the platform measures them.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>The measure</dt>
-                    <dd>
-                      Recoverable annual revenue: the yearly total of added sales and cost savings
-                      the report ties to specific, fixable gaps. Each is calculated from your POS
-                      data and the six observed shifts, with the arithmetic shown so you can check
-                      it.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>How it is set</dt>
-                    <dd>
-                      Your guarantee is 5% of your actual net sales for the last 12 months, taken
-                      from your own POS and written into your agreement before the first shift.
-                      Nothing is annualized from a shorter period. The report follows rules fixed
-                      in that agreement: every input comes
-                      from your own POS data and the six observed shifts, and every target comes
-                      from your own restaurant (your best nights and your own top two servers),
-                      never an industry benchmark. Your accountant can review every figure before
-                      the debrief, and we go through each line together.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Fit check</dt>
-                    <dd>
-                      After you sign, you send two POS exports: net sales for the last 12 months,
-                      which set your guarantee amount, and 90 days of sales by server, which set
-                      each server’s starting point. We confirm both before the first shift. If the
-                      numbers don’t support
-                      the program, everything you’ve paid beyond the $10,000 audit fee is
-                      returned in full.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Audit first</dt>
-                    <dd>
-                      You have paid $10,000 for the audit. You owe nothing more and keep the report.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Committed, two payments</dt>
-                    <dd>
-                      You have paid $37,500. $27,500 comes back, the second payment is never due,
-                      and you keep the report.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Paid in full</dt>
-                    <dd>You have paid $65,000. $55,000 comes back, and you keep the report.</dd>
-                  </div>
-                  <div>
-                    <dt>Two locations</dt>
-                    <dd>
-                      The same rule for each location: 5% of that restaurant’s own annual
-                      sales, with $10,000 kept for each audit.
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>When</dt>
-                    <dd>Decided at the debrief, before your program is built.</dd>
-                  </div>
-                </dl>
-                <p className="guarantee-note">
-                  The full terms are written into your agreement before the first shift.
-                </p>
-              </div>
               <button
                 className="terms-toggle"
                 onClick={() => setTermsOpen(!termsOpen)}
@@ -1377,8 +1553,8 @@ export default function Home() {
                           <span className="sr-only">Locations</span>
                         </th>
                         <th scope="col">Audit first</th>
-                        <th scope="col">Commit, two payments</th>
-                        <th scope="col">Commit, paid in full</th>
+                        <th scope="col">Precommitment, two payments</th>
+                        <th scope="col">Precommitment, paid in full</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1407,7 +1583,8 @@ export default function Home() {
                     updates (seasonal rollouts, new standards and new policies, each sign off on
                     record) and up to four further customizations. Support is a one day platform
                     training at launch, and technical support for as long as you use the platform.
-                    After the first year, the platform continues on a subscription basis.
+                    After the first year, the platform continues on a subscription basis, at the
+                    year two rate written into your agreement before you sign.
                   </p>
                 </div>
               )}
@@ -1448,6 +1625,20 @@ export default function Home() {
               A great service shouldn’t depend on who is working, or whether the owner is watching.
               Here is the platform your program lives on, shown with a fictional demo restaurant.
             </p>
+          </div>
+          <div className="core-loop" aria-labelledby="core-loop-title">
+            <p className="core-loop-title" id="core-loop-title">
+              One loop. <em>Everything in the platform supports it.</em>
+            </p>
+            <ol>
+              {coreLoop.map(([step, body], i) => (
+                <li key={step}>
+                  <span className="core-loop-n">{i + 1}</span>
+                  <b>{step}</b>
+                  <span>{body}</span>
+                </li>
+              ))}
+            </ol>
           </div>
           <TourFilm />
           <div className="lasting-grid">
@@ -1524,6 +1715,19 @@ export default function Home() {
             </div>
             <ul>
               {platformMore.map((m) => (
+                <li key={m.title}>
+                  <span>{m.title}</span>
+                  <p>{m.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="platform-rules">
+            <p className="platform-rules-head">
+              How the platform is governed. <em>Your rules, people deciding.</em>
+            </p>
+            <ul>
+              {platformRules.map((m) => (
                 <li key={m.title}>
                   <span>{m.title}</span>
                   <p>{m.body}</p>
@@ -1715,7 +1919,7 @@ export default function Home() {
           <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
           {founderOpen && (
             <a className="closing-founder" href="#founder">
-              Two founder places, audits from the week of November 16. <em>Read the terms</em>
+              Two founder places, audits from the week of December 15. <em>Read the terms</em>
             </a>
           )}
         </section>

@@ -374,9 +374,8 @@ export const INCENTIVES = [
   { title: "Paid day off", detail: "A full quarter at or above your own target, 8 solo shifts a month" },
   { title: "Guest quote recognition", detail: "Read aloud at line up, kept on the profile" },
   { title: "Monthly ADS bonus", detail: "$150 cash at 5% over target on the rolling 30 days, 8 solo shifts" },
-  { title: "First pick of sections and shifts", detail: "On the next schedule" },
   { title: "Chef’s Table for two", detail: "With the sommelier’s pairing" },
   { title: "Certification paid in full", detail: "WSET Level 2 or CMS Introductory" },
-  { title: "Ten guests, by name", detail: "Every 10 reviews that name you: pick a Friday or Saturday section, a shift with no side work, or $50 to spend here" },
+  { title: "Ten guests, by name", detail: "Every 10 reviews that name you: a shift with no side work, or $50 to spend here" },
   { title: "Winery or distillery visit", detail: "Top performer of the year" },
 ];

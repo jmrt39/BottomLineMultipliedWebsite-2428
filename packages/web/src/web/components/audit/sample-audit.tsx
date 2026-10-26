@@ -39,8 +39,14 @@ import {
   cents,
   COVER_SALES,
   COMPS,
+  COMP_COLLECTED,
+  REMAKE_SAVED,
+  SAVINGS,
+  CARD_FEES,
+  FOOD_COST,
   findings,
   pctOf,
+  pctOf1,
   servers,
   usd,
 } from "./model";
@@ -130,7 +136,8 @@ function Summary() {
           <span className="ap-figure">{usd(TOTAL)}</span>
           <span className="ap-figure-note">estimated, every year</span>
           <span className="ap-figure-guarantee">
-            This model finds 9.4% of annual sales. Our guarantee starts at 5%.
+            This model finds {pctOf1(TOTAL, SALES_NOW)} of annual net sales. The Audit Opportunity
+            Guarantee threshold is 5%.
           </span>
         </div>
         <blockquote className="ap-pull">
@@ -191,7 +198,7 @@ function Servers() {
             Same menu. Same tables. <br />A {cents(SPREAD)} spread per ticket.
           </>
         }
-        lede="Average spend per ticket by server, across six shifts over two weeks. Each target closes half the distance to your own top two."
+        lede="Average spend per ticket by server, across six shifts over two weeks. Each target closes half the distance to your own top two. Before assigning a target, we review whether differences reflect service behavior or different selling opportunities."
       />
       <figure
         className="ap-servers"
@@ -325,9 +332,9 @@ function BottomLine() {
   const max = PROFIT_NOW + PROFIT;
   const w = (v: number) => `${(v / max) * 100}%`;
   const rows = [
-    { label: "Added sales & comps recovered", value: ADDED_SALES, sign: "", tone: "ink" },
+    { label: "Added sales & comps collected", value: ADDED_SALES, sign: "", tone: "ink" },
     { label: "Less cost of goods & fees", value: COGS, sign: "", tone: "neg" },
-    { label: "Plus pour savings", value: POUR, sign: "+", tone: "gold" },
+    { label: "Plus pour & remake savings", value: SAVINGS, sign: "+", tone: "gold" },
   ];
   return (
     <>
@@ -335,7 +342,7 @@ function BottomLine() {
         index={4}
         kicker="The bottom line"
         title="From the floor to the bottom line."
-        lede="Rent and salaries are already paid. Added sales carry only their cost of goods and card fees, so most of every recovered dollar reaches the bottom line. We call that estimated contribution. Every figure on this page is before tax and any added labor."
+        lede="Rent and salaries are already paid. New dishes carry their cost of goods and card fees, a comp collected instead carries card fees only, and a remake prevented saves just its cost of goods. What is left we call estimated contribution. Every figure on this page is before tax, team rewards and any added labor."
       />
       <div className="ap-ledger">
         <figure className="ap-ledger-block" aria-label="Annual sales recovered to profit kept">
@@ -389,7 +396,7 @@ function BottomLine() {
             </li>
           </ul>
           <p className="ap-lg-note">
-            Nearly double, in this model, before tax and any added labor. Same restaurant, same
+            Nearly double, in this model, before tax, team rewards and any added labor. Same restaurant, same
             rent.
           </p>
         </figure>
@@ -507,6 +514,14 @@ function HowBuilt() {
           the restaurant’s own top two, {cents(BENCH)} ({cents(a.now)} and {cents(b.now)}). Not an
           industry benchmark. For {ex.name}: ({cents(BENCH)} less {cents(ex.now)}) ÷ 2 ={" "}
           {cents(ex.gap)} per ticket × {n(COVERS_EACH)} tickets = <b>{usd(ex.annual)}</b> a year.
+        </p>
+        <p className="ap-mt-text">
+          Before assigning a target, we review whether differences reflect service behavior or
+          different selling opportunities: party size, section, daypart, private events, comps and
+          price reductions on the check, and the mix of weekday and weekend shifts. Where a gap
+          comes from the opportunity rather than the service, the target is adjusted or the server
+          is compared only with servers who had like shifts. In this sample, all eight work the
+          same sections in rotation.
         </p>
         <table className="ap-mt-table ap-mt-servers">
           <thead>
@@ -643,13 +658,19 @@ function HowBuilt() {
           </div>
           <div>
             <dt>
-              <i>+</i> Comps recovered, kept in full
+              <i>+</i> Comps collected instead, less {pct(CARD_FEES)} card fees
             </dt>
-            <dd>{usd(COMPS)}</dd>
+            <dd>{usd(COMP_COLLECTED * (1 - CARD_FEES))}</dd>
           </div>
           <div>
             <dt>
-              <i>+</i> Pour savings, kept in full
+              <i>+</i> Remakes prevented, {pct(FOOD_COST)} cost of goods saved
+            </dt>
+            <dd>{usd(REMAKE_SAVED)}</dd>
+          </div>
+          <div>
+            <dt>
+              <i>+</i> Pour savings, product not used
             </dt>
             <dd>{usd(POUR)}</dd>
           </div>
@@ -662,9 +683,41 @@ function HowBuilt() {
         </dl>
         <p className="ap-mt-text">
           Rent and salaries are already paid, so an added sale only carries its cost of goods and
-          card fees. Comps and overpour are kept in full: the food and liquor are already bought,
-          and the restaurant simply stops giving them away. Every figure here is before tax and any
-          added labor.
+          card fees. The rest is modeled by what actually changes in cost:
+        </p>
+        <ul className="ap-mt-others ap-mt-costs">
+          <li>
+            <span>A comp collected</span>
+            <p>
+              The guest pays for a dish that would have been given away. It was made either way, so
+              the price is gained, less card fees.
+            </p>
+          </li>
+          <li>
+            <span>A remake prevented</span>
+            <p>
+              The guest pays the same. Only the cost of goods of the plate that would have been
+              thrown out is saved, not its menu price.
+            </p>
+          </li>
+          <li>
+            <span>Product not used</span>
+            <p>
+              Overpour is valued at pour cost, the liquor that stays in the bottle, never at the
+              price of a drink.
+            </p>
+          </li>
+          <li>
+            <span>A smaller price reduction</span>
+            <p>
+              Less taken off a check is added sales with no added cost of goods, less card fees.
+              None is counted in this sample.
+            </p>
+          </li>
+        </ul>
+        <p className="ap-mt-text">
+          Every figure here is before tax, team rewards and any added labor. Those costs are entered
+          separately in the payback calculator.
         </p>
       </Step>
 

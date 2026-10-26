@@ -7,6 +7,8 @@ export const COVERS = COVERS_PER_SERVICE * SERVICES_PER_YEAR; // 34,320
 export const NET_MARGIN = 0.07; // fine dining commonly runs 5–10%
 export const FLOW_THROUGH = 0.66; // added items after ~30% cost of goods and ~4% card fees
 export const TIP_RATE = 0.2;
+export const CARD_FEES = 0.04;
+export const FOOD_COST = 0.3;
 export const WEEKEND_NIGHTS = 104;
 
 // Average spend per ticket during the audit, by server (net sales ÷ tickets).
@@ -83,6 +85,17 @@ export const POUR_COST = 0.2;
 const OVERPOUR = 0.25 / 2; // 0.25 oz over a 2 oz spec
 const POURS_OVER = 18 / 24;
 const WALKED_PER_NIGHT = 3;
+// Comps and remakes are valued separately, because different costs change in each.
+// A comp that is collected instead: the dish was made either way, so the restaurant gains
+// the price, less card fees. A remake prevented: the guest pays the same, so only the
+// cost of goods of the plate that would have been thrown out is saved.
+const COMPS_NOW = 0.011;
+const COMPS_TARGET = 0.007;
+const REMAKES_NOW = 0.008;
+const REMAKES_TARGET = 0.005;
+export const COMP_COLLECTED = Math.round(SALES_NOW * (COMPS_NOW - COMPS_TARGET));
+export const REMAKE_SAVED = Math.round(SALES_NOW * (REMAKES_NOW - REMAKES_TARGET) * FOOD_COST);
+const pct1 = (n: number) => `${(n * 100).toFixed(1)}%`;
 
 // Each finding is rounded to the dollar once, here, so the figures on the page add up
 // to the totals exactly.
@@ -91,14 +104,14 @@ export const findings: Finding[] = [
   {
     moment: "Lineup · 4:30 pm",
     title: "The meeting before service",
-    saw: "A lineup ran before 3 of 6 services. The kitchen attended none, and features were never tasted. Two dishes ran out and were still sold, then comped.",
-    from: "Comps 1.9% of sales",
-    to: "1.2%",
-    now: "Comps and remakes run at 1.9% of sales.",
+    saw: "A lineup ran before 3 of 6 services. The kitchen attended none, and features were never tasted. Two dishes ran out and were still sold, then comped. Plates went back for a remake when an allergy or temperature was missed at the order.",
+    from: "Comps 1.1%, remakes 0.8%",
+    to: "0.7%, 0.5%",
+    now: "Comps run at 1.1% of sales and remakes at 0.8%, at menu price.",
     target:
-      "1.2%, the rate on nights a full lineup ran with the kitchen there and sold out dishes called before doors.",
-    math: `0.7% of ${whole(SALES_NOW)} in yearly sales`,
-    value: Math.round(SALES_NOW * 0.007),
+      "Comps at 0.7% and remakes at 0.5%, the rates on nights a full lineup ran with the kitchen there and sold out dishes called before doors.",
+    math: `Comps collected instead: ${pct1(COMPS_NOW - COMPS_TARGET)} of ${whole(SALES_NOW)} = ${whole(COMP_COLLECTED)}. Remakes prevented: ${pct1(REMAKES_NOW - REMAKES_TARGET)} of ${whole(SALES_NOW)} × ${Math.round(FOOD_COST * 100)}% cost of goods, the only cost saved = ${whole(REMAKE_SAVED)}. Together`,
+    value: COMP_COLLECTED + REMAKE_SAVED,
     kind: "comps",
   },
   {
@@ -199,9 +212,13 @@ export const COMPS = sum("comps");
 export const COVER_SALES = sum("covers");
 export const POUR = sum("cost");
 export const CHECK_FINDINGS = sum("check");
-export const ADDED_SALES = CHECK_LIFT + COVER_SALES + COMPS;
-export const COGS = (CHECK_LIFT + COVER_SALES) * (1 - FLOW_THROUGH);
-export const PROFIT = ADDED_SALES - COGS + POUR;
+// Added sales: higher checks, tables seated, and comps collected instead of given away.
+export const ADDED_SALES = CHECK_LIFT + COVER_SALES + COMP_COLLECTED;
+// New dishes carry cost of goods and card fees; a collected comp was cooked anyway, so only card fees.
+export const COGS = (CHECK_LIFT + COVER_SALES) * (1 - FLOW_THROUGH) + COMP_COLLECTED * CARD_FEES;
+// Cost saved outright: product not poured and plates not remade.
+export const SAVINGS = POUR + REMAKE_SAVED;
+export const PROFIT = ADDED_SALES - COGS + SAVINGS;
 export const PROFIT_NOW = SALES_NOW * NET_MARGIN;
 export const TIPS = (CHECK_LIFT + COVER_SALES) * TIP_RATE;
 export const TIPS_WEEK_EACH = TIPS / servers.length / 52;
@@ -209,10 +226,11 @@ export const TIPS_WEEK_EACH = TIPS / servers.length / 52;
 export const composition = [
   { label: "Higher checks", value: CHECK_LIFT, tone: "ink" },
   { label: "Tables that walked", value: COVER_SALES, tone: "gold" },
-  { label: "Comps & remakes", value: COMPS, tone: "taupe" },
+  { label: "Comps collected & remakes saved", value: COMPS, tone: "taupe" },
   { label: "Overpour", value: POUR, tone: "pale" },
 ] as const;
 
 export const usd = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
 export const cents = (n: number) => `$${n.toFixed(2)}`;
 export const pctOf = (n: number, of: number) => `${Math.round((n / of) * 100)}%`;
+export const pctOf1 = (n: number, of: number) => `${((n / of) * 100).toFixed(1)}%`;

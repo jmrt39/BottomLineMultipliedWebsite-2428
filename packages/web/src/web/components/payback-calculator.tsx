@@ -21,16 +21,47 @@ type Result = {
   spend: number;
   sales: number;
   contribution: number;
+  /** Contribution not earned in year one while the team adopts the program. */
+  rampLoss: number;
   months: number;
   yearOne: number;
 };
+
+export type Costs = {
+  /** Team rewards a year: cash bonuses, paid days off, meals, certifications. */
+  rewards: number;
+  /** Added paid training time, at launch. */
+  training: number;
+  /** Any other added operating cost a year. */
+  other: number;
+  /** Months from launch until the full lift is reached, rising evenly. */
+  ramp: number;
+};
+
+export const DEFAULT_COSTS: Costs = { rewards: 6_000, training: 4_000, other: 0, ramp: 6 };
+
+/** Share of the full lift reached in month m after launch (1 is the first month). */
+const adoption = (m: number, ramp: number) => (ramp <= 0 ? 1 : Math.min(1, m / ramp));
+
+/** Months from launch until cumulative contribution, less running costs, covers the fee and training. */
+export function paybackMonths(contribution: number, fee: number, c: Costs) {
+  const upfront = fee + c.training;
+  const running = (c.rewards + c.other) / 12;
+  let total = 0;
+  for (let m = 1; m <= 120; m++) {
+    const net = (contribution / 12) * adoption(m, c.ramp) - running;
+    if (net > 0 && total + net >= upfront) return m - 1 + (upfront - total) / net;
+    total += net;
+  }
+  return Infinity;
+}
 
 const money = (n: number) => `$${Math.round(Math.abs(n)).toLocaleString("en-US")}`;
 const usd = (n: number) => (n < 0 ? `(${money(n)})` : money(n));
 const perTicket = (n: number) => (Number.isInteger(n) ? `$${n}` : `$${n.toFixed(2)}`);
 
 function paybackLabel(months: number) {
-  if (!Number.isFinite(months)) return { value: "Not yet", unit: "" };
+  if (!Number.isFinite(months)) return { value: "10+", unit: "years" };
   if (months > 36) return { value: "3+", unit: "years" };
   if (months < 2) {
     const weeks = Math.max(1, Math.ceil((months * 52) / 12));
@@ -51,12 +82,48 @@ const ROWS: [string, (x: Result) => string][] = [
   ["First year after the fee", (x) => usd(x.yearOne)],
 ];
 
+function Money({
+  label,
+  hint,
+  value,
+  max,
+  step,
+  onChange,
+}: {
+  label: string;
+  hint: string;
+  value: number;
+  max: number;
+  step: number;
+  onChange: (n: number) => void;
+}) {
+  return (
+    <label>
+      <span>
+        {label} <strong>{money(value)}</strong>
+      </span>
+      <input
+        type="range"
+        aria-label={label}
+        min="0"
+        max={max}
+        step={step}
+        value={value}
+        onChange={(e) => onChange(+e.target.value)}
+      />
+      <small className="calc-hint">{hint}</small>
+    </label>
+  );
+}
+
 export function PaybackCalculator() {
   const [locations, setLocations] = useState<1 | 2>(1);
   const [covers, setCovers] = useState(100);
   const [lift, setLift] = useState(8);
   const [nights, setNights] = useState(5);
   const [scenarioId, setScenarioId] = useState<ScenarioId>("expected");
+  const [costs, setCosts] = useState<Costs>(DEFAULT_COSTS);
+  const setCost = (k: keyof Costs) => (n: number) => setCosts((c) => ({ ...c, [k]: n }));
 
   const fee = PROGRAM[locations];
   const nightsYear = nights * 52;
@@ -64,12 +131,15 @@ export function PaybackCalculator() {
     const spend = lift * factor;
     const sales = covers * spend * nightsYear * locations;
     const contribution = sales * KEPT;
+    let earned = 0;
+    for (let m = 1; m <= 12; m++) earned += (contribution / 12) * adoption(m, costs.ramp);
     return {
       spend,
       sales,
       contribution,
-      months: fee / (contribution / 12),
-      yearOne: contribution - fee,
+      rampLoss: contribution - earned,
+      months: paybackMonths(contribution, fee, costs),
+      yearOne: earned - costs.rewards - costs.other - costs.training - fee,
     };
   };
   const scenario = SCENARIOS.find((s) => s.id === scenarioId)!;
@@ -143,6 +213,57 @@ export function PaybackCalculator() {
         </label>
       </div>
 
+      <fieldset className="calculator-costs">
+        <legend>
+          Your costs and adoption <em>Set these to your own figures</em>
+        </legend>
+        <div className="calculator-controls">
+          <Money
+            label="Team rewards a year"
+            hint="Cash bonuses, paid days off, meals and certifications"
+            value={costs.rewards}
+            max={30_000}
+            step={500}
+            onChange={setCost("rewards")}
+          />
+          <Money
+            label="Added paid training time"
+            hint="Hours your team is paid to train at launch"
+            value={costs.training}
+            max={20_000}
+            step={500}
+            onChange={setCost("training")}
+          />
+          <Money
+            label="Other added operating costs a year"
+            hint="Anything else the program adds to run"
+            value={costs.other}
+            max={30_000}
+            step={500}
+            onChange={setCost("other")}
+          />
+          <label>
+            <span>
+              Months to full adoption{" "}
+              <strong>
+                {costs.ramp === 0 ? "From launch" : costs.ramp}
+                {costs.ramp > 0 && <em className="calc-sub"> rising evenly</em>}
+              </strong>
+            </span>
+            <input
+              type="range"
+              aria-label="Months to full adoption"
+              min="0"
+              max="12"
+              step="1"
+              value={costs.ramp}
+              onChange={(e) => setCost("ramp")(+e.target.value)}
+            />
+            <small className="calc-hint">The lift builds as your team adopts the program</small>
+          </label>
+        </div>
+      </fieldset>
+
       <fieldset className="payback-scenarios" aria-label="Scenario">
         {SCENARIOS.map((s) => (
           <button
@@ -167,10 +288,13 @@ export function PaybackCalculator() {
           {label.unit && <em> {label.unit}</em>}
         </span>
         <p>
-          Counted from launch, out of estimated contribution, not sales. Launch comes about 6 weeks
-          after the first audit shift, so from the day we start it is about{" "}
-          {paybackText(r.months + LEAD_MONTHS)}. The model assumes the full lift from launch; in
-          practice it builds as your team adopts the program.
+          Counted from launch, out of estimated contribution after your team rewards, training time
+          and other costs, not sales.{" "}
+          {costs.ramp > 0
+            ? `The lift rises evenly to its full level over ${costs.ramp} ${costs.ramp === 1 ? "month" : "months"}. `
+            : "The full lift is assumed from launch. "}
+          Launch comes about 6 weeks after the first audit shift, so from the day we start it is
+          about {paybackText(r.months + LEAD_MONTHS)}.
         </p>
       </div>
 
@@ -217,6 +341,27 @@ export function PaybackCalculator() {
         </div>
         <div>
           <dt>
+            Less the lift not yet reached
+            <small>
+              {costs.ramp > 0
+                ? `Year one, while adoption rises over ${costs.ramp} ${costs.ramp === 1 ? "month" : "months"}`
+                : "None: full lift assumed from launch"}
+            </small>
+          </dt>
+          <dd className={r.rampLoss > 0 ? "is-negative" : undefined}>{usd(-r.rampLoss)}</dd>
+        </div>
+        <div>
+          <dt>
+            Less team rewards and other costs
+            <small>
+              {money(costs.rewards)} rewards and {money(costs.other)} other costs a year, plus{" "}
+              {money(costs.training)} training time
+            </small>
+          </dt>
+          <dd className="is-negative">{usd(-(costs.rewards + costs.other + costs.training))}</dd>
+        </div>
+        <div>
+          <dt>
             Less the program fee
             <small>
               {locations === 1 ? "One location, audit first" : "Two locations, audit first"}
@@ -227,7 +372,9 @@ export function PaybackCalculator() {
         <div className="is-total">
           <dt>
             First year after the fee
-            <small>Estimated contribution in the first 12 months from launch, less the fee</small>
+            <small>
+              Estimated contribution in the first 12 months from launch, less costs and the fee
+            </small>
           </dt>
           <dd className={r.yearOne < 0 ? "is-negative" : undefined}>{usd(r.yearOne)}</dd>
         </div>
@@ -277,22 +424,24 @@ export function PaybackCalculator() {
             ))}
           </tbody>
         </table>
-        {run(0.5).contribution < fee && (
+        {run(0.5).yearOne < 0 && (
           <p className="payback-warning">
-            At half your estimate, a year of estimated contribution ({usd(run(0.5).contribution)})
-            is below the {usd(fee)} fee. It takes {paybackText(run(0.5).months)} to recover.
+            At half your estimate, the first year after costs and the fee is{" "}
+            {usd(run(0.5).yearOne)}. It takes {paybackText(run(0.5).months)} to recover.
           </p>
         )}
       </div>
 
       <p className="calculator-disclaimer">
         A model, not a promise. Estimated contribution is what remains of added sales after roughly
-        30% cost of goods and 4% card fees, before tax and any added labor; rent and salaries are
-        already paid. The fee counts $85,000 for one location and $140,000 for two, the audit first
-        path, with the first year of the platform included. Commit before the audit and it is
-        $75,000 or $120,000; pay in full and it is $65,000 or $100,000. After the first year, the
-        platform continues on a subscription basis. Results depend on your operation, costs, guest
-        demand and how consistently the program is used.
+        30% cost of goods and 4% card fees, before tax; rent and salaries are already paid. Team
+        rewards, training time and other costs are the figures you set above. The fee counts
+        $85,000 for one location and $140,000 for two, the audit first path, with the first year of
+        the platform included. On the precommitment package price it is $75,000 or $120,000; paid
+        in full, $65,000 or $100,000. After the first year, the platform continues on a
+        subscription basis at the rate written into your agreement before you sign, which is not
+        counted here. Results depend on your operation, costs, guest demand and how consistently
+        the program is used.
       </p>
     </div>
   );

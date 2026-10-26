@@ -7,7 +7,7 @@ const chapters = [
 /** Added to the pricing answers while the founder offer is on the site. */
 const FOUNDER_LINES: Record<string, string> = {
   "Can I start with just the audit?":
-    "Founder restaurants commit before the audit, so the audit fee is waived: $65,000 in two payments or $55,000 paid in full, for one location.",
+    "The founder engagement is a separate, limited offer: $10,000 less than the precommitment package price, $65,000 in two payments or $55,000 paid in full, for one location.",
   "What if I have more than one location?":
     "Founder terms cover one restaurant; additional locations are quoted individually.",
 };
@@ -16,7 +16,7 @@ const questions = [
   {
     question: "Can I start with just the audit?",
     answer:
-      "Yes. The audit is $10,000 per location and stands on its own: $5,000 to book your dates, nonrefundable, and $5,000 when the written gap report is delivered, due within 7 days. You keep the report whether or not you continue. If you go on, the program is $75,000, so $85,000 all in. Committing before the audit costs less, because the audit fee is waived.",
+      "Yes. The audit is $10,000 per location and stands on its own: $5,000 to book your dates, nonrefundable, and $5,000 when the written gap report is delivered, due within 7 days. You keep the report whether or not you continue. If you go on, the program is $75,000, so $85,000 all in. Committing to implementation before the audit is the precommitment package price: $75,000 in two payments or $65,000 paid in full.",
   },
   {
     question: "What does the audit involve?",
@@ -46,17 +46,17 @@ const questions = [
   {
     question: "Will my results match the case study?",
     answer:
-      "Not necessarily. The case study is one upscale fine dining bar over one year of consistent use: the average ticket went from $68 to $84 with no meaningful price changes. Your result depends on your restaurant, your team and how consistently managers use the program. That is why the guarantee covers what the report finds, and the platform measures what actually changes.",
+      "Not necessarily. The case study is one upscale fine dining bar over one year of consistent use: the average ticket, net sales divided by checks before tax and tips, went from $68 to $84 with no changes to prices, volume, staffing or menu mix. It is a historical result, not a model. Your result depends on your restaurant, your team and how consistently managers use the program. That is why the Audit Opportunity Guarantee is a diagnostic threshold on what the report finds, and the platform measures what actually changes.",
   },
   {
     question: "What if I have more than one location?",
     answer:
-      "Every floor is audited against one shared standard, and the guarantee applies to each restaurant separately. Two locations: $140,000 audit first, $120,000 committed in two payments, or $100,000 paid in full. Three or more locations are quoted individually.",
+      "Every floor is audited against one shared standard, and the Audit Opportunity Guarantee applies to each restaurant separately. Two locations: $140,000 audit first, or at the precommitment package price $120,000 in two payments or $100,000 paid in full. Three or more locations are quoted individually.",
   },
   {
     question: "What happens after the first year?",
     answer:
-      "Year one of the platform is included in the program. After the first year, the platform continues on a subscription basis. Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
+      "Year one of the platform is included in the program. After the first year, the platform continues on a subscription basis, at the year two rate written into your agreement before you sign. Nothing is rebuilt. Your program, your team's records and every grade so far carry on as they are, and the monthly report keeps measuring every server against the starting point recorded in the audit.",
   },
 ];
 
