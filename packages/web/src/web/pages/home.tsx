@@ -236,7 +236,7 @@ const fit = [
   },
   {
     label: "Dinner volume",
-    yes: "Roughly 100 tickets a night or more, about $2 million or more in annual sales. At 100 tickets, five nights a week, $8 more per ticket adds $208,000 in sales a year. After $6,000 a year in team rewards, $4,000 of training time and six months to full adoption, it recovers the $85,000 fee in about 11 months from launch.",
+    yes: "Roughly 100 tickets a night or more, about $2 million or more in annual sales. At 100 tickets, five nights a week, $8 more per ticket adds $208,000 in sales a year. After $6,000 a year in team rewards, $4,000 of training time and six months to full adoption, it recovers the $75,000 fee in about 10 months from launch.",
     no: "Fewer tickets, where the numbers in the calculator above don’t work yet.",
   },
   {
@@ -316,41 +316,35 @@ function Select<T extends string>({
   );
 }
 
-/** The founder engagement, defined again on the inquiry form. */
+/** The 2026 terms, defined again on the inquiry form. */
 function FounderTerms({ asking = false }: { asking?: boolean }) {
   const body = (
     <dl className="inquiry-founder-terms">
       <div>
         <dt>What it is</dt>
         <dd>
-          A separate, limited offer: the full program for one location at $10,000 less than the
-          precommitment package price.
+          Sign by December 31, 2026, on any path, and two things are added to your agreement. The
+          price is the same.
         </dd>
       </div>
       <div>
-        <dt>The price</dt>
+        <dt>18 months of the platform</dt>
         <dd>
-          $65,000 in two payments ($32,500 when you sign on, $32,500 when the platform is handed
-          over), or $55,000 paid in full before the audit begins.
+          The platform is included for 18 months from launch instead of 12. The subscription starts
+          after that, at the year two rate written into your agreement before you sign.
         </dd>
       </div>
       <div>
-        <dt>In return</dt>
+        <dt>A return visit at month 6</dt>
         <dd>
-          Your results are shared and you are quoted on this website and in marketing material,
-          named or anonymous, your choice. A 90 day results check in, and up to two reference calls
-          with prospective clients in year one.
+          Two shifts back on your floor six months after launch, checked against what the audit
+          found, with a written update.
         </dd>
       </div>
       <div>
-        <dt>The guarantee</dt>
-        <dd>The Audit Opportunity Guarantee applies in full, with $10,000 kept for the audit.</dd>
-      </div>
-      <div>
-        <dt>Dates and places</dt>
+        <dt>Audit first</dt>
         <dd>
-          Two restaurants, one location each. Audits begin the week of December 15. Offered until
-          both places are taken or December 15, whichever comes first.
+          Book your audit in 2026 and both carry over to the program if you go on after the report.
         </dd>
       </div>
     </dl>
@@ -359,15 +353,15 @@ function FounderTerms({ asking = false }: { asking?: boolean }) {
     return (
       <div className="inquiry-founder">
         <p>
-          You are asking about one of two founder places. It starts with the same complimentary 20
-          minute consultation.
+          You are asking about the 2026 terms. It starts with the same complimentary 20 minute
+          consultation.
         </p>
         {body}
       </div>
     );
   return (
     <details className="inquiry-founder is-collapsed">
-      <summary>What the founder engagement is</summary>
+      <summary>What the 2026 terms are</summary>
       {body}
     </details>
   );
@@ -400,7 +394,7 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
         </button>
         <span className="eyebrow">
           {founder
-            ? "THE FOUNDER ENGAGEMENT · TWO RESTAURANTS"
+            ? "THE 2026 TERMS · SIGN BY DECEMBER 31"
             : "A COMPLIMENTARY 20 MINUTE CONSULTATION"}
         </span>
         <h2 id="inquiry-title">
@@ -532,12 +526,12 @@ function Inquiry({ onClose, founder }: { onClose: () => void; founder: boolean }
               {founderOpen && (
                 <>
                   <label htmlFor="inquiry-founder">
-                    The founder engagement
+                    When you would like to start
                     <select id="inquiry-founder" name="founder" defaultValue={founder ? "yes" : "no"}>
                       <option value="yes">
-                        I would like to be considered for a founder place
+                        I would like to sign in 2026, on the 2026 terms
                       </option>
-                      <option value="no">Not for now</option>
+                      <option value="no">In 2027, or not sure yet</option>
                     </select>
                   </label>
                   {!founder && <FounderTerms />}
@@ -928,22 +922,21 @@ export default function Home() {
         {founderOpen && (
           <div className="founder-band section-shell">
             <aside className="founder-note" aria-labelledby="founder-note-title">
-              <span className="founder-note-mark">THE FOUNDER ENGAGEMENT · TWO RESTAURANTS</span>
+              <span className="founder-note-mark">THE 2026 TERMS · SIGN BY DECEMBER 31</span>
               <p className="founder-note-line" id="founder-note-title">
-                Two restaurants. <em>Their results, featured here.</em>
+                Sign in 2026. <em>18 months of the platform, and a return visit.</em>
               </p>
               <p className="founder-note-sub">
-                A separate, limited offer: the full program for one location at $10,000 less than
-                the precommitment package price, either way you pay, in return for sharing your
-                results. Audits begin the week of December 15. Offered until both places are taken
-                or December 15.
+                Every restaurant that signs by December 31, 2026, on any path, gets the platform for
+                18 months instead of 12 and a return visit at month 6: two shifts back on the floor,
+                checked against the audit. The price is the same.
               </p>
               <div className="founder-note-actions">
                 <a className="founder-note-link" href="#founder">
-                  Read the founder terms <ArrowRight size={15} />
+                  Read the 2026 terms <ArrowRight size={15} />
                 </a>
                 <button className="fold-book" onClick={openFounder}>
-                  Claim your founder place <ArrowUpRight size={16} />
+                  Ask about the 2026 terms <ArrowUpRight size={16} />
                 </button>
               </div>
             </aside>
@@ -1274,14 +1267,14 @@ export default function Home() {
                     report is delivered. You keep the report and owe nothing more.
                   </p>
                   <span className="invest-path-then">
-                    If you go on, the program is $75,000. $85,000 all in.
+                    If you go on, the program is $65,000. $75,000 in total.
                   </span>
                 </div>
                 <div className="invest-path is-commit">
                   <span className="invest-path-step">PATH TWO</span>
                   <h3>Commit to implementation</h3>
                   <span className="invest-path-price">
-                    From $75,000 <em>Precommitment package price</em>
+                    From $55,000 <em>Audit included, paid in full</em>
                   </span>
                   <p>
                     The defined audit to launch program in one agreement: the audit and report, your
@@ -1289,7 +1282,7 @@ export default function Home() {
                     year. The Audit Opportunity Guarantee applies.
                   </p>
                   <span className="invest-path-then">
-                    $65,000 if paid in full before the audit begins.
+                    $55,000 paid in full before the audit begins, or $65,000 in two payments.
                   </span>
                 </div>
               </div>
@@ -1297,7 +1290,7 @@ export default function Home() {
                 <span className="eyebrow">THE FULL PROGRAM · ONE LOCATION</span>
                 <div className="invest-price">
                   <h3>Diagnose. Build. Install.</h3>
-                  <span className="price">From $85,000</span>
+                  <span className="price">From $55,000</span>
                 </div>
                 <p className="invest-price-note">
                   Your final program fee is confirmed on your consultation, based on the size of
@@ -1312,30 +1305,37 @@ export default function Home() {
                 <div className="invest-options is-three">
                   <div>
                     <span className="invest-option">Start with the audit</span>
-                    <b>$85,000</b>
-                    <span>
-                      $10,000 for the audit, then $75,000 for the program: half when you sign on,
-                      half when the platform is handed over. Decide after you see the report.
-                    </span>
-                  </div>
-                  <div>
-                    <span className="invest-option">Precommitment, two payments</span>
                     <b>$75,000</b>
                     <span>
-                      The precommitment package price. $37,500 when you sign on, $37,500 when the
-                      platform is handed over.
+                      $10,000 for the audit, then $65,000 for the program in one payment or two:
+                      half when you sign on, half when the platform is handed over. Decide after
+                      you see the report.
                     </span>
                   </div>
                   <div>
-                    <span className="invest-option">Precommitment, paid in full</span>
+                    <span className="invest-option">Commit up front, two payments</span>
                     <b>$65,000</b>
-                    <span>One payment before the audit begins. $20,000 less than audit first.</span>
+                    <span>
+                      Audit included. $32,500 when you sign on, $32,500 when the platform is handed
+                      over.
+                    </span>
+                  </div>
+                  <div>
+                    <span className="invest-option">Commit up front, paid in full</span>
+                    <b>$55,000</b>
+                    <span>Audit included. One payment before the audit begins.</span>
                   </div>
                 </div>
                 <p className="invest-renewal">
                   <b>After year one.</b> The platform continues on a subscription basis. The year two
                   rate is written into your agreement before you sign, so you know it before you
                   buy.
+                </p>
+                <p className="invest-renewal invest-publication">
+                  <b>Publication, in every agreement.</b> I may publish the findings and results
+                  from your restaurant: the figures, your restaurant’s name and video. Staff appear
+                  by role only, never by name, and anyone on camera signs a release. You check every
+                  fact before it goes out, and nothing is published before the 90 day results check.
                 </p>
               </div>
               <div className="guarantee">
@@ -1356,15 +1356,15 @@ export default function Home() {
                     </dd>
                   </div>
                   <div>
-                    <dt>Precommitted, two payments</dt>
+                    <dt>Committed up front, two payments</dt>
                     <dd>
-                      You have paid $37,500. $27,500 comes back, the second payment is never due,
+                      You have paid $32,500. $22,500 comes back, the second payment is never due,
                       and you keep the report.
                     </dd>
                   </div>
                   <div>
-                    <dt>Precommitted, paid in full</dt>
-                    <dd>You have paid $65,000. $55,000 comes back, and you keep the report.</dd>
+                    <dt>Committed up front, paid in full</dt>
+                    <dd>You have paid $55,000. $45,000 comes back, and you keep the report.</dd>
                   </div>
                   <div>
                     <dt>When</dt>
@@ -1464,72 +1464,56 @@ export default function Home() {
               </div>
               {founderOpen && (
                 <div className="founder-card" id="founder">
-                  <span className="eyebrow">A SEPARATE, LIMITED OFFER · TWO RESTAURANTS</span>
+                  <span className="eyebrow">THE 2026 TERMS · ANY PATH</span>
                   <h3>
-                    The founder engagement, <em>until December&nbsp;15.</em>
+                    Sign by December&nbsp;31, 2026, <em>and two things are added.</em>
                   </h3>
                   <p>
-                    Separate from the standard terms above. Two restaurants will be the ones whose
-                    results are featured on this website. In return, their program costs $10,000
-                    less than the precommitment package price, either way they pay. Audits begin
-                    the week of December&nbsp;15.
+                    The prices above stay the same. Every restaurant that signs its agreement by
+                    December&nbsp;31, 2026 receives both of these, written into the agreement.
                   </p>
                   <div className="invest-options founder-options">
                     <div>
-                      <span className="invest-option">Founder, two payments</span>
-                      <b>$65,000</b>
+                      <span className="invest-option">The platform</span>
+                      <b>18 months</b>
                       <span>
-                        $32,500 when you sign on, $32,500 when the platform is handed over. That is
-                        the standard paid in full price, in two payments.
+                        Included from launch instead of 12. The subscription starts after that, at
+                        the year two rate written into your agreement before you sign.
                       </span>
                     </div>
                     <div>
-                      <span className="invest-option">Founder, paid in full</span>
-                      <b>$55,000</b>
-                      <span>One payment when you sign on, before the audit begins.</span>
+                      <span className="invest-option">A return visit</span>
+                      <b>Month 6</b>
+                      <span>
+                        Two shifts back on your floor six months after launch, checked against what
+                        the audit found, with a written update.
+                      </span>
                     </div>
                   </div>
                   <dl className="founder-terms">
                     <div>
-                      <dt>In return</dt>
+                      <dt>Any path</dt>
                       <dd>
-                        I will share your results and quote you in marketing material and on this
-                        website. Named or anonymous: your choice.
+                        Paid in full, two payments, or audit first. Book your audit in 2026 and both
+                        carry over to the program if you go on after the report.
                       </dd>
                     </div>
                     <div>
-                      <dt>Check in and references</dt>
-                      <dd>
-                        A 90 day results check in together, and up to two reference calls with
-                        prospective clients in year one.
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>One location</dt>
-                      <dd>
-                        Founder terms cover one restaurant. Additional locations are quoted
-                        individually.
-                      </dd>
+                      <dt>Two locations</dt>
+                      <dd>Both apply to each location, with a return visit to each restaurant.</dd>
                     </div>
                     <div>
                       <dt>The guarantee</dt>
-                      <dd>
-                        The Audit Opportunity Guarantee applies in full, with $10,000 kept for the
-                        audit. Two payments: $22,500 of your $32,500 comes back and the second
-                        payment is never due. Paid in full: $45,000 of your $55,000 comes back. You
-                        keep the report.
-                      </dd>
+                      <dd>The Audit Opportunity Guarantee and its refunds are unchanged.</dd>
                     </div>
                     <div>
-                      <dt>Places</dt>
-                      <dd>
-                        Two, offered until both are taken or December 15, whichever comes first.
-                      </dd>
+                      <dt>The date</dt>
+                      <dd>Agreements signed by December 31, 2026.</dd>
                     </div>
                   </dl>
                   <div className="founder-claim">
                     <button className="fold-book" onClick={openFounder}>
-                      Claim your founder place <ArrowUpRight size={16} />
+                      Ask about the 2026 terms <ArrowUpRight size={16} />
                     </button>
                     <span>It begins with a complimentary 20 minute consultation.</span>
                   </div>
@@ -1553,27 +1537,27 @@ export default function Home() {
                           <span className="sr-only">Locations</span>
                         </th>
                         <th scope="col">Audit first</th>
-                        <th scope="col">Precommitment, two payments</th>
-                        <th scope="col">Precommitment, paid in full</th>
+                        <th scope="col">Commit up front, two payments</th>
+                        <th scope="col">Commit up front, paid in full</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <th scope="row">One location</th>
-                        <td>From $85,000</td>
                         <td>From $75,000</td>
                         <td>From $65,000</td>
+                        <td>From $55,000</td>
                       </tr>
                       <tr>
                         <th scope="row">Two locations</th>
-                        <td>From $140,000</td>
                         <td>From $120,000</td>
                         <td>From $100,000</td>
+                        <td>From $80,000</td>
                       </tr>
                     </tbody>
                   </table>
                   <p>
-                    Two locations audit first: $20,000 for the two audits, then $120,000 for the
+                    Two locations audit first: $20,000 for the two audits, then $100,000 for the
                     program. Both floors are audited against one shared standard. Three or more
                     locations are quoted individually.
                   </p>
@@ -1919,7 +1903,8 @@ export default function Home() {
           <span className="closing-note">20 MINUTES. YOUR RESTAURANT. NO OBLIGATION.</span>
           {founderOpen && (
             <a className="closing-founder" href="#founder">
-              Two founder places, audits from the week of December 15. <em>Read the terms</em>
+              Sign by December 31, 2026: 18 months of the platform and a return visit.{" "}
+              <em>Read the terms</em>
             </a>
           )}
         </section>

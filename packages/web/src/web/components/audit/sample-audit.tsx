@@ -38,7 +38,6 @@ import {
   composition,
   cents,
   COVER_SALES,
-  COMPS,
   COMP_COLLECTED,
   REMAKE_SAVED,
   SAVINGS,

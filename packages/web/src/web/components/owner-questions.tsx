@@ -1,22 +1,24 @@
 const chapters = [
   { title: "The audit", from: 0, to: 5 },
-  { title: "The program", from: 5, to: 8 },
-  { title: "The platform", from: 8, to: 9 },
+  { title: "The program", from: 5, to: 9 },
+  { title: "The platform", from: 9, to: 10 },
 ];
 
 /** Added to the pricing answers while the founder offer is on the site. */
 const FOUNDER_LINES: Record<string, string> = {
   "Can I start with just the audit?":
-    "The founder engagement is a separate, limited offer: $10,000 less than the precommitment package price, $65,000 in two payments or $55,000 paid in full, for one location.",
+    "Sign by December 31, 2026, on any path, audit first included, and the platform is included for 18 months instead of 12, with a return visit at month 6. The price is the same.",
   "What if I have more than one location?":
-    "Founder terms cover one restaurant; additional locations are quoted individually.",
+    "Signed by December 31, 2026, the 2026 terms apply to each location, with a return visit to each restaurant.",
+  "What happens after the first year?":
+    "Signed by December 31, 2026, the platform is included for 18 months, and the subscription starts after that.",
 };
 
 const questions = [
   {
     question: "Can I start with just the audit?",
     answer:
-      "Yes. The audit is $10,000 per location and stands on its own: $5,000 to book your dates, nonrefundable, and $5,000 when the written gap report is delivered, due within 7 days. You keep the report whether or not you continue. If you go on, the program is $75,000, so $85,000 all in. Committing to implementation before the audit is the precommitment package price: $75,000 in two payments or $65,000 paid in full.",
+      "Yes. The audit is $10,000 per location and stands on its own: $5,000 to book your dates, nonrefundable, and $5,000 when the written gap report is delivered, due within 7 days. You keep the report whether or not you continue. If you go on, the program is $65,000, in one payment or two, so $75,000 in total. Committing up front, with the audit included, is $55,000 paid in full or $65,000 in two payments.",
   },
   {
     question: "What does the audit involve?",
@@ -51,7 +53,12 @@ const questions = [
   {
     question: "What if I have more than one location?",
     answer:
-      "Every floor is audited against one shared standard, and the Audit Opportunity Guarantee applies to each restaurant separately. Two locations: $140,000 audit first, or at the precommitment package price $120,000 in two payments or $100,000 paid in full. Three or more locations are quoted individually.",
+      "Every floor is audited against one shared standard, and the Audit Opportunity Guarantee applies to each restaurant separately. Two locations: $120,000 audit first, or committing up front $100,000 in two payments or $80,000 paid in full. Three or more locations are quoted individually.",
+  },
+  {
+    question: "Will you publish my results?",
+    answer:
+      "Yes. Every agreement gives me the right to publish the findings and results from your restaurant: the figures, your restaurant's name and video. Staff appear by role only, never by name, and anyone on camera signs a release. You check every fact before it goes out, and nothing is published before the 90 day results check.",
   },
   {
     question: "What happens after the first year?",

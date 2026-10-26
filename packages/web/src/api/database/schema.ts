@@ -20,7 +20,7 @@ export const inquiries = sqliteTable("inquiries", {
   volume: text("volume").notNull().default(""),
   pos: text("pos").notNull().default(""),
   message: text("message").notNull().default(""),
-  /** "yes" when they asked to be considered for a founder place. */
+  /** "yes" when they want to sign in 2026, on the 2026 terms (column name kept from the founder offer). */
   founder: text("founder").notNull().default("no"),
   /** "sent" once the notification email went out, otherwise "pending" or "failed". */
   notified: text("notified").notNull().default("pending"),

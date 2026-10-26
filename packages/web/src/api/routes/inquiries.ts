@@ -52,7 +52,7 @@ export const inquiries = {
         volume: z.enum(VOLUMES),
         pos: z.enum(POS_ACCESS),
         message: z.string().trim().max(4000).default(""),
-        /** Asked to be considered for one of the two founder places. */
+        /** "yes" when they want to sign in 2026, on the 2026 terms. */
         founder: z.enum(["yes", "no"]).default("no"),
         /** Honeypot: hidden from people, filled in by bots. */
         website: z.string().optional(),
@@ -83,7 +83,7 @@ export const inquiries = {
           ["Locations", LOCATION_LABEL[fields.locations]],
           ["Dinner volume", LABEL[fields.volume]],
           ["Can share POS reports", LABEL[fields.pos]],
-          ["Founder place", fields.founder === "yes" ? "Requested" : "Not requested"],
+          ["Start", fields.founder === "yes" ? "Sign in 2026 (2026 terms)" : "2027, or not sure yet"],
           ["Received", `${when} (Mountain)`],
         ];
         const text = `${lines.map(([k, v]) => `${k}: ${v}`).join("\n")}\n\n${fields.message || "(No message)"}\n\nReply to this email to answer ${fields.name} directly.`;
@@ -101,7 +101,7 @@ export const inquiries = {
         try {
           await sendEmail({
             to: process.env.INQUIRY_NOTIFY_EMAIL!,
-            subject: `${fields.founder === "yes" ? "Founder place inquiry" : "New inquiry"}: ${fields.restaurant} (${fields.name})`,
+            subject: `${fields.founder === "yes" ? "2026 terms inquiry" : "New inquiry"}: ${fields.restaurant} (${fields.name})`,
             text,
             html,
             replyTo: fields.email,

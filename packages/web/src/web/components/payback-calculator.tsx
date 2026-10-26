@@ -8,7 +8,7 @@ const KEPT = 0.66;
 const HORIZON = 24; // months shown on the timeline
 /** Weeks from the first audit shift to launch: two weeks on the floor, then the build. */
 const LEAD_MONTHS = 1.5;
-const PROGRAM = { 1: 85_000, 2: 140_000 } as const;
+const PROGRAM = { 1: 75_000, 2: 120_000 } as const;
 
 const SCENARIOS = [
   { id: "conservative", label: "Conservative", factor: 0.5, note: "Half the lift" },
@@ -436,9 +436,9 @@ export function PaybackCalculator() {
         A model, not a promise. Estimated contribution is what remains of added sales after roughly
         30% cost of goods and 4% card fees, before tax; rent and salaries are already paid. Team
         rewards, training time and other costs are the figures you set above. The fee counts
-        $85,000 for one location and $140,000 for two, the audit first path, with the first year of
-        the platform included. On the precommitment package price it is $75,000 or $120,000; paid
-        in full, $65,000 or $100,000. After the first year, the platform continues on a
+        $75,000 for one location and $120,000 for two, the audit first path, with the first year of
+        the platform included. Committing up front it is $65,000 or $100,000 in two payments, and
+        $55,000 or $80,000 paid in full. After the first year, the platform continues on a
         subscription basis at the rate written into your agreement before you sign, which is not
         counted here. Results depend on your operation, costs, guest demand and how consistently
         the program is used.
