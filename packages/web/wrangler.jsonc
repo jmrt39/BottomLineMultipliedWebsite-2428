@@ -1,0 +1,16 @@
+{
+  "name": "blm-website",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "routes": [
+    { "pattern": "bottomlinemultiplied.com", "custom_domain": true },
+    { "pattern": "www.bottomlinemultiplied.com", "custom_domain": true }
+  ],
+  "observability": { "enabled": true }
+}

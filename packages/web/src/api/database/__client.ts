@@ -1,7 +1,8 @@
 // TEMPLATE-MANAGED (__ prefix) — do not edit. Define tables in ./schema.ts
 // and query via: import { db } from "./database";
 import { drizzle } from "drizzle-orm/libsql";
-import { createClient } from "@libsql/client";
+//import { createClient } from "@libsql/client";
+import { createClient } from "@libsql/client/web";
 import * as schema from "./schema";
 
 const client = createClient({

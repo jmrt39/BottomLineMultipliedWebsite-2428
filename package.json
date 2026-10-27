@@ -20,7 +20,9 @@
     "db:generate": "turbo db:generate",
     "db:migrate": "turbo db:migrate",
     "db:push": "turbo db:push",
-    "internal:kill-port": "lsof -t -i :$(bun --print \"require('./__ports.cjs').website\") | xargs kill -9"
+    "internal:kill-port": "lsof -t -i :$(bun --print \"require('./__ports.cjs').website\") | xargs kill -9",
+    "env:dev": "ln -sf .env.dev .env && echo 'Using DEV'",
+    "env:prod": "ln -sf .env.prod .env && echo 'Using PROD'"
   },
   "devDependencies": {
     "@runablehq/runkit": "0.1.1",
